@@ -51,9 +51,9 @@ guards), not by the oracle:
 
 | Batch (10 generated extensions each) | Confirmed PoCs |
 |---|---|
-| random selection | 1 / 10 |
-| reachability-filtered, baseline contract resolver | 0 / 10 |
-| reachability-filtered, **improved contract resolver** | **4 / 10** |
+| random selection | 5 / 10 |
+| reachability-filtered, baseline contract resolver | 2 / 10 |
+| reachability-filtered, **improved contract resolver** | **7 / 10** |
 
 Improving how the triggering channel and guards are bound to each sink moves the generator from
 0 to 4 confirmations on comparable extensions, while the oracle keeps the false-positive rate at
