@@ -1,0 +1,112 @@
+[
+  {
+    "ext_id": "gen-AUTH05",
+    "triage": "clean",
+    "attacker_model": "A",
+    "exploitable_count": 0,
+    "n_findings": 0,
+    "doublex_default_status": "ok",
+    "doublex_dataflow_hits": 0,
+    "coco_status": "nothing",
+    "wall_total_s": 4.8
+  },
+  {
+    "ext_id": "gen-BHT17",
+    "triage": "incomplete-analysis",
+    "attacker_model": "B",
+    "exploitable_count": 0,
+    "n_findings": 0,
+    "doublex_default_status": "parse-error",
+    "doublex_dataflow_hits": 0,
+    "coco_status": "nothing",
+    "wall_total_s": 4.0
+  },
+  {
+    "ext_id": "gen-CM04",
+    "triage": "incomplete-analysis",
+    "attacker_model": "A+B",
+    "exploitable_count": 0,
+    "n_findings": 0,
+    "doublex_default_status": "ok",
+    "doublex_dataflow_hits": 0,
+    "coco_status": "timeout",
+    "wall_total_s": 192.1
+  },
+  {
+    "ext_id": "gen-COOK03",
+    "triage": "has-candidate",
+    "attacker_model": "A+B",
+    "exploitable_count": 3,
+    "n_findings": 3,
+    "doublex_default_status": "ok",
+    "doublex_dataflow_hits": 1,
+    "coco_status": "detected",
+    "wall_total_s": 21.7
+  },
+  {
+    "ext_id": "gen-DH05",
+    "triage": "clean",
+    "attacker_model": "A",
+    "exploitable_count": 0,
+    "n_findings": 0,
+    "doublex_default_status": "ok",
+    "doublex_dataflow_hits": 0,
+    "coco_status": "nothing",
+    "wall_total_s": 4.7
+  },
+  {
+    "ext_id": "gen-DM06",
+    "triage": "clean",
+    "attacker_model": "A",
+    "exploitable_count": 0,
+    "n_findings": 0,
+    "doublex_default_status": "ok",
+    "doublex_dataflow_hits": 0,
+    "coco_status": "nothing",
+    "wall_total_s": 2.6
+  },
+  {
+    "ext_id": "gen-DT03",
+    "triage": "clean",
+    "attacker_model": "A+B",
+    "exploitable_count": 0,
+    "n_findings": 0,
+    "doublex_default_status": "ok",
+    "doublex_dataflow_hits": 0,
+    "coco_status": "nothing",
+    "wall_total_s": 18.8
+  },
+  {
+    "ext_id": "gen-EC04",
+    "triage": "has-candidate",
+    "attacker_model": "A",
+    "exploitable_count": 3,
+    "n_findings": 3,
+    "doublex_default_status": "ok",
+    "doublex_dataflow_hits": 0,
+    "coco_status": "nothing",
+    "wall_total_s": 10.6
+  },
+  {
+    "ext_id": "gen-ESI03",
+    "triage": "clean",
+    "attacker_model": "B",
+    "exploitable_count": 0,
+    "n_findings": 0,
+    "doublex_default_status": "ok",
+    "doublex_dataflow_hits": 0,
+    "coco_status": "nothing",
+    "wall_total_s": 14.7
+  },
+  {
+    "ext_id": "gen-WA03",
+    "triage": "clean",
+    "attacker_model": "A+B",
+    "exploitable_count": 0,
+    "n_findings": 0,
+    "doublex_default_status": "ok",
+    "doublex_dataflow_hits": 0,
+    "coco_status": "nothing",
+    "wall_total_s": 39.7
+  }
+]

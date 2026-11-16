@@ -1,0 +1,27 @@
+<!doctype html>
+<!-- Skeleton Attacker Model A : page web malveillante.
+     L'extension cible est atteignable car la page correspond a content_scripts.matches
+     ou externally_connectable.matches. Placeholders {{...}} remplis par le PoC Generator. -->
+<html>
+<head><meta charset="utf-8"><title>PoC-A</title></head>
+<body>
+<script>
+// Canari observe par le harness (jamais un payload reel).
+const CANARY = 'CANARY_' + Date.now();
+
+// 1) Canal DOM/postMessage vers le content script
+// {{CHANNEL}} = 'window.message' | 'document.customEvent'
+{{TRIGGER}}
+// ex. window.message :
+//   window.postMessage({{MESSAGE}}, '*');
+// ex. evenement DOM custom :
+//   document.dispatchEvent(new CustomEvent('{{EVENT_NAME}}', {detail: {{MESSAGE}}}));
+
+// 2) (optionnel) recevoir la reponse et logger le canari pour l'oracle
+window.addEventListener('message', e => {
+  if (e.data && e.data.__poc_response !== undefined)
+    console.log('POC_RESPONSE=' + JSON.stringify(e.data.__poc_response));
+});
+</script>
+</body>
+</html>

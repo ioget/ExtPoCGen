@@ -1,0 +1,570 @@
+[
+  {
+    "log": "logs/agent_runs/gen-DT01_20261115-112001.json",
+    "name": "ReqBin HTTP Client",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "has-candidate",
+    "paths": [
+      "vulnerability"
+    ],
+    "llm_calls": 7,
+    "cost_usd": 0.06911,
+    "duration_s": 626.6,
+    "n_hyps": 2,
+    "hypotheses": [
+      {
+        "sink": "fetch",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "fetch",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": null,
+    "malware_suspicious": null,
+    "malware_n_external": null,
+    "ext_id": "gen-DT01",
+    "model": "deepseek-reasoner",
+    "budget": 12,
+    "rc": 0,
+    "wall_s": 627.2
+  },
+  {
+    "log": "logs/agent_runs/gen-EC01_20261115-112408.json",
+    "name": "Amazon Seller Toolset",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "has-candidate",
+    "paths": [
+      "vulnerability"
+    ],
+    "llm_calls": 6,
+    "cost_usd": 0.025635,
+    "duration_s": 247.05,
+    "n_hyps": 2,
+    "hypotheses": [
+      {
+        "sink": "fetch_resource_sink",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "fetch",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": null,
+    "malware_suspicious": null,
+    "malware_n_external": null,
+    "ext_id": "gen-EC01",
+    "model": "deepseek-reasoner",
+    "budget": 12,
+    "rc": 0,
+    "wall_s": 247.5
+  },
+  {
+    "log": "logs/agent_runs/gen-BHT01_20261115-112524.json",
+    "name": "Galago bookmarks",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 4,
+    "cost_usd": 0.004208,
+    "duration_s": 75.57,
+    "n_hyps": 4,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "storage_hit": null,
+        "page_hit": null,
+        "attacker_controlled": null,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "fetch",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "storage_hit": null,
+        "page_hit": null,
+        "attacker_controlled": null,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "showToast(status, message) -> text.textContent / toast.style.backgroundColor",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "storage_hit": null,
+        "page_hit": null,
+        "attacker_controlled": null,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "fetch(GALAGO_ENDPOINT, {body: JSON.stringify(payload)}) in background.js",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": "clean",
+    "malware_suspicious": false,
+    "malware_n_external": 0,
+    "ext_id": "gen-BHT01",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 76.1
+  },
+  {
+    "log": "logs/agent_runs/gen-CM01_20261115-112644.json",
+    "name": "LiquidVoice PCI",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 5,
+    "cost_usd": 0.004147,
+    "duration_s": 78.89,
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": "clean",
+    "malware_suspicious": false,
+    "malware_n_external": 0,
+    "ext_id": "gen-CM01",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 79.3
+  },
+  {
+    "log": "logs/agent_runs/gen-COOK01_20261115-112900.json",
+    "name": "__MSG_appName__",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 10,
+    "cost_usd": 0.007854,
+    "duration_s": 135.35,
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome.cookies.getAll({url, name}) returning full cookie values via sendResponse",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "chrome.cookies.getAll(details) with arbitrary url",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "chrome.cookies.getAll + sendResponse",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": "clean",
+    "malware_suspicious": false,
+    "malware_n_external": 0,
+    "ext_id": "gen-COOK01",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 135.8
+  },
+  {
+    "log": "logs/agent_runs/gen-DH01_20261115-113140.json",
+    "name": "BPTM Local File Viewer Extension",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 10,
+    "cost_usd": 0.010152,
+    "duration_s": 159.81,
+    "n_hyps": 4,
+    "hypotheses": [
+      {
+        "sink": "fetch",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "storage_hit": null,
+        "page_hit": null,
+        "attacker_controlled": null,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "fetch(url) in background.js readLocalFileAsDataUrl / readLocalFileAsText, result returned to page via postResult",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "readLocalFileAsText -> fetch(url) -> blob.text() returned to page",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "fetch(url) in background via runtime message",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": "clean",
+    "malware_suspicious": false,
+    "malware_n_external": 0,
+    "ext_id": "gen-DH01",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 160.3
+  },
+  {
+    "log": "logs/agent_runs/gen-DM01_20261115-113629.json",
+    "name": "HTTP Commander",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 18,
+    "cost_usd": 0.01719,
+    "duration_s": 288.7,
+    "n_hyps": 6,
+    "hypotheses": [
+      {
+        "sink": "chrome_downloads_download_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "chrome.downloads.download({url, filename}) in background.js HC_DOWNLOAD handler",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "buildDownloadPath -> chrome.downloads.download filename (path traversal / folder control)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "chrome.runtime.onMessage HC_DOWNLOAD handler (no sender validation)",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "storage_hit": null,
+        "page_hit": null,
+        "attacker_controlled": null,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "chrome.pageAction.show(sender.tab.id)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": "clean",
+    "malware_suspicious": false,
+    "malware_n_external": 0,
+    "ext_id": "gen-DM01",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 289.2
+  },
+  {
+    "log": "logs/agent_runs/gen-ESI01_20261115-113903.json",
+    "name": "g7 st card plugin",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 10,
+    "cost_usd": 0.006166,
+    "duration_s": 152.87,
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome.runtime.sendMessage -> background handleMessage -> sendToNative(action, payload) -> nativePort.postMessage to com.g7st.cardreader host",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "sendToNative -> nativePort.postMessage to native host",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "nativePort.postMessage({action, payload, requestId})",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": "clean",
+    "malware_suspicious": false,
+    "malware_n_external": 0,
+    "ext_id": "gen-ESI01",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 153.6
+  },
+  {
+    "log": "logs/agent_runs/gen-WA01_20261115-114414.json",
+    "name": "__MSG_appName__",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 21,
+    "cost_usd": 0.018889,
+    "duration_s": 310.42,
+    "n_hyps": 6,
+    "hypotheses": [
+      {
+        "sink": "chrome_tabs_executeScript_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "keyCache / chrome.storage.local (persistKeys) and getKey return value",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "chrome.tabs.executeScript with code built from SCM_LOGIN_SCRIPTS.default(username, password) — string interpolation into injected JS",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "chrome.tabs.executeScript injecting login script into arbitrary tab",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      },
+      {
+        "sink": "setKey/getKey/deleteKey and login executeScript handlers",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": false,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": "clean",
+    "malware_suspicious": false,
+    "malware_n_external": 0,
+    "ext_id": "gen-WA01",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 310.9
+  },
+  {
+    "log": "logs/agent_runs/gen-AUTH01_20261115-114541.json",
+    "name": "CertiFirm.EU",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "incomplete-analysis",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 5,
+    "cost_usd": 0.00461,
+    "duration_s": 86.92,
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "chrome_cookies_set_sink",
+        "status": "CONFIRMED",
+        "iterations": 4,
+        "sink_fired": true,
+        "storage_hit": false,
+        "page_hit": false,
+        "attacker_controlled": true,
+        "sink_without_canary": null
+      }
+    ],
+    "malware_level": "clean",
+    "malware_suspicious": false,
+    "malware_n_external": 0,
+    "ext_id": "gen-AUTH01",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 87.5
+  }
+]

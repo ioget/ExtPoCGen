@@ -1,0 +1,89 @@
+{
+  "schema": "ext-malware-behavior/1.0",
+  "extension_id": "jmilgfebahjgmcnhiiemhbebehfmljld__cc9ce625",
+  "name": "bitcoinrewards",
+  "class": "malware",
+  "manifest_version": "2",
+  "observed_at": "2026-11-08T01:06:23",
+  "verdict": {
+    "malicious_behavior": true,
+    "reason": "4 requête(s) sortante(s) externe(s) tentée(s)"
+  },
+  "category": "adware;scam",
+  "mitre_tags": [
+    "T1071 Application Layer Protocol (C2 / phone-home)",
+    "T1041 Exfiltration Over C2 Channel (tentée)",
+    "T1557 Adversary-in-the-Middle (webRequest)",
+    "T1217 Browser Information Discovery",
+    "T1185 Browser Session Hijacking (<all_urls>)"
+  ],
+  "iocs": {
+    "domains": [
+      "spreadsheets.google.com",
+      "www.bitcoinrewards.com"
+    ],
+    "urls": [
+      "https://www.bitcoinrewards.com/api/shops",
+      "https://www.bitcoinrewards.com/api/shops/popular",
+      "https://www.bitcoinrewards.com/api/promotions",
+      "https://spreadsheets.google.com/feeds/list/1Ii2gLHckTtjo4YRWEfucwPtlRy4iMUuBGhRQTf0bO2c/1/public/values?alt=json"
+    ]
+  },
+  "observed_behavior": {
+    "n_external_requests": 4,
+    "outbound_c2": [
+      {
+        "url": "https://www.bitcoinrewards.com/api/shops",
+        "method": "GET"
+      },
+      {
+        "url": "https://www.bitcoinrewards.com/api/shops/popular",
+        "method": "GET"
+      },
+      {
+        "url": "https://www.bitcoinrewards.com/api/promotions",
+        "method": "GET"
+      },
+      {
+        "url": "https://spreadsheets.google.com/feeds/list/1Ii2gLHckTtjo4YRWEfucwPtlRy4iMUuBGhRQTf0bO2c/1/public/values?alt=json",
+        "method": "GET"
+      }
+    ],
+    "sensitive_permissions": [
+      "tabs",
+      "webRequest",
+      "<all_urls>"
+    ],
+    "console": []
+  },
+  "evidence": {
+    "chromium": "126.0.6478.182",
+    "all_outbound": [
+      {
+        "url": "https://www.bitcoinrewards.com/api/shops",
+        "method": "GET"
+      },
+      {
+        "url": "https://www.bitcoinrewards.com/api/shops/popular",
+        "method": "GET"
+      },
+      {
+        "url": "https://www.bitcoinrewards.com/api/promotions",
+        "method": "GET"
+      },
+      {
+        "url": "https://spreadsheets.google.com/feeds/list/1Ii2gLHckTtjo4YRWEfucwPtlRy4iMUuBGhRQTf0bO2c/1/public/values?alt=json",
+        "method": "GET"
+      },
+      {
+        "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkY4MTNFMjBCMjMwRTExRUFCQkY1QjVGMkUxMzQ0MUQ4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkY4MTNFMjBDMjMwRTExRUFCQkY1QjVGMkUxMzQ0MUQ4Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RjgxM0UyMDkyMzBFMTFFQUJCRjVCNUYyRTEzNDQxRDgiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RjgxM0UyMEEyMzBFMTFFQUJCRjVCNUYyRTEzNDQxRDgiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6oBgc7AAAF30lEQVR42txaXWwU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",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:49027/favicon.ico",
+        "method": "GET"
+      }
+    ]
+  },
+  "provenance": "behavioral-observation (Chrome isolé, egress bloqué)"
+}

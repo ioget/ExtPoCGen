@@ -1,0 +1,84 @@
+# ===================================================================
+# ExtPoCGen — .gitignore pour release PUBLIQUE
+# Règle d'or : ni secret, ni malware, ni binaire, ni outil tiers vendoré.
+# ===================================================================
+
+# --- SECRETS (NE JAMAIS committer) --------------------------------
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets.*
+**/credentials*
+
+# --- VRAI MALWARE + extensions tierces (copyright / sécurité) ------
+# On garde UNIQUEMENT l'index + le builder (min-set/index.csv, README.md, build_minset.py),
+# jamais les payloads d'extensions (dont du malware réel).
+min-set/malware/
+min-set/vulnerable/
+min-set/unlabel/
+min-set.zip
+vuln-set/
+uploads/
+
+# --- Extensions générées par LLM (dérivées de ChromeSecBench) ------
+chromesecbench_generated/
+
+# --- Binaires lourds / navigateur ---------------------------------
+chromium/
+*.crx
+*.zip
+*.pak
+*.dat
+*.so
+*.dll
+*.dylib
+*.bin
+
+# --- Outils TIERS avec leur propre dépôt (à cloner séparément) -----
+# cf. README : DoubleX et CoCo sont des projets externes, pas vendorés ici.
+CoCo/
+DoubleX/
+PoCGen/
+
+# --- PoC d'exploit fonctionnelles (divulgation responsable) -------
+poc_repo/
+
+# --- Sorties volumineuses / dérivées (régénérables) ---------------
+tool_outputs/
+logs/
+rag/corpora/
+rag/graph/
+rag/index/
+# dumps bruts d'orchestrateur + fichiers de progression transitoires
+**/_raw/
+**/_stage3_progress.json
+
+# --- Environnements Python / Node / caches ------------------------
+.static_venv/
+**/venv/
+**/.venv/
+**/node_modules/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- Logs et temporaires ------------------------------------------
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# --- Papiers PDF (copyright) --------------------------------------
+*.pdf
+
+# --- Notes de travail / divers ------------------------------------
+/note
+note.txt
+scratch*
+
+# --- sauvegarde locale des modules retirés de la version publique ---
+.private/

@@ -1,0 +1,471 @@
+[
+  {
+    "log": "logs/agent_runs/gen-COOK03_20261116-041305.json",
+    "name": "__MSG_appName__",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "has-candidate",
+    "paths": [
+      "vulnerability"
+    ],
+    "llm_calls": 1,
+    "cost_usd": 0.003241,
+    "duration_s": 40.23,
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "window_postMessage_sink",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true
+      }
+    ],
+    "malware_level": null,
+    "malware_n_external": null,
+    "ext_id": "gen-COOK03",
+    "model": "deepseek-reasoner",
+    "budget": 12,
+    "rc": 0,
+    "wall_s": 40.6
+  },
+  {
+    "log": "logs/agent_runs/gen-EC04_20261116-041635.json",
+    "name": "TheHub",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "has-candidate",
+    "paths": [
+      "vulnerability"
+    ],
+    "llm_calls": 12,
+    "cost_usd": 0.018562,
+    "duration_s": 209.69,
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "storage.local.set",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "storage.local.set",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "storage.local.get",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": null,
+    "malware_n_external": null,
+    "ext_id": "gen-EC04",
+    "model": "deepseek-reasoner",
+    "budget": 12,
+    "rc": 0,
+    "wall_s": 210.1
+  },
+  {
+    "log": "logs/agent_runs/gen-AUTH05_20261116-041851.json",
+    "name": "TDOS",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 10,
+    "cost_usd": 0.008198,
+    "duration_s": 134.95,
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome.runtime.sendMessage({ action, payload }) relayed to the service worker",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "window.postMessage({ channel: RESPONSE_CHANNEL, id, ...reply }, '*')",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "window.postMessage({ channel: EVENT_CHANNEL, event: 'records:changed', ts }, '*')",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-AUTH05",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 135.3
+  },
+  {
+    "log": "logs/agent_runs/gen-BHT17_20261116-042221.json",
+    "name": "Buxenger",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "incomplete-analysis",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 13,
+    "cost_usd": 0.013459,
+    "duration_s": 209.97,
+    "n_hyps": 5,
+    "hypotheses": [
+      {
+        "sink": "innerHTML",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "attacker_controlled": null
+      },
+      {
+        "sink": "shadowRoot.innerHTML in renderBookmarksTab (bookmark list items) and renderTasksTab (task list items / option labels) via escapeHtml(b.title), escapeHtml(b.url), escapeHtml(bm.title)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "urlInput.value / sendMessage('ADD_BOOKMARK', {url}) then <a href=\"${escapeHtml(b.url)}\"> and window.open(bm.url)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "currentState = message.state; renderPanel() -> innerHTML with bookmarks/tasks fields",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "window.open(bm.url) in .open handler and EXECUTE_PENDING flow",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-BHT17",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 210.6
+  },
+  {
+    "log": "logs/agent_runs/gen-CM04_20261116-042431.json",
+    "name": "iQare Fullscreen Site Navigation",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "incomplete-analysis",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 7,
+    "cost_usd": 0.007635,
+    "duration_s": 129.83,
+    "n_hyps": 2,
+    "hypotheses": [
+      {
+        "sink": "chrome.runtime.onMessage listener in background.js (FULLSCREEN_MESSAGE / ACTIVITY_MESSAGE handling) and content-script onRuntimeMessage",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "window.location.href assignment in home button handler (window.location.origin + '/')",
+        "status": "CONFIRMED",
+        "iterations": 3,
+        "sink_fired": true,
+        "attacker_controlled": true
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-CM04",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 130.3
+  },
+  {
+    "log": "logs/agent_runs/gen-DH05_20261116-042544.json",
+    "name": "Go Pipeline Filter",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 4,
+    "cost_usd": 0.003248,
+    "duration_s": 72.4,
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "window.dispatchEvent(new CustomEvent('go-pipeline-filter:settings', {detail: items})) exposing chrome.storage.local contents to page context",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-DH05",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 72.9
+  },
+  {
+    "log": "logs/agent_runs/gen-DM06_20261116-042854.json",
+    "name": "Расширение для LanDocs",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 13,
+    "cost_usd": 0.014701,
+    "duration_s": 189.18,
+    "n_hyps": 4,
+    "hypotheses": [
+      {
+        "sink": "chrome.runtime.sendMessage({namespace: NS, action: 'download', ...}) relayed to service worker download handler",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "postToPage(...) responses and chrome.runtime.sendMessage relay",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "postToPage(Object.assign({action, requestId}, rest))",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "promptForFile -> file input click / sendResponse({file})",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-DM06",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 190.0
+  },
+  {
+    "log": "logs/agent_runs/gen-DT03_20261116-043139.json",
+    "name": "Meiosis Tracer",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 11,
+    "cost_usd": 0.011869,
+    "duration_s": 164.14,
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome_tabs_executeScript_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "chrome.runtime.sendMessage / relay(payload) to background, then port.postMessage to DevTools panel",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "window.postMessage({source:SOURCE, direction:'to-page', payload}) in content script",
+        "status": "CONFIRMED",
+        "iterations": 3,
+        "sink_fired": true,
+        "attacker_controlled": true
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-DT03",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 164.6
+  },
+  {
+    "log": "logs/agent_runs/gen-ESI03_20261116-043430.json",
+    "name": "Zebra Printing",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 10,
+    "cost_usd": 0.012696,
+    "duration_s": 170.32,
+    "n_hyps": 5,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "attacker_controlled": null
+      },
+      {
+        "sink": "fetch",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "attacker_controlled": null
+      },
+      {
+        "sink": "fetch(`http://${cfg.host}:${cfg.port}/`, {method:'POST', body: zpl}) in sendZpl",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "chrome.storage.local.set({zebraHost, zebraPort}) and subsequent fetch URL construction",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "fetch POST body to attacker-repointed host after config:set",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-ESI03",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 170.7
+  },
+  {
+    "log": "logs/agent_runs/gen-WA03_20261116-043931.json",
+    "name": "Quicky",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 19,
+    "cost_usd": 0.022828,
+    "duration_s": 301.15,
+    "n_hyps": 6,
+    "hypotheses": [
+      {
+        "sink": "innerHTML",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "chrome_tabs_executeScript_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "chrome.storage.local writes (TRANSACTIONS, BALANCE) and payment processing in background processPayment(msg, sender)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "processPayment(msg, sender) in background — balance deduction and transaction record write",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "Content script onMessage handler toggling UI panel and refreshState()",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-WA03",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 301.5
+  }
+]

@@ -1,0 +1,1113 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ExtPoCGen Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.3/mermaid.min.js"></script>
+<style>
+:root{
+  --canvas:#F4F5F7; --surface:#FFFFFF; --sunken:#F7F8FA;
+  --line:#E6E8EC; --line-strong:#D2D6DD;
+  --ink:#111318; --ink2:#474D59; --ink3:#7A818E;
+  --sky:#0369A1; --sky-deep:#075985; --sky-soft:#E0F2FE; --sky-line:#BAE6FD;
+  --ia:#6B4EF0; --ia-deep:#4B32C3; --ia-soft:#EFEBFE; --ia-line:#CFC4FB;
+  --human:#0F6B45; --human-soft:#E4F2EB; --human-line:#B9DCCB;
+  --alert:#A91D16; --alert-soft:#FBEBEA; --alert-line:#F1C4C1;
+  --font-display:"Bricolage Grotesque",Georgia,serif;
+  --font-ui:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --r-sm:7px; --r-md:11px; --r-lg:16px; --r-xl:22px; --r-pill:999px;
+  --sh-1:0 1px 2px rgba(17,19,24,.05),0 1px 1px rgba(17,19,24,.03);
+  --sh-2:0 4px 14px rgba(17,19,24,.07),0 1px 3px rgba(17,19,24,.04);
+  --sh-3:0 18px 44px rgba(17,19,24,.16),0 4px 12px rgba(17,19,24,.08);
+  --ease:cubic-bezier(.22,.8,.3,1);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --canvas:#0B0C10; --surface:#15171D; --sunken:#111318;
+  --line:#23262E; --line-strong:#333742;
+  --ink:#ECEDF1; --ink2:#AEB4C0; --ink3:#828A98;
+  --sky:#38BDF8; --sky-deep:#7DD3FC; --sky-soft:#0D2A3B; --sky-line:#165066;
+  --ia:#A78BFA; --ia-deep:#C7BBFD; --ia-soft:#221A41; --ia-line:#3C2E6D;
+  --human:#4ADE94; --human-soft:#102A1F; --human-line:#1F4F3A;
+  --alert:#F87171; --alert-soft:#2D1413; --alert-line:#5C201D;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --canvas:#0B0C10; --surface:#15171D; --sunken:#111318;
+  --line:#23262E; --line-strong:#333742;
+  --ink:#ECEDF1; --ink2:#AEB4C0; --ink3:#828A98;
+  --sky:#38BDF8; --sky-deep:#7DD3FC; --sky-soft:#0D2A3B; --sky-line:#165066;
+  --ia:#A78BFA; --ia-deep:#C7BBFD; --ia-soft:#221A41; --ia-line:#3C2E6D;
+  --human:#4ADE94; --human-soft:#102A1F; --human-line:#1F4F3A;
+  --alert:#F87171; --alert-soft:#2D1413; --alert-line:#5C201D;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--canvas);color:var(--ink);font-family:var(--font-ui);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+h1,h2,h3,h4,p{margin:0}
+[hidden]{display:none!important}.hidden{display:none!important}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.tnum{font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3)}
+:focus-visible{outline:2px solid var(--ia);outline-offset:2px}
+.wrap{max-width:1380px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:31;background:var(--surface)}
+.top__in{display:flex;align-items:center;gap:16px;padding-block:13px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:11px;font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:-.015em}
+.logo svg{width:32px;height:32px;flex:none}.logo b{color:var(--ia)}
+.top__meta{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tabs{display:flex;gap:3px;background:var(--sunken);border:1px solid var(--line);border-radius:var(--r-pill);padding:3px}
+.tab{appearance:none;border:0;background:transparent;color:var(--ink2);font:inherit;font-weight:600;font-size:13px;padding:7px 17px;border-radius:var(--r-pill);cursor:pointer;transition:all .18s var(--ease)}
+.tab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+.iconbtn{width:36px;height:36px;border-radius:var(--r-md);display:grid;place-items:center;color:var(--ink2);border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:16px}
+.iconbtn:hover{background:var(--sunken);color:var(--ink)}
+
+/* primitives */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-1)}
+.card__head{padding:15px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.card__head h3{font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:-.01em}
+.card__body{padding:20px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 11px;border-radius:var(--r-pill);border:1px solid var(--line-strong);color:var(--ink2);background:var(--surface)}
+.chip--ok{color:var(--human);background:var(--human-soft);border-color:var(--human-line)}
+.chip--ai{color:var(--ia-deep);background:var(--ia-soft);border-color:var(--ia-line)}
+.chip--alert{color:var(--alert);background:var(--alert-soft);border-color:var(--alert-line)}
+.chip--sky{color:var(--sky-deep);background:var(--sky-soft);border-color:var(--sky-line)}
+.chip--mut{color:var(--ink3)}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:var(--r-md);font:inherit;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;transition:all .14s var(--ease)}
+.btn:active{transform:scale(.985)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn--sky{background:var(--sky);color:#fff;box-shadow:var(--sh-2)}.btn--sky:hover:not(:disabled){background:var(--sky-deep)}
+.btn--ia{background:var(--ia);color:#fff;box-shadow:var(--sh-2)}.btn--ia:hover:not(:disabled){background:var(--ia-deep)}
+.btn--ghost{background:var(--surface);border-color:var(--line-strong);color:var(--ink)}.btn--ghost:hover:not(:disabled){background:var(--sunken)}
+.btn--block{width:100%}
+
+/* ===== STATE 1 — landing / upload ===== */
+.landing{max-width:720px;margin:0 auto;padding-block:46px 60px}
+.hero{text-align:center;margin-bottom:28px}
+.hero .eyebrow{margin-bottom:12px}
+.hero h1{font-family:var(--font-display);font-weight:700;font-size:38px;line-height:1.04;letter-spacing:-.03em}
+.hero p{color:var(--ink2);max-width:52ch;margin:12px auto 0;font-size:15px}
+.drop{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;box-sizing:border-box;border:2px dashed var(--line-strong);border-radius:var(--r-lg);background:var(--sunken);padding:44px 20px;text-align:center;cursor:pointer;transition:border-color .15s var(--ease),background .15s var(--ease)}
+.drop:hover,.drop.drag{border-color:var(--ia);background:var(--ia-soft)}
+.drop svg{width:46px;height:46px;color:var(--ia);margin-bottom:12px}
+.drop b{font-weight:700;display:block;font-size:16px;margin-bottom:3px}
+.drop small{color:var(--ink3)}
+.drop.busy{cursor:progress;pointer-events:none;opacity:.9}
+.spin{width:38px;height:38px;border-radius:50%;border:3px solid var(--ia-line);border-top-color:var(--ia);animation:spin .7s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.upok{display:flex;flex-direction:column;align-items:center;gap:3px}
+.upok .badge{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ia-deep);background:var(--ia-soft);border:1px solid var(--ia-line);padding:3px 10px;border-radius:var(--r-pill);margin-bottom:6px}
+.upnote{color:var(--ink3);font-size:12.5px;margin-top:12px;text-align:center;min-height:18px}
+.ctl{display:flex;gap:12px;align-items:center;margin-top:18px}
+.field{flex:1}
+.field label{display:block;margin-bottom:6px}
+.select{width:100%;appearance:none;background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--r-md);padding:11px 12px;font:inherit;color:var(--ink);cursor:pointer;font-weight:600}
+.scanbtn{flex:none;align-self:flex-end;min-width:170px;padding-block:12px}
+.liblock{margin-top:26px;border-top:1px solid var(--line);padding-top:8px}
+.liblock summary{cursor:pointer;list-style:none;padding:12px 2px;font-weight:600;color:var(--ink2);display:flex;align-items:center;gap:8px}
+.liblock summary::-webkit-details-marker{display:none}
+.liblock summary::before{content:"▸";color:var(--ink3);transition:transform .15s}
+.liblock[open] summary::before{transform:rotate(90deg)}
+.libtools{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+.search{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--r-md);padding:8px 12px;font:inherit;color:var(--ink)}
+.flt{appearance:none;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink2);font:inherit;font-size:12px;font-weight:600;padding:4px 12px;border-radius:var(--r-pill);cursor:pointer}
+.flt[aria-selected="true"]{background:var(--sky-soft);color:var(--sky-deep);border-color:var(--sky-line)}
+.liblist{display:flex;flex-direction:column;gap:7px;max-height:330px;overflow:auto;padding-right:2px}
+.samp{display:flex;align-items:center;gap:11px;text-align:left;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);cursor:pointer;font:inherit;transition:all .14s var(--ease)}
+.samp:hover{border-color:var(--sky-line);background:var(--sky-soft)}
+.samp[aria-selected="true"]{border-color:var(--sky);box-shadow:0 0 0 2px color-mix(in srgb,var(--sky) 28%,transparent)}
+.samp .nm{font-weight:600;font-size:13px;line-height:1.25}
+.samp .sub{font-size:10.5px;color:var(--ink3);font-family:var(--font-mono);margin-top:1px}
+.samp .tag{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:var(--r-pill);flex:none}
+.tag.vuln{color:var(--sky-deep);background:var(--sky-soft)}.tag.mal{color:var(--alert);background:var(--alert-soft)}.tag.up{color:var(--ia-deep);background:var(--ia-soft)}.tag.gen{color:var(--human);background:var(--human-soft)}
+
+/* ===== STATE 2 — running (map + console, row) ===== */
+.runstage{padding-block:20px}
+.runhead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.runhead h2{font-family:var(--font-display);font-weight:700;font-size:22px;letter-spacing:-.02em}
+.runhead .mx-strip{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+.mx{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:8px 14px;box-shadow:var(--sh-1);min-width:92px}
+.mx .k{font-size:10px;color:var(--ink3);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em}
+.mx .v{font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:-.02em;margin-top:1px}
+.run007{} .rungrid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:stretch}
+@media (max-width:980px){.rungrid{grid-template-columns:1fr}}
+.rungrid .card{display:flex;flex-direction:column;min-width:0}
+.maplegend{display:flex;gap:12px;flex-wrap:wrap}
+.lg{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--ink3)}
+.lg i{width:11px;height:11px;border-radius:3px;border:1.5px solid}
+.lg.cur i{border-color:var(--sky);background:var(--sky-soft)}.lg.done i{border-color:var(--sky);background:transparent}
+.lg.ai i{border-color:var(--ia);background:var(--ia-soft)}.lg.ok i{border-color:var(--human);background:var(--human-soft)}.lg.al i{border-color:var(--alert);background:var(--alert-soft)}
+.flowmap{width:100%;overflow:hidden;padding:8px;flex:1;height:520px;display:block;cursor:grab;touch-action:none}
+.flowmap.grabbing{cursor:grabbing}
+.flowmap svg{width:100%!important;height:100%!important;max-width:none}
+.mapzoom{display:flex;gap:4px}
+.mapzoom button{width:28px;height:28px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink2);border-radius:var(--r-sm);cursor:pointer;font-size:14px;line-height:1;display:grid;place-items:center}
+.mapzoom button:hover{background:var(--sunken);color:var(--ink)}
+.flowmap .node rect,.flowmap .node polygon,.flowmap .node circle,.flowmap .node path{fill:var(--surface)!important;stroke:var(--line-strong)!important;stroke-width:1.3px!important;transition:fill .4s var(--ease),stroke .4s var(--ease),filter .4s}
+.flowmap .nodeLabel,.flowmap .node .label,.flowmap .node span,.flowmap .node p{color:var(--ink)!important;fill:var(--ink)!important;font-family:var(--font-ui)!important}
+.flowmap .cluster rect{fill:var(--sunken)!important;stroke:var(--line)!important;rx:12px}
+.flowmap .cluster .nodeLabel,.flowmap .cluster span{color:var(--ink3)!important;fill:var(--ink3)!important;font-weight:600!important;font-size:11px!important}
+.flowmap .edgePath path,.flowmap .flowchart-link{stroke:var(--line-strong)!important;stroke-width:1.3px!important;transition:stroke .3s,stroke-width .3s}
+.flowmap path.edge-done{stroke:var(--sky)!important;stroke-width:1.9px!important}
+.flowmap path.edge-live{stroke:var(--sky)!important;stroke-width:3px!important;stroke-dasharray:7 7;animation:edgedash .55s linear infinite;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--sky) 60%,transparent))}
+.flowmap path.edge-back{stroke:var(--ia)!important;stroke-width:3px!important;stroke-dasharray:7 7;animation:edgedashback .55s linear infinite;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--ia) 60%,transparent))}
+@keyframes edgedash{to{stroke-dashoffset:-28}}
+@keyframes edgedashback{to{stroke-dashoffset:28}}
+@media (prefers-reduced-motion:reduce){.flowmap path.edge-live,.flowmap path.edge-back{animation:none}}
+.flowmap .edgeLabel,.flowmap .edgeLabel *{color:var(--ink3)!important;fill:var(--ink3)!important;background:transparent!important}
+.flowmap .marker{fill:var(--line-strong)!important;stroke:var(--line-strong)!important}
+.flowmap .node.st-done rect,.flowmap .node.st-done polygon,.flowmap .node.st-done path{stroke:var(--sky)!important}
+.flowmap .node.st-active rect,.flowmap .node.st-active polygon,.flowmap .node.st-active path{fill:var(--sky-soft)!important;stroke:var(--sky-deep)!important;stroke-width:2.6px!important;filter:drop-shadow(0 0 9px color-mix(in srgb,var(--sky) 55%,transparent))}
+.flowmap .node.st-ai rect,.flowmap .node.st-ai polygon{fill:var(--ia-soft)!important;stroke:var(--ia)!important;stroke-width:2.2px!important}
+.flowmap .node.st-kb rect,.flowmap .node.st-kb polygon{fill:var(--ia-soft)!important;stroke:var(--ia)!important;stroke-width:2.4px!important;filter:drop-shadow(0 0 7px color-mix(in srgb,var(--ia) 45%,transparent))}
+.flowmap .node.st-kb.st-dim{opacity:.45}
+.flowmap .node.st-ok rect,.flowmap .node.st-ok polygon,.flowmap .node.st-ok circle,.flowmap .node.st-ok path{fill:var(--human-soft)!important;stroke:var(--human)!important;stroke-width:2.4px!important}
+.flowmap .node.st-alert rect,.flowmap .node.st-alert polygon,.flowmap .node.st-alert circle,.flowmap .node.st-alert path{fill:var(--alert-soft)!important;stroke:var(--alert)!important;stroke-width:2.4px!important}
+.flowmap .node.st-skip{opacity:.4}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.flowmap .node.st-active{animation:pulse 1.1s var(--ease) infinite}
+@media (prefers-reduced-motion:reduce){.flowmap .node.st-active{animation:none}}
+.console{font-family:var(--font-mono);font-size:12.5px;background:var(--sunken);border-radius:var(--r-md);border:1px solid var(--line);padding:14px;flex:1;min-height:420px;overflow:auto;display:flex;flex-direction:column;gap:7px}
+.ln{display:flex;gap:10px;align-items:baseline;animation:slide .25s var(--ease)}
+@keyframes slide{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.ln .t{color:var(--ink3);flex:none;font-size:11px;width:44px;text-align:right}
+.ln .ic{flex:none;width:12px}
+.ln .m{min-width:0;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.ln.ai .m{color:var(--ia-deep)}.ln.ok .m{color:var(--human)}.ln.alert .m{color:var(--alert)}.ln.step .m{color:var(--ink2)}
+.ln.ai .ic{color:var(--ia)}.ln.ok .ic{color:var(--human)}.ln.alert .ic{color:var(--alert)}.ln.step .ic{color:var(--sky)}
+/* ===== Agent action details (back-office live feed) ===== */
+/* grille 3 colonnes : chaque item (prompt / code / trace…) = une tuile */
+.details{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start;max-height:680px;overflow:auto;padding:4px}
+.details .dethint{grid-column:1/-1}            /* le message d'accueil occupe toute la largeur */
+.dtl{min-width:0}                               /* autorise la tuile à rétrécir dans sa colonne */
+@media (max-width:1100px){.details{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.details{grid-template-columns:1fr}}
+/* la PoC générée sort de la grille : bloc PLEINE LARGEUR sous la grille (code lisible) */
+.pocout{display:flex;flex-direction:column;gap:12px;padding:4px}
+.pocout:not(:empty){margin-top:12px;padding-top:14px;border-top:1px dashed var(--line)}
+.pocout .dtl{width:100%}
+.pocout .dtl pre{max-height:420px}
+.dethint{color:var(--ink3);font-size:13px;text-align:center;padding:30px 20px}
+.dtl{border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);overflow:hidden;animation:slide .25s var(--ease);box-shadow:var(--sh-1)}
+.dtl__h{display:flex;align-items:center;gap:9px;padding:10px 14px;background:var(--sunken);border-bottom:1px solid var(--line);font-size:12.5px;font-weight:600;color:var(--ink)}
+.dtl__h .ic{flex:none}
+.dtl__h .t{margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--ink3)}
+.dtl.ai .dtl__h{color:var(--ia-deep)}.dtl.ok .dtl__h{color:var(--human)}.dtl.alert .dtl__h{color:var(--alert)}
+.dtl.ai{border-color:color-mix(in srgb,var(--ia) 35%,var(--line))}.dtl.ok{border-color:color-mix(in srgb,var(--human) 35%,var(--line))}
+.dtl pre{font-family:var(--font-mono);font-size:11.5px;line-height:1.5;padding:12px 14px;margin:0;max-height:300px;overflow:auto;white-space:pre-wrap;word-break:break-word;color:var(--ink2)}
+.dtl .kvs .r{display:flex;gap:10px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:12px}
+.dtl .kvs .r:last-child{border-bottom:0}
+.dtl .kvs .r .k{color:var(--ink3);font-family:var(--font-mono);font-size:11px;min-width:150px;flex:none}
+.dtl .kvs .r .v{color:var(--ink);word-break:break-word;font-family:var(--font-mono);font-size:11.5px}
+.dtl .kvs .r .v.yes{color:var(--human);font-weight:600}.dtl .kvs .r .v.no{color:var(--ink3)}
+.dtl .sub{padding:8px 14px;border-top:1px solid var(--line)}
+.dtl .sub:first-child{border-top:0}
+.dtl .sub .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);font-family:var(--font-mono)}
+.dtl .mk{font-family:var(--font-mono);font-size:11px;color:var(--human);background:var(--human-soft);border:1px solid color-mix(in srgb,var(--human) 30%,var(--line));border-radius:var(--r-sm);padding:4px 8px;margin-top:5px;word-break:break-all}
+.dtl__h .abadge{margin-left:8px;font-family:var(--font-mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--ink3);font-weight:600}
+/* bottom bar : filtre par agent (montre que TOUS les agents agissent) */
+.agentbar{display:flex;flex-wrap:wrap;gap:7px;padding:12px 2px 2px;margin-top:12px;border-top:1px solid var(--line)}
+.achip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:5px 11px;border-radius:var(--r-pill);border:1px solid var(--line);background:var(--sunken);color:var(--ink2);cursor:pointer;font-family:var(--font-mono);transition:border-color .2s,background .2s,box-shadow .3s}
+.achip:hover{border-color:var(--line-strong);color:var(--ink)}
+.achip.active{background:var(--ia-soft);border-color:var(--ia);color:var(--ia-deep);font-weight:600}
+.achip.live{box-shadow:0 0 0 2px color-mix(in srgb,var(--sky) 45%,transparent)}
+.achip .ac{font-size:10px;background:var(--line);color:var(--ink2);border-radius:var(--r-pill);padding:1px 6px;min-width:17px;text-align:center}
+.achip.active .ac{background:color-mix(in srgb,var(--ia) 25%,transparent);color:var(--ia-deep)}
+
+/* tables & kpi (Scans / Application) */
+.section{padding-block:22px}
+.hd{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.hd h2{font-family:var(--font-display);font-weight:700;font-size:22px;letter-spacing:-.02em}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{text-align:left;font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);font-weight:600;padding:11px 14px;border-bottom:1px solid var(--line)}
+td{padding:13px 14px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--sunken)}
+.bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.bento .w2{grid-column:span 2}@media (max-width:980px){.bento{grid-template-columns:repeat(2,1fr)}}@media (max-width:520px){.bento{grid-template-columns:1fr}.bento .w2{grid-column:span 1}}
+.kpi{padding:18px 20px}
+.kpi .n{font-family:var(--font-display);font-weight:700;font-size:36px;letter-spacing:-.03em;line-height:1}
+.kpi .l{font-size:12.5px;color:var(--ink2);margin-top:7px}
+.kpi .s{font-size:11px;color:var(--ink3);font-family:var(--font-mono);margin-top:3px}
+.stack{display:flex;flex-direction:column;gap:9px}
+.bar{height:9px;border-radius:var(--r-pill);background:var(--line);overflow:hidden}.bar i{display:block;height:100%;border-radius:var(--r-pill)}
+.lead{color:var(--ink2);max-width:74ch;font-size:14.5px}
+.stageline,.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.stagepill{font-family:var(--font-mono);font-size:11px;padding:5px 11px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--ink2);background:var(--surface)}
+.tool{font-size:12px;padding:6px 12px;border-radius:var(--r-md);border:1px solid var(--line);background:var(--sunken);color:var(--ink2)}.tool b{color:var(--ink)}
+.footnote{color:var(--ink3);font-size:12px;margin-top:10px}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(10,12,16,.5);backdrop-filter:blur(3px)}
+.modal.show{display:flex;animation:fade .2s var(--ease)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal__card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--sh-3);width:min(760px,100%);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;animation:pop .22s var(--ease)}
+@keyframes pop{from{transform:translateY(10px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+.modal__head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.modal__title{font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+.modal__head .x{margin-left:auto;width:34px;height:34px;border-radius:var(--r-md);border:1px solid var(--line);background:var(--surface);color:var(--ink2);cursor:pointer;font-size:17px;line-height:1}
+.modal__body{padding:22px;overflow:auto}
+.modal__foot{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.kv-row{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:16px}
+.kv{display:flex;flex-direction:column;gap:3px}
+.kv .k{font-size:10.5px;color:var(--ink3);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em}
+.kv .v{font-weight:600}
+.codebox{position:relative;background:var(--sunken);border:1px solid var(--line);border-radius:var(--r-md);margin-top:6px}
+.codebox pre{margin:0;padding:16px;overflow:auto;max-height:320px;font-family:var(--font-mono);font-size:12.5px;line-height:1.6;color:var(--ink)}
+.codebox .copy{position:absolute;top:9px;right:9px;font-size:11px;font-weight:600;padding:5px 11px;border-radius:var(--r-sm);border:1px solid var(--line-strong);background:var(--surface);color:var(--ink2);cursor:pointer}
+/* coloration syntaxique type IDE (PoC) — modal + agent details */
+pre.hl .cm{color:#4a9e63;font-style:italic}      /* commentaires = vert */
+pre.hl .kw{color:#9a6fe0;font-weight:600}         /* mots-clés du langage = violet */
+pre.hl .st{color:#d2694f}                          /* chaînes = orange-rouge */
+pre.hl .bi{color:#3b9cd9}                          /* APIs/objets globaux = bleu */
+pre.hl .nm{color:#d08a3b}                          /* nombres = ambre */
+pre.hl .tg{color:#8a94a6}                          /* balise HTML (fallback) */
+pre.hl .tn{color:#3fa6a0;font-weight:600}          /* nom de balise HTML = teal */
+pre.hl .at{color:#d19a66}                          /* attribut HTML = tan */
+pre.hl .pn{color:#8a94a6}                          /* chevrons / = = gris */
+.ioc{font-family:var(--font-mono);font-size:12px;background:var(--alert-soft);border:1px solid var(--alert-line);color:var(--alert);padding:5px 10px;border-radius:var(--r-sm);display:inline-block;word-break:break-all;margin:3px 3px 0 0}
+.reqtable td{padding:8px 10px;font-family:var(--font-mono);font-size:11.5px}
+.sect-label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin:18px 0 8px}
+</style>
+</head><body>
+
+<div class="top"><div class="wrap top__in">
+  <div class="logo">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--ink)"/><path d="M16 7l8 4.5-8 4.5-8-4.5z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M8 16l8 4.5 8-4.5M8 20.5l8 4.5 8-4.5" fill="none" stroke="var(--ia)" stroke-width="2" stroke-linejoin="round"/></svg>
+    ExtPoC<b>Gen</b> Studio
+  </div>
+  <div class="top__meta">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-view="run">Analyze</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="scans">Scans</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="metrics">Application</button>
+    </div>
+    <a class="iconbtn" href="/god" title="GOD Agent — méta-architecte (recommandations d'amélioration)" aria-label="GOD Agent" style="text-decoration:none;display:inline-flex;align-items:center">⚙️</a>
+    <button class="iconbtn" id="theme" title="Theme" aria-label="Theme">◐</button>
+  </div>
+</div></div>
+
+<!-- ============ ANALYZE (state machine) ============ -->
+<section class="wrap" data-pane="run">
+
+  <!-- STATE 1: landing / upload -->
+  <div id="stageLanding" class="landing">
+    <div class="hero">
+      <div class="eyebrow">ExtPoCGen · neuro-symbolic PoC agent</div>
+      <h1>Analyse a browser extension</h1>
+      <p>Upload a packed extension to observe its behaviour in isolated Chrome — or run one of the pre-analysed samples through the full exploit pipeline.</p>
+    </div>
+    <div class="card"><div class="card__body">
+      <label class="drop" for="file" id="drop">
+        <input type="file" id="file" accept=".zip,.crx" class="hidden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15V3m0 0L8 7m4-4l4 4"/><path d="M4 15v4a2 2 0 002 2h12a2 2 0 002-2v-4"/></svg>
+        <b>Drop a packed extension or a folder</b><small>.zip / .crx or an unpacked folder — unpacked &amp; run in isolated Chrome (behaviour scan)</small>
+      </label>
+      <div class="orfolder" style="margin:10px 0 2px;text-align:center">
+        <input type="file" id="dir" webkitdirectory directory multiple class="hidden">
+        <button type="button" class="btn btn--ghost" id="dirBtn">📁 …or upload an unpacked extension folder</button>
+      </div>
+      <p class="upnote" id="upNote">Uploads (zip or folder) are analysed with CoCo/DoubleX and observed in isolated Chrome — the same pipeline as the pre-analysed set.</p>
+      <div class="ctl">
+        <div class="field"><label class="eyebrow">Generation model</label>
+          <select class="select" id="model">
+            <option value="deepseek-reasoner">deepseek-reasoner — strongest</option>
+            <option value="deepseek-chat">deepseek-chat (flash) — cheapest</option>
+          </select>
+        </div>
+        <button class="btn btn--sky scanbtn" id="scanBtn" disabled>Run analysis</button>
+      </div>
+      <details class="liblock" id="liblock">
+        <summary>Or pick a pre-analysed extension <span class="chip chip--mut" id="libCount" style="margin-left:4px"></span></summary>
+        <div class="libtools">
+          <input class="search" id="search" placeholder="Search by name…">
+          <button class="flt" aria-selected="true" data-f="all">All</button>
+          <button class="flt" aria-selected="false" data-f="vulnerable">Vulnerable</button>
+          <button class="flt" aria-selected="false" data-f="malware">Malware</button>
+          <button class="flt" aria-selected="false" data-f="generated">Generated</button>
+        </div>
+        <div class="liblist" id="samples"></div>
+      </details>
+    </div></div>
+  </div>
+
+  <!-- STATE 2: running -->
+  <div id="stageRun" class="runstage hidden">
+    <div class="runhead">
+      <h2 id="runLabel">—</h2>
+      <span id="phaseChip" class="chip chip--sky"><span class="dot"></span>running</span>
+      <button class="btn btn--ghost hidden" id="openResBtn">◱ View result</button>
+      <button class="btn btn--ia hidden" id="newBtn">↻ New analysis</button>
+      <div class="mx-strip">
+        <div class="mx"><div class="k">Elapsed</div><div class="v tnum" id="mxTime">0.0s</div></div>
+        <div class="mx"><div class="k">LLM calls</div><div class="v tnum" id="mxCalls">0</div></div>
+        <div class="mx"><div class="k">Tokens</div><div class="v tnum" id="mxTok">0</div></div>
+        <div class="mx"><div class="k">Cost</div><div class="v tnum" id="mxCost">$0</div></div>
+      </div>
+    </div>
+    <div class="rungrid">
+      <div class="card">
+        <div class="card__head"><h3>Pipeline map</h3>
+          <div class="maplegend">
+            <span class="lg cur"><i></i>running</span><span class="lg done"><i></i>done</span>
+            <span class="lg ai"><i></i>AI</span><span class="lg ok"><i></i>confirmed</span><span class="lg al"><i></i>malicious</span>
+          </div>
+          <div class="mapzoom" title="Shift+scroll (or ⌘/Ctrl) to zoom · drag to pan · ⤢ fit">
+            <button id="zIn" aria-label="Zoom in">+</button>
+            <button id="zOut" aria-label="Zoom out">−</button>
+            <button id="zFit" aria-label="Fit" style="font-size:12px">⤢</button>
+          </div>
+        </div>
+        <div class="flowmap" id="flowmap"></div>
+      </div>
+      <div class="card">
+        <div class="card__head"><h3>Agent actions</h3><div class="eyebrow">live stream</div></div>
+        <div class="console" id="console"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <div class="card__head"><h3>Agent action details</h3><div class="eyebrow">back office · live</div></div>
+      <div class="details" id="details"><div class="dethint">The agent's full actions — the prompt it receives, the code it writes, and each harness trace — stream here live.</div></div>
+      <div class="pocout" id="pocout"></div>
+      <div class="agentbar" id="agentbar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCANS -->
+<section class="wrap hidden" data-pane="scans"><div class="section">
+  <div class="hd"><h2>Scan history</h2><span class="chip chip--mut" id="scanCount"></span></div>
+  <div class="card"><div class="tbl-wrap"><table id="scanTable">
+    <thead><tr><th>Extension</th><th>Class</th><th>MV</th><th>Verdict</th><th>Model</th><th>Time</th><th>Tokens</th><th>Cost</th></tr></thead>
+    <tbody></tbody></table></div></div>
+</div></section>
+
+<!-- APPLICATION -->
+<section class="wrap hidden" data-pane="metrics"><div class="section stack" style="gap:20px">
+  <div>
+    <div class="hd"><h2>ExtPoCGen</h2><span class="chip chip--ai"><span class="dot"></span>neuro-symbolic</span></div>
+    <p class="lead">An agent that proves what it finds. Static analysis (CoCo + DoubleX) locates attacker-controllable flows; a Graph-RAG grounds the agent; DeepSeek writes a proof-of-concept; an isolated Chrome harness executes it and a deterministic canary oracle confirms — or the Malware Behavior Analyst flags malicious behaviour.</p>
+    <div class="stageline" id="stageline"></div>
+    <div class="tools" id="tools" style="margin-top:12px"></div>
+  </div>
+  <div class="bento" id="kpis"></div>
+  <div class="bento">
+    <div class="card w2"><div class="card__head"><h3>Cost &amp; tokens by path</h3></div><div class="card__body"><div class="stack" id="byModel"></div></div></div>
+    <div class="card w2"><div class="card__head"><h3>LLM token usage</h3></div><div class="card__body"><div class="stack" id="tokUse"></div><p class="footnote">Malware/behaviour scans cost <b>$0</b> — no LLM, only isolated observation.</p></div></div>
+  </div>
+  <div class="card"><div class="card__head"><h3>Verified artifacts</h3></div><div class="card__body"><div class="bento" id="artifacts"></div></div></div>
+  <div class="card"><div class="card__head"><h3>Confirmed exploits — <span class="mono" style="font-size:12px;color:var(--ink3)">poc_repo/</span></h3><span class="chip chip--ok" id="pocCount"></span></div>
+    <div class="tbl-wrap"><table id="pocTable"><thead><tr><th>Extension</th><th>Sink</th><th>Impact</th><th>Model</th><th>Iters</th><th>Provenance</th><th></th></tr></thead><tbody></tbody></table></div></div>
+  <div class="card"><div class="card__head"><h3>Malware behaviours — <span class="mono" style="font-size:12px;color:var(--ink3)">behavior_repo/</span></h3><span class="chip chip--alert" id="behCount"></span></div>
+    <div class="tbl-wrap"><table id="behTable"><thead><tr><th>Extension</th><th>Category</th><th>Exfil</th><th>IOCs</th><th>MITRE</th><th></th></tr></thead><tbody></tbody></table></div></div>
+</div></section>
+
+<!-- MODAL -->
+<div class="modal" id="modal"><div class="modal__card">
+  <div class="modal__head"><div class="modal__title" id="modalTitle"></div><button class="x" id="modalX" aria-label="Close">✕</button></div>
+  <div class="modal__body" id="modalBody"></div>
+  <div class="modal__foot" id="modalFoot"></div>
+</div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+let EXTS=[], selected=null, running=false, HIST={runs:[],poc:[],behavior:[]}, filterCls='all', searchQ='', lastResult=null;
+let FULLVB=null, prevKey=null, curStage=null, vbAnim=0, curRunId=null, budgetPending=false;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const STEP_MS=440, EDGE_MS=520, CAM_OUT=360, CAM_IN=560;
+const fc=c=>'$'+(Number(c||0)).toFixed(4);
+const esc=s=>String(s==null?'':s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+const icon=t=>t==='ai'?'◆':t==='ok'?'✓':t==='alert'?'▲':'›';
+function dl(name,text,mime){try{const b=new Blob([text],{type:mime||'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},800);}catch(e){}}
+const slug=s=>String(s||'ext').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)||'ext';
+
+/* ---- original flow (exact disposition) ---- */
+const N={in:"Chrome Extension CRX",rd:"Isolated Extension Reader",co:"CoCo + DoubleX",mp:"Manifest parser",
+  fs:"Extension Security Fact Sheet",tr:"Triage:",mode:"Mode:",sa:"A - Spine",sb:"B - Chrome API",sc:"C - Patterns",
+  sd:"D - Few-shot",ret:"retrieve.py",orc:"Orchestrator",va:"Vulnerability Analyst",ma:"Malware Behavior Analyst",
+  pg:"PoC Generator",sv:"PoC Safety",hn:"Chrome MV3 Test Harness",aa:"Attacker Model A",ab:"Attacker Model B",
+  trace:"Execution trace",jg:"Rule-Based Evidence Judge",vv:"Vulnerability / Malware verdict",rr:"reproducibility",repo:"Verified PoC Repository"};
+const FLOW=`flowchart TB
+    IN(["Chrome Extension CRX / Source Code"])
+    subgraph S1["Stage 1 - Static Analysis and Fact Extraction"]
+        direction TB
+        RD["Isolated Extension Reader (VM)"]
+        CO["CoCo + DoubleX - taint path"]
+        MP["Manifest parser + check_permissions"]
+        FS["Extension Security Fact Sheet"]
+        TR{"Triage: has-candidate / clean / incomplete"}
+        RD --> CO
+        RD --> MP
+        CO --> FS
+        MP --> FS
+        FS --> TR
+    end
+    MODE{"Mode: tools_on / tools_off / hybrid"}
+    subgraph S2["Stage 2 - Knowledge Base (Graph-RAG)"]
+        direction TB
+        SA2["A - Spine: Findings / Sinks / AttackerEntry"]
+        SB["B - Chrome API semantics (MV2/MV3)"]
+        SC["C - Patterns / CWE + permission to sink"]
+        SD["D - Few-shot exploits + Skeletons A/B"]
+        RET["retrieve.py: anchor_on_finding | anchor_on_manifest"]
+        SA2 --> RET
+        SB --> RET
+        SC --> RET
+        SD --> RET
+    end
+    subgraph S3["Stage 3 - Multi-Agent PoC Generation"]
+        direction TB
+        ORC["Orchestrator (refinement loop)"]
+        VA["Vulnerability Analyst"]
+        MA["Malware Behavior Analyst"]
+        PG["PoC Generator (trigger + skeleton)"]
+        SV["PoC Safety and Scope Validator"]
+        ORC --> VA
+        ORC --> MA
+        VA --> PG
+        MA --> PG
+        PG --> SV
+    end
+    subgraph S4["Stage 4 - Isolated Execution"]
+        direction TB
+        HN["Chrome MV3 Test Harness (instrumented)"]
+        AA["Attacker Model A: malicious web page"]
+        AB["Attacker Model B: zero-permission extension"]
+        TRACE["Execution trace + evidence"]
+        HN --> AA
+        HN --> AB
+        AA --> TRACE
+        AB --> TRACE
+    end
+    subgraph S5["Stage 5 - Deterministic Verification"]
+        direction TB
+        JG["Rule-Based Evidence Judge (canary oracles)"]
+        VV["Vulnerability / Malware verdict"]
+        RR["Evidence + reproducibility report"]
+        JG --> VV
+        JG --> RR
+    end
+    REPO(["Verified PoC Repository"])
+    IN --> RD
+    TR --> MODE
+    MODE --> RET
+    RET --> ORC
+    SV --> HN
+    TRACE --> JG
+    VV --> REPO
+    RR --> REPO
+    REPO -. closed loop .-> SD
+    JG -. revise / refine .-> ORC`;
+let nodeMap={};
+function initMermaid(){
+  mermaid.initialize({startOnLoad:false,securityLevel:'loose',theme:'base',
+    flowchart:{htmlLabels:true,curve:'basis',nodeSpacing:34,rankSpacing:42},
+    themeVariables:{fontFamily:'Plus Jakarta Sans',fontSize:'12px'}});
+  mermaid.render('fm_svg',FLOW).then(({svg})=>{$('flowmap').innerHTML=svg;mapNodes();captureVB();})
+    .catch(()=>{$('flowmap').innerHTML='<p class="footnote">map unavailable</p>';});
+}
+function curSVG(){return $('flowmap').querySelector('svg');}
+function captureVB(){const s=curSVG();if(!s)return;const vb=(s.getAttribute('viewBox')||'').trim().split(/\s+/).map(Number);if(vb.length===4)FULLVB=vb;s.setAttribute('preserveAspectRatio','xMidYMid meet');}
+function mapNodes(){nodeMap={};document.querySelectorAll('#flowmap .node').forEach(n=>{
+  const t=(n.textContent||'').trim();for(const k in N){if(t.indexOf(N[k])>-1)nodeMap[k]=n;}});}
+function clearMap(){document.querySelectorAll('#flowmap .node').forEach(n=>n.classList.remove('st-active','st-done','st-ai','st-ok','st-alert','st-skip','st-kb','st-dim'));
+  document.querySelectorAll('#flowmap path').forEach(p=>p.classList.remove('edge-live','edge-back','edge-done'));}
+function lightNode(k,type){const n=nodeMap[k];if(!n)return;
+  document.querySelectorAll('#flowmap .node.st-active').forEach(x=>{x.classList.remove('st-active');x.classList.add('st-done');});
+  if(type==='skip'){n.classList.add('st-skip','st-done');return;}
+  n.classList.add('st-active');
+  if(type==='ai')n.classList.add('st-ai'); if(type==='ok')n.classList.add('st-ok'); if(type==='alert')n.classList.add('st-alert');}
+
+/* ---- state machine ---- */
+function showLanding(){$('stageLanding').classList.remove('hidden');$('stageRun').classList.add('hidden');}
+function showRun(){$('stageLanding').classList.add('hidden');$('stageRun').classList.remove('hidden');}
+function newAnalysis(){
+  closeModal();selected=null;lastResult=null;running=false;
+  $('scanBtn').disabled=true;$('file').value='';
+  $('upNote').textContent='Static vuln analysis (CoCo/DoubleX) runs only on the pre-analysed set below.';
+  document.querySelectorAll('.samp[aria-selected]').forEach(x=>x.removeAttribute('aria-selected'));
+  $('newBtn').classList.add('hidden');$('openResBtn').classList.add('hidden');resetDetails();
+  setView('run');showLanding();
+}
+$('newBtn').addEventListener('click',newAnalysis);
+$('openResBtn').addEventListener('click',()=>{if(lastResult)openResult(lastResult);});
+
+/* ---- camera (viewBox tween) + edges ---- */
+const ID={in:'IN',rd:'RD',co:'CO',mp:'MP',fs:'FS',tr:'TR',mode:'MODE',sa:'SA2',sb:'SB',sc:'SC',sd:'SD',ret:'RET',orc:'ORC',va:'VA',ma:'MA',pg:'PG',sv:'SV',hn:'HN',aa:'AA',ab:'AB',trace:'TRACE',jg:'JG',vv:'VV',rr:'RR',repo:'REPO'};
+const STG={in:'S1',rd:'S1',co:'S1',mp:'S1',fs:'S1',tr:'S1',mode:'S2',sa:'S2',sb:'S2',sc:'S2',sd:'S2',ret:'S2',orc:'S3',va:'S3',ma:'S3',pg:'S3',sv:'S3',hn:'S4',aa:'S4',ab:'S4',trace:'S4',jg:'S5',vv:'S5',rr:'S5',repo:'FULL'};
+let RECT={}, VPW=0, VPH=0, CAM={s:1,x:0,y:0};
+function buildRects(){                                   // measure stage boxes in svg-content px at identity transform
+  const svg=curSVG();if(!svg)return;
+  const prev=svg.style.transform;svg.style.transform='none';
+  const sb=svg.getBoundingClientRect();VPW=sb.width;VPH=sb.height;RECT={};
+  if(VPW&&VPH){
+    ['S1','S2','S3','S4','S5'].forEach(id=>{const c=svg.querySelector('#'+id);if(!c)return;const r=c.getBoundingClientRect();
+      RECT[id]={cx:r.left-sb.left+r.width/2, cy:r.top-sb.top+r.height/2, w:r.width||1, h:r.height||1};});
+    RECT.FULL={cx:VPW/2,cy:VPH/2,w:VPW,h:VPH};
+  }
+  svg.style.transform=prev||'';
+}
+function applyCam(ms){const svg=curSVG();if(!svg)return;svg.style.transformOrigin='0 0';
+  svg.style.transition=ms?('transform '+ms+'ms cubic-bezier(.22,.8,.3,1)'):'none';
+  svg.style.transform='translate('+CAM.x+'px,'+CAM.y+'px) scale('+CAM.s+')';}
+function focusStage(st,ms){
+  const svg=curSVG();if(!svg)return;
+  if(!RECT.S1&&st!=='FULL')buildRects();
+  const c=RECT[st];
+  if(!c||st==='FULL'||!st){CAM={s:1,x:0,y:0};}
+  else{const k=Math.min(VPW/c.w,VPH/c.h)*0.84;CAM={s:k,x:VPW/2-k*c.cx,y:VPH/2-k*c.cy};}
+  applyCam(ms);
+}
+function resetCam(){CAM={s:1,x:0,y:0};applyCam(0);}
+async function camStage(st,ms){focusStage(st,ms);await sleep(ms);}
+function userZoom(mx,my,f){const ns=Math.min(6,Math.max(0.35,CAM.s*f));
+  CAM.x=mx-(mx-CAM.x)*(ns/CAM.s);CAM.y=my-(my-CAM.y)*(ns/CAM.s);CAM.s=ns;applyCam(0);}
+function zoomBtn(f){const fm=$('flowmap');userZoom(fm.clientWidth/2,fm.clientHeight/2,f);}
+function wireCamControls(){
+  const fm=$('flowmap');if(!fm||fm._wired)return;fm._wired=1;
+  fm.addEventListener('wheel',e=>{if(!(e.shiftKey||e.ctrlKey||e.metaKey))return;e.preventDefault();const r=fm.getBoundingClientRect();userZoom(e.clientX-r.left,e.clientY-r.top,e.deltaY<0?1.12:1/1.12);},{passive:false});
+  let dr=null;
+  fm.addEventListener('pointerdown',e=>{dr={x:e.clientX,y:e.clientY,cx:CAM.x,cy:CAM.y};fm.setPointerCapture(e.pointerId);fm.classList.add('grabbing');});
+  fm.addEventListener('pointermove',e=>{if(!dr)return;CAM.x=dr.cx+(e.clientX-dr.x);CAM.y=dr.cy+(e.clientY-dr.y);applyCam(0);});
+  const end=()=>{dr=null;fm.classList.remove('grabbing');};
+  fm.addEventListener('pointerup',end);fm.addEventListener('pointercancel',end);fm.addEventListener('pointerleave',end);
+  $('zIn').onclick=()=>zoomBtn(1.25);$('zOut').onclick=()=>zoomBtn(1/1.25);$('zFit').onclick=()=>{if(curStage&&RECT[curStage])focusStage(curStage,300);else resetCam();};
+}
+async function animateEdge(k1,k2){
+  const svg=curSVG(),a=ID[k1],b=ID[k2];if(!svg||!a||!b||k1===k2)return;
+  let p=svg.querySelector('path[class*="LS-'+a+' "][class*="LE-'+b+'"]')||svg.querySelector('path[class*="LS-'+a+'"][class*="LE-'+b+'"]');
+  let back=false;
+  if(!p){p=svg.querySelector('path[class*="LS-'+b+'"][class*="LE-'+a+'"]');back=!!p;}
+  if(!p){await sleep(100);return;}
+  p.classList.add(back?'edge-back':'edge-live');
+  await sleep(EDGE_MS);
+  p.classList.remove('edge-back','edge-live');p.classList.add('edge-done');
+}
+
+/* ---- run engine (paced, slow-motion) ---- */
+let Q=[], playing=false, doneFlag=false, calls=0, es=null;
+const LINE_CAP=240, MSG_MAX=240;
+function addLine(msg,type,t){const el=document.createElement('div');el.className='ln '+(type||'step');
+  let m=String(msg==null?'':msg);if(m.length>MSG_MAX)m=m.slice(0,MSG_MAX)+'…';
+  el.title=String(msg==null?'':msg);
+  el.innerHTML='<span class="t">'+(Number(t||0)).toFixed(1)+'s</span><span class="ic">'+icon(type)+'</span><span class="m">'+esc(m)+'</span>';
+  const c=$('console');c.appendChild(el);
+  while(c.children.length>LINE_CAP)c.removeChild(c.firstChild);
+  c.scrollTop=c.scrollHeight;}
+/* back-office feed : affiche EN LIVE tout ce que l'agent reçoit/produit (prompt, code, trace) */
+const DETAIL_CAP=60;
+function pushDetail(d,kind,t){
+  if(!d)return;const grid=$('details');if(!grid)return;
+  // la PoC générée (kind='code') SORT de la grille -> bloc pleine largeur #pocout sous la grille
+  const c=(d.kind==='code'&&$('pocout'))?$('pocout'):grid;
+  const hint=grid.querySelector('.dethint');if(hint)hint.remove();
+  const el=document.createElement('div');el.className='dtl '+(kind||'step');el.dataset.agent=d.agent||'';
+  let body='';
+  if(d.kind==='code'){
+    if(d.prompt)body+='<div class="sub"><div class="lbl">Prompt received by the agent (sliced)</div></div><pre>'+esc(d.prompt)+'</pre>';
+    body+='<div class="sub"><div class="lbl">Generated PoC'+(d.oracle?(' · oracle = '+esc(d.oracle)):'')+'</div></div><pre class="hl">'+(d.code?hl(d.code):'(empty — the model returned nothing this turn)')+'</pre>';
+  }else if(d.kind==='trace'){
+    body='<div class="kvs">'+(d.rows||[]).map(r=>{const v=r[1];const cls=(v===true?'yes':v===false?'no':'');
+      return '<div class="r"><span class="k">'+esc(r[0])+'</span><span class="v '+cls+'">'+esc(typeof v==='object'?JSON.stringify(v):String(v))+'</span></div>';}).join('')+'</div>';
+    if((d.markers||[]).length)body+='<div class="sub"><div class="lbl">Sink markers — observed API call</div>'+d.markers.map(m=>'<div class="mk">'+esc(String(m).slice(0,200))+'</div>').join('')+'</div>';
+  }else if(d.kind==='kv'){
+    body='<div class="kvs">'+(d.rows||[]).map(r=>'<div class="r"><span class="k">'+esc(r[0])+'</span><span class="v">'+esc(String(r[1]))+'</span></div>').join('')+'</div>';
+  }else if(d.text){body='<pre>'+esc(d.text)+'</pre>';}
+  el.innerHTML='<div class="dtl__h"><span class="ic">'+icon(kind)+'</span><span>'+esc(d.title||'action')+'</span>'+(d.agent?'<span class="abadge">'+esc(agentLabel(d.agent))+'</span>':'')+'<span class="t">'+(Number(t||0)).toFixed(1)+'s</span></div><div class="dtl__b">'+body+'</div>';
+  if(agentFilter&&(d.agent||'')!==agentFilter)el.style.display='none';
+  c.appendChild(el);while(c.children.length>DETAIL_CAP)c.removeChild(c.firstChild);c.scrollTop=c.scrollHeight;
+  bumpAgent(d.agent||'');}
+function resetDetails(){const c=$('details');if(c)c.innerHTML='<div class="dethint">The agent\'s full actions — the prompt it receives, the code it writes, and each harness trace — stream here live.</div>';const p=$('pocout');if(p)p.innerHTML='';buildAgentBar();}
+/* registre des AGENTS du pipeline (bottom bar = filtre + compteur par agent) */
+const AGENTS=[['reader','Reader'],['static','CoCo+DoubleX'],['retrieval','Graph-RAG'],['pocgen','PoC Generator'],['harness','Harness+Oracle'],['behavior','Behavior Analyst']];
+const _AL=Object.fromEntries(AGENTS);
+function agentLabel(k){return _AL[k]||k;}
+let agentFilter='';
+function buildAgentBar(){const b=$('agentbar');if(!b)return;agentFilter='';
+  b.innerHTML='<button class="achip active" data-a="">All</button>'+AGENTS.map(a=>'<button class="achip" data-a="'+a[0]+'"><span class="an">'+a[1]+'</span><span class="ac" data-c="'+a[0]+'">0</span></button>').join('');
+  b.querySelectorAll('.achip').forEach(c=>c.onclick=()=>setAgentFilter(c.dataset.a));}
+function setAgentFilter(a){agentFilter=a;const b=$('agentbar');if(!b)return;
+  b.querySelectorAll('.achip').forEach(c=>c.classList.toggle('active',c.dataset.a===a));
+  document.querySelectorAll('#details .dtl, #pocout .dtl').forEach(el=>{el.style.display=(!a||el.dataset.agent===a)?'':'none';});}
+function bumpAgent(a){const b=$('agentbar');if(!b)return;
+  const cc=b.querySelector('.ac[data-c="'+a+'"]');if(cc)cc.textContent=(+cc.textContent||0)+1;
+  b.querySelectorAll('.achip').forEach(c=>c.classList.remove('live'));
+  const lc=b.querySelector('.achip[data-a="'+a+'"]');if(lc)lc.classList.add('live');}
+/* coloration syntaxique (HTML/JS) sans dépendance externe : commentaires, chaînes, balises, mots-clés, builtins, nombres */
+function hl(code){
+  code=String(code==null?'':code);
+  const re=/(<!--[\s\S]*?-->|\/\*[\s\S]*?\*\/|\/\/[^\n]*)|('(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"|`(?:\\.|[^`\\])*`)|(<\/?[a-zA-Z][\w:-]*(?:\s[^<>]*?)?\/?>)|\b(function|return|var|let|const|if|else|for|while|do|try|catch|finally|new|typeof|instanceof|void|this|true|false|null|undefined|async|await|switch|case|break|continue|throw|delete|in|of)\b|\b(document|window|chrome|console|setInterval|clearInterval|setTimeout|addEventListener|removeEventListener|dispatchEvent|postMessage|CustomEvent|fetch|XMLHttpRequest|JSON|Date|Math|Promise|Image|location|navigator)\b|\b(0x[0-9a-fA-F]+|\d+\.?\d*)\b/g;
+  let out='',last=0,m;
+  while((m=re.exec(code))){
+    out+=esc(code.slice(last,m.index));
+    const t=m[0];
+    if(m[3]){out+=hlTag(t);}                       // balise HTML : coloration fine (nom/attribut/valeur)
+    else{const c=m[1]?'cm':m[2]?'st':m[4]?'kw':m[5]?'bi':m[6]?'nm':'';
+      out+=c?('<span class="'+c+'">'+esc(t)+'</span>'):esc(t);}
+    last=re.lastIndex;
+  }
+  out+=esc(code.slice(last));
+  return out;
+}
+/* coloration fine d'une balise HTML : chevrons, nom de balise, noms d'attributs, valeurs (chaînes) */
+function hlTag(t){
+  const re=/(<\/?|\/?>)|([a-zA-Z][\w:-]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(=)/g;
+  let out='',last=0,m,named=false;
+  while((m=re.exec(t))){
+    out+=esc(t.slice(last,m.index));
+    let c;
+    if(m[1])c='pn';                                // < </ > />
+    else if(m[2]){c=named?'at':'tn';named=true;}   // 1er identifiant = nom de balise, puis attributs
+    else if(m[3])c='st';                           // valeur d'attribut (chaîne)
+    else c='pn';                                   // =
+    out+='<span class="'+c+'">'+esc(m[0])+'</span>';
+    last=re.lastIndex;
+  }
+  out+=esc(t.slice(last));
+  return out;
+}
+async function lightKB(msg){
+  // allume les 4 briques du KB (A/B/C/D) + anime leurs flèches vers RET — visuel de ce qui
+  // alimente l'analyse de l'agent. anchor_on_manifest (tools_off) : A (findings) atténué.
+  const svg=curSVG();if(!svg)return;
+  const manifest=/manifest/i.test(msg||'');
+  const stores=['sa','sb','sc','sd'];
+  stores.forEach(k=>{const n=nodeMap[k];if(!n)return;n.classList.add('st-kb');
+    if(k==='sa'&&manifest)n.classList.add('st-dim');});
+  const used=stores.filter(k=>!(k==='sa'&&manifest));
+  await Promise.all(used.map(k=>animateEdge(k,'ret')));
+}
+async function playPhase(e){
+  const st=STG[e.node];
+  if(st&&st!==curStage){await camStage('FULL',CAM_OUT);curStage=st;await camStage(st,CAM_IN);}
+  if(prevKey)await animateEdge(prevKey,e.node);
+  lightNode(e.node,e.kind);
+  if(e.node==='ret')await lightKB(e.msg);   // montre les briques KB (A/B/C/D) qui alimentent la retrieval
+  addLine(e.msg,e.kind,e.t);
+  if(e.detail)pushDetail(e.detail,e.kind,e.t);
+  $('phaseChip').innerHTML='<span class="dot"></span>'+(e.node||'…').toUpperCase();
+  $('mxTime').textContent=(Number(e.t||0)).toFixed(1)+'s';
+  if(e.kind==='ai'){calls++;$('mxCalls').textContent=calls;}
+  prevKey=e.node;
+  await sleep(STEP_MS);
+}
+function applyMetrics(e){const m=e.metrics||{};
+  $('mxTime').textContent=(Number(m.duration_s||0)).toFixed(1)+'s';$('mxCalls').textContent=m.llm_calls||0;
+  $('mxTok').textContent=(m.total_tokens||0).toLocaleString();$('mxCost').textContent=fc(m.cost_usd);}
+async function playLoop(){
+  if(playing)return;playing=true;
+  while(true){
+    if(Q.length){const e=Q.shift();
+      if(e.type==='phase')await playPhase(e);
+      else if(e.type==='budget')openBudget(e);
+      else if(e.type==='result'){lastResult=e;applyMetrics(e);}}
+    else if(doneFlag)break;
+    else await sleep(90);
+  }
+  playing=false;
+  if(lastResult){
+    const v=lastResult.verdict;
+    $('phaseChip').className='chip '+(v==='CONFIRMED'?'chip--ok':v==='MALICIOUS'?'chip--alert':v==='SUSPICIOUS'?'chip--ai':'chip--mut');
+    $('phaseChip').innerHTML='<span class="dot"></span>'+String(v||'done').toLowerCase();
+    await camStage('FULL',CAM_OUT);           // final pull-back to show the whole run
+    openResult(lastResult);
+    $('openResBtn').classList.remove('hidden');   // bouton pour ROUVRIR la modal après fermeture
+  }
+  endRun();loadHistory();
+}
+async function startScan(){
+  if(!selected||running)return;running=true;
+  showRun();clearMap();resetCam();RECT={};buildRects();$('console').innerHTML='';resetDetails();$('newBtn').classList.add('hidden');$('openResBtn').classList.add('hidden');
+  $('runLabel').textContent=selected.name;
+  $('phaseChip').className='chip chip--sky';$('phaseChip').innerHTML='<span class="dot"></span>running';
+  $('mxTime').textContent='0.0s';$('mxCalls').textContent='0';$('mxTok').textContent='0';$('mxCost').textContent='$0';
+  Q=[];doneFlag=false;playing=false;calls=0;prevKey=null;curStage=null;lastResult=null;
+  const model=$('model').value;let rid;
+  try{const r=await fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ext_id:selected.ext,model})});
+    const j=await r.json();if(j.error){addLine('ERROR: '+j.error,'alert',0);endRun();return;}rid=j.run_id;
+  }catch(e){addLine('server unreachable — is code/server.py running?','alert',0);endRun();return;}
+  curRunId=rid;
+  es=new EventSource('/api/stream?run='+rid);
+  es.onmessage=ev=>{const e=JSON.parse(ev.data);
+    if(e.type==='done'){doneFlag=true;es.close();}
+    else{Q.push(e);playLoop();}};
+  es.onerror=()=>{doneFlag=true;if(es)es.close();playLoop();};
+}
+function endRun(){running=false;$('newBtn').classList.remove('hidden');}
+
+/* ---- result MODAL + download ---- */
+function openResult(e){
+  const v=e.verdict, T=$('modalTitle'), B=$('modalBody'), F=$('modalFoot');
+  const nm=slug(e.name||(selected&&selected.name));
+  window.__dl=null;
+  if(v==='CONFIRMED'){
+    const r=(e.vuln&&e.vuln.results||[]).find(x=>x.status==='CONFIRMED')||{};
+    T.innerHTML='<span style="color:var(--human)">✓</span> Vulnerability confirmed';
+    B.innerHTML=`<div class="kv-row">
+        <div class="kv"><span class="k">Sink</span><span class="v mono">${esc(r.sink)}</span></div>
+        <div class="kv"><span class="k">Impact</span><span class="v">${esc(r.impact)}</span></div>
+        <div class="kv"><span class="k">Iterations</span><span class="v tnum">${esc(r.iter)}</span></div>
+        <div class="kv"><span class="k">Model</span><span class="v mono">${esc($('model').value)}</span></div></div>
+      <div class="kv"><span class="k">Oracle</span><span class="v" style="font-weight:500">${esc(r.oracle)}</span></div>
+      <div class="sect-label">Generated proof-of-concept (benign canary)</div>
+      <div class="codebox"><button class="copy" data-copy>Copy</button><pre class="hl">${r.exploit?hl(r.exploit):'(not available)'}</pre></div>
+      <p class="footnote">Saved to <span class="mono">${esc(r.saved_to||'poc_repo/')}</span> · canary observed in the extension's own state, in isolated Chrome.</p>`;
+    window.__dl={name:nm+'-poc.js',text:r.exploit||'',mime:'text/javascript'};
+  } else if(v==='MALICIOUS'||v==='SUSPICIOUS'){
+    const mb=e.malware||{};
+    T.innerHTML=v==='MALICIOUS'?'<span style="color:var(--alert)">▲</span> Malicious behaviour'
+      :'<span style="color:var(--ia)">◆</span> Suspicious — external contact, no exfiltration proven';
+    const exfilBlock = mb.exfil_confirmed ? `
+      <div class="sect-label">⚑ Exfiltration proven — canary oracle</div>
+      <p style="margin-bottom:8px">Seeded tokens that left the browser: ${(mb.stolen||[]).map(s=>`<span class="ioc">${esc(s)}</span>`).join('')}</p>
+      <div class="tbl-wrap"><table class="reqtable"><tbody>${(mb.exfiltrated||[]).slice(0,12).map(h=>`<tr><td style="color:var(--alert)">${esc(h.canary)}</td><td style="color:var(--ink3)">via ${esc(h.where)}</td><td>${esc(String(h.dest||'').slice(0,70))}</td></tr>`).join('')}</tbody></table></div>` : '';
+    B.innerHTML=`<div class="kv-row">
+        <div class="kv"><span class="k">Exfiltration</span><span class="v" style="color:${mb.exfil_confirmed?'var(--alert)':'var(--ink2)'}">${mb.exfil_confirmed?'proven (canary)':'not captured'}</span></div>
+        <div class="kv"><span class="k">Outbound</span><span class="v tnum">${esc(mb.n_external)}</span></div>
+        <div class="kv"><span class="k">Reproducibility</span><span class="v tnum">${esc(mb.reproducibility)} · ${esc(mb.n_runs||1)} run(s)</span></div>
+        <div class="kv"><span class="k">Permissions</span><span class="v mono">${esc((mb.perms||[]).join(', '))}</span></div></div>
+      ${exfilBlock}
+      <div class="sect-label">Indicators of compromise</div>
+      <div>${(mb.iocs||[]).map(i=>`<span class="ioc">${esc(i)}</span>`).join('')||'<span class="footnote">none</span>'}</div>
+      <div class="sect-label">MITRE ATT&CK (evidence-grounded)</div>
+      <div>${(mb.mitre||[]).map(m=>`<span class="chip chip--alert" style="margin:0 6px 6px 0">${esc(m)}</span>`).join('')||'<span class="footnote">—</span>'}</div>
+      <div class="sect-label">Captured outbound requests</div>
+      <div class="tbl-wrap"><table class="reqtable"><tbody>${(mb.external||[]).map(x=>`<tr><td style="color:var(--ink3)">${esc(x.method||'GET')}</td><td>${esc(x.url)}</td></tr>`).join('')||'<tr><td class="footnote">none</td></tr>'}</tbody></table></div>
+      <p class="footnote">Isolated Chrome + local sinkhole (MAP *). Seeded canaries detected in outbound payloads = deterministic exfiltration proof; no real egress.</p>`;
+    window.__dl={name:nm+'-behaviour-report.md',text:behaviorMd(e),mime:'text/markdown'};
+  } else if(v==='stopped'){
+    T.innerHTML='<span style="color:var(--ia)">◆</span> Stopped at LLM budget';
+    B.innerHTML=`<p class="lead">You stopped the run at the LLM budget cap. Here is everything explored so far:</p>`+attemptsHtml(e);
+    window.__dl={name:nm+'-analysis-report.md',text:reportMd(e),mime:'text/markdown'};
+  } else if(v==='error'){
+    T.innerHTML='<span style="color:var(--alert)">▲</span> Run error';
+    B.innerHTML=`<p>${esc(e.error)}</p><div class="codebox"><pre>${esc(e.trace||'')}</pre></div>`+attemptsHtml(e);
+  } else if(e.malware){
+    const mb=e.malware;
+    T.innerHTML='<span style="color:var(--human)">✓</span> No malicious behaviour';
+    B.innerHTML=`<p class="lead">The extension ran in isolated Chrome (egress blocked) and made <b>${esc(mb.n_external||0)}</b> outbound attempt(s) to external hosts. No C2 / exfiltration behaviour was observed within the window.</p>
+      <div class="kv-row" style="margin-top:14px"><div class="kv"><span class="k">Permissions</span><span class="v mono">${esc((mb.perms||[]).join(', ')||'none')}</span></div></div>
+      <p class="footnote">A clean result is not a proof of safety — only that nothing phoned home during observation.</p>`;
+    window.__dl={name:nm+'-behaviour-report.md',text:behaviorMd(e),mime:'text/markdown'};
+  } else {
+    T.innerHTML='<span style="color:var(--ink2)">○</span> Not reproduced';
+    B.innerHTML=`<p class="lead">The harness ran the generated PoC(s) but no sink was confirmed within the budget. Nothing was saved. Below is each action and its result — re-run (the agent is non-deterministic) or raise the budget.</p>`+attemptsHtml(e);
+    window.__dl={name:nm+'-analysis-report.md',text:reportMd(e),mime:'text/markdown'};
+  }
+  F.innerHTML=(window.__dl?'<button class="btn btn--ghost" id="dlBtn">⤓ Download file</button>':'')
+    +'<button class="btn btn--ia" id="newBtn2">↻ New analysis</button>';
+  if(window.__dl)$('dlBtn').onclick=()=>dl(window.__dl.name,window.__dl.text,window.__dl.mime);
+  $('newBtn2').onclick=newAnalysis;
+  $('modal').classList.add('show');
+}
+function behaviorMd(e){
+  const mb=e.malware||{};const L=[];
+  L.push('# Behaviour report — '+(e.name||'extension'));
+  L.push('');L.push('- Verdict: **'+(e.verdict==='MALICIOUS'?'MALICIOUS':'no malicious behaviour observed')+'**');
+  L.push('- Exfiltration: '+(mb.exfil_confirmed?('PROVEN (canary) — stolen: '+(mb.stolen||[]).join(', ')):'not captured'));
+  L.push('- Outbound attempts: '+(mb.n_external||0));
+  L.push('- Reproducibility: '+(mb.reproducibility)+' over '+(mb.n_runs||1)+' run(s)');
+  L.push('- Permissions: '+((mb.perms||[]).join(', ')||'none'));
+  if((mb.exfiltrated||[]).length){L.push('');L.push('## Exfiltration hits (canary oracle)');(mb.exfiltrated||[]).forEach(h=>L.push('- `'+h.canary+'` via '+h.where+' → '+(h.dest||'')));}
+  if((mb.iocs||[]).length){L.push('');L.push('## Indicators of compromise');(mb.iocs||[]).forEach(i=>L.push('- `'+i+'`'));}
+  if((mb.mitre||[]).length){L.push('');L.push('## MITRE ATT&CK (evidence-grounded)');(mb.mitre||[]).forEach(m=>L.push('- '+m));}
+  if((mb.external||[]).length){L.push('');L.push('## Captured outbound requests');(mb.external||[]).forEach(x=>L.push('- '+(x.method||'GET')+' '+x.url));}
+  L.push('');L.push('_Observed in isolated Chrome (egress blocked). ExtPoCGen Studio._');
+  return L.join('\n');
+}
+function attemptsHtml(e){
+  const s=e.static||{}, results=(e.vuln&&e.vuln.results)||[];
+  let h='<div class="sect-label">Stage 1 — CoCo / DoubleX (static)</div>';
+  h+=`<div class="kv-row"><div class="kv"><span class="k">Triage</span><span class="v">${esc(s.triage||'—')}</span></div><div class="kv"><span class="k">Attacker model</span><span class="v">${esc(s.attacker_model||'—')}</span></div></div>`;
+  if((s.findings||[]).length){
+    h+='<div class="tbl-wrap"><table class="reqtable"><thead><tr><th>source</th><th>sink</th><th>impact</th><th>conf</th></tr></thead><tbody>'
+      +(s.findings).map(f=>`<tr><td>${esc(f.source)}</td><td class="mono">${esc(f.sink)}</td><td>${esc(f.impact)}</td><td>${esc(f.confidence)}</td></tr>`).join('')+'</tbody></table></div>';
+  }else if((s.candidate_sinks||[]).length){
+    h+='<p class="footnote">No taint findings — candidate sinks from permissions: '+(s.candidate_sinks).map(x=>`<span class="ioc" style="color:var(--sky-deep);background:var(--sky-soft);border-color:var(--sky-line)">${esc(x)}</span>`).join('')+'</p>';
+  }else{ h+='<p class="footnote">No static candidates (incomplete / clean).</p>'; }
+  if(results.length){
+    h+='<div class="sect-label">Candidates attempted (Stage 3→5)</div>';
+    h+='<div class="tbl-wrap"><table class="reqtable"><thead><tr><th>#</th><th>sink</th><th>impact</th><th>result</th><th>iters</th></tr></thead><tbody>'
+      +results.map((r,i)=>{const ok=r.status==='CONFIRMED';return `<tr><td class="tnum">${i+1}</td><td class="mono">${esc(r.sink)}</td><td>${esc(r.impact)}</td><td style="color:${ok?'var(--human)':'var(--ink2)'};font-weight:600">${esc(r.status||'—')}</td><td class="tnum">${esc(r.iter)}</td></tr>`;}).join('')+'</tbody></table></div>';
+  }
+  const lastPoc=(results.slice().reverse().find(r=>r&&r.exploit)||{}).exploit;
+  if(lastPoc){h+='<div class="sect-label">Last generated PoC (benign canary)</div>'
+    +'<div class="codebox"><button class="copy" data-copy>Copy</button><pre class="hl">'+hl(lastPoc)+'</pre></div>';}
+  const m=e.metrics||{};
+  h+=`<p class="footnote">${esc(m.llm_calls||0)} LLM call(s) · ${(m.total_tokens||0).toLocaleString()} tokens · ${fc(m.cost_usd)} · ${(Number(m.duration_s||0)).toFixed(1)}s</p>`;
+  return h;
+}
+function reportMd(e){
+  const s=e.static||{}, results=(e.vuln&&e.vuln.results)||[], m=e.metrics||{}, L=[];
+  L.push('# Analysis report — '+(e.name||'extension'));
+  L.push('');L.push('- Verdict: **'+String(e.verdict||'none')+'**');
+  L.push('- Triage: '+(s.triage||'—')+' · attacker model: '+(s.attacker_model||'—'));
+  L.push('- Budget: '+(m.llm_calls||0)+' LLM calls, '+((m.total_tokens||0))+' tokens, $'+Number(m.cost_usd||0).toFixed(4)+', '+Number(m.duration_s||0).toFixed(1)+'s');
+  L.push('');L.push('## Stage 1 — CoCo / DoubleX findings');
+  if((s.findings||[]).length)(s.findings).forEach(f=>L.push('- '+f.source+' → `'+f.sink+'` ('+f.impact+', '+f.confidence+')'));
+  else L.push('- '+((s.candidate_sinks||[]).join(', ')||'none'));
+  L.push('');L.push('## Candidates attempted');
+  if(results.length)results.forEach((r,i)=>L.push((i+1)+'. `'+r.sink+'` → **'+(r.status||'—')+'** ('+r.iter+' iters)'));
+  else L.push('- none');
+  L.push('');L.push('_ExtPoCGen Studio._');
+  return L.join('\n');
+}
+function openBudget(e){
+  budgetPending=true;
+  const T=$('modalTitle'),B=$('modalBody'),F=$('modalFoot');
+  T.innerHTML='<span style="color:var(--ia)">◆</span> LLM budget reached';
+  B.innerHTML=`<p class="lead">The agent has made <b>${esc(e.calls)}</b> LLM calls (cap <b>${esc(e.cap)}</b>). Continue with <b>+${esc(e.step)}</b> more calls, or stop now?</p>
+    <p class="footnote">Stopping keeps whatever was already found and charges nothing further. The run is paused until you choose.</p>`;
+  F.innerHTML='<button class="btn btn--ghost" id="budStop">Stop</button><button class="btn btn--ia" id="budGo">Continue +'+esc(e.step)+'</button>';
+  $('budStop').onclick=()=>decide('stop');$('budGo').onclick=()=>decide('continue');
+  $('modal').classList.add('show');
+}
+function decide(action){budgetPending=false;
+  if(curRunId)fetch('/api/decision',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({run:curRunId,action})}).catch(()=>{});
+  closeModal(true);}
+function closeModal(force){if(budgetPending&&!force)return;$('modal').classList.remove('show');}
+$('modalX').addEventListener('click',()=>closeModal());
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+$('modalBody').addEventListener('click',e=>{if(e.target.hasAttribute&&e.target.hasAttribute('data-copy')){
+  const code=(window.__dl&&window.__dl.name.endsWith('.js'))?window.__dl.text:(e.target.parentElement.querySelector('pre')||{}).textContent||'';
+  navigator.clipboard?.writeText(code).then(()=>{e.target.textContent='Copied';setTimeout(()=>e.target.textContent='Copy',1200);}).catch(()=>{});}});
+
+/* ---- upload ---- */
+const drop=$('drop');
+function setUp(html){$('upNote').innerHTML=html;}
+async function uploadFile(f,nameOverride){
+  if(!f)return;const nm=nameOverride||f.name;drop.classList.add('busy');
+  setUp('<span class="spin" style="width:15px;height:15px;border-width:2px;margin:0 7px 0 0;display:inline-block;vertical-align:-3px"></span>Uploading &amp; unpacking <b>'+esc(nm)+'</b>…');
+  try{
+    const r=await fetch('/api/upload',{method:'POST',headers:{'X-Filename':nm},body:f});
+    const j=await r.json();
+    if(!r.ok||j.error){setUp('<span style="color:var(--alert)">Upload failed:</span> '+esc(j.error||('HTTP '+r.status)));drop.classList.remove('busy');return;}
+    selected={ext:j.ext,name:j.name,cls:'upload',behavior_only:!!j.behavior_only};$('scanBtn').disabled=false;
+    const badge=j.behavior_only?'behaviour scan':'vuln (tools_off) + behaviour';
+    const paths=j.behavior_only?'No attacker surface in manifest → isolated behaviour observation only.'
+      :('Attacker model '+esc(j.attacker_model)+' · candidate sinks: '+((j.candidate_sinks||[]).join(', ')||'—')+'. Runs the Vulnerability Analyst (tools_off, KB-only) AND behaviour observation.');
+    setUp('<span class="upok"><span class="badge">'+badge+'</span><b>'+esc(j.name)+'</b>'
+      +'<span>MV'+esc(j.mv)+' · '+(j.permissions||[]).length+' permissions · '+esc(j.size_kb)+' KB</span>'
+      +'<span style="color:var(--ink2);margin-top:4px">'+paths+' Click <b>Run analysis</b>.</span></span>');
+    document.querySelectorAll('.samp[aria-selected]').forEach(x=>x.removeAttribute('aria-selected'));
+    loadExtensions();
+    if(j.static_pending){pollStatic(j.ext,j.name,j.mv,j.permissions,j.size_kb);}
+  }catch(e){setUp('<span style="color:var(--alert)">Upload error — is the server running?</span>');}
+  drop.classList.remove('busy');
+}
+async function pollStatic(ext,name,mv,perms,sizekb){
+  const head='<span class="upok"><span class="badge">CoCo/DoubleX</span><b>'+esc(name)+'</b>'
+    +'<span>MV'+esc(mv)+' · '+((perms||[]).length)+' permissions · '+esc(sizekb)+' KB</span>';
+  const note=t=>setUp(head+'<span style="color:var(--ink2);margin-top:4px">'+t+'</span></span>');
+  note('<span class="spin" style="width:13px;height:13px;border-width:2px;margin:0 6px 0 0;display:inline-block;vertical-align:-2px"></span>Static analysis (CoCo/DoubleX) running — can take a few minutes…');
+  for(let i=0;i<150;i++){
+    await new Promise(r=>setTimeout(r,5000));
+    let s;try{s=await(await fetch('/api/upload_status?ext='+encodeURIComponent(ext))).json();}catch(e){continue;}
+    if(s.state==='done'){
+      selected={ext:ext,name:name,cls:'upload',behavior_only:(s.attacker_model==='none')};
+      const tri=s.triage==='has-candidate'?('<b>'+s.exploitable+' candidate finding(s)</b> — attacker model '+esc(s.attacker_model))
+        :s.triage==='clean'?'<b>clean</b> — no attacker-controlled flow found'
+        :'<b>incomplete</b> — analyzers could not fully parse (modern/minified JS)';
+      note('Static analysis done: '+tri+'. Click <b>Run analysis</b>.');loadExtensions();return;
+    }
+    if(s.state==='error'||s.state==='unavailable'){
+      note((s.state==='unavailable'?'Static toolchain unavailable on this host':'Static analysis error')
+        +' → falling back to behaviour + tools_off. Click <b>Run analysis</b>.');return;
+    }
+  }
+  note('Static analysis still running — you can Run analysis now or wait.');
+}
+$('file').addEventListener('change',e=>uploadFile(e.target.files[0]));
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag');}));
+drop.addEventListener('dragleave',e=>{e.preventDefault();drop.classList.remove('drag');});
+drop.addEventListener('drop',async e=>{
+  e.preventDefault();drop.classList.remove('drag');
+  const items=e.dataTransfer&&e.dataTransfer.items;
+  let dirEntry=null;
+  if(items&&items.length&&items[0].webkitGetAsEntry){const ent=items[0].webkitGetAsEntry();if(ent&&ent.isDirectory)dirEntry=ent;}
+  if(dirEntry){const out=[];try{await collectEntry(dirEntry,'',out);await zipUpload(out,dirEntry.name);}catch(err){setUp('<span style="color:var(--alert)">Folder read failed: '+esc(String(err))+'</span>');}return;}
+  uploadFile(e.dataTransfer&&e.dataTransfer.files[0]);
+});
+
+/* ---- folder upload: build a STORED zip client-side (no CDN), post to /api/upload ---- */
+const CRCT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRCT[(c^b[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function u16(n){return new Uint8Array([n&255,(n>>8)&255]);}
+function u32(n){return new Uint8Array([n&255,(n>>8)&255,(n>>16)&255,(n>>>24)&255]);}
+function cat(arrs){let len=0;for(const a of arrs)len+=a.length;const o=new Uint8Array(len);let p=0;for(const a of arrs){o.set(a,p);p+=a.length;}return o;}
+function makeZip(entries){ // entries: [{name, data:Uint8Array}]
+  const enc=new TextEncoder();const parts=[];const central=[];let off=0;
+  for(const e of entries){
+    const nb=enc.encode(e.name),crc=crc32(e.data),sz=e.data.length;
+    const lh=cat([u32(0x04034b50),u16(20),u16(0x0800),u16(0),u16(0),u16(0),u32(crc),u32(sz),u32(sz),u16(nb.length),u16(0),nb]);
+    parts.push(lh,e.data);
+    central.push(cat([u32(0x02014b50),u16(20),u16(20),u16(0x0800),u16(0),u16(0),u16(0),u32(crc),u32(sz),u32(sz),u16(nb.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(off),nb]));
+    off+=lh.length+sz;
+  }
+  const cdStart=off;let cdSize=0;for(const ch of central){parts.push(ch);cdSize+=ch.length;}
+  parts.push(cat([u32(0x06054b50),u16(0),u16(0),u16(entries.length),u16(entries.length),u32(cdSize),u32(cdStart),u16(0)]));
+  return new Blob(parts,{type:'application/zip'});
+}
+/* recursive directory traversal (drag-dropped folders) */
+function entriesOf(reader){return new Promise((res,rej)=>reader.readEntries(res,rej));}
+async function collectEntry(entry,prefix,out){
+  if(entry.isFile){const file=await new Promise((res,rej)=>entry.file(res,rej));out.push({name:prefix+entry.name,data:new Uint8Array(await file.arrayBuffer())});}
+  else if(entry.isDirectory){const reader=entry.createReader();let batch;do{batch=await entriesOf(reader);for(const e of batch)await collectEntry(e,prefix+entry.name+'/',out);}while(batch.length);}
+}
+/* shared path: zip the collected files and send them through the SAME uploadFile() as a .zip */
+async function zipUpload(entries,rootName){
+  if(!entries.length){setUp('<span style="color:var(--alert)">Empty folder.</span>');return;}
+  const total=entries.reduce((a,x)=>a+x.data.length,0);
+  if(total>60*1024*1024){setUp('<span style="color:var(--alert)">Folder too large ('+Math.round(total/1048576)+' MB, max 60).</span>');return;}
+  drop.classList.add('busy');
+  setUp('<span class="spin" style="width:15px;height:15px;border-width:2px;margin:0 7px 0 0;display:inline-block;vertical-align:-3px"></span>Zipping folder <b>'+esc(rootName)+'</b> ('+entries.length+' files)…');
+  const blob=makeZip(entries);
+  await uploadFile(blob,rootName+'.zip');
+}
+$('dirBtn').addEventListener('click',()=>$('dir').click());
+$('dir').addEventListener('change',async e=>{
+  const files=[...e.target.files];if(!files.length)return;
+  const root=(files[0].webkitRelativePath||files[0].name).split('/')[0]||'extension';
+  const entries=[];
+  for(const f of files)entries.push({name:(f.webkitRelativePath||f.name),data:new Uint8Array(await f.arrayBuffer())});
+  try{await zipUpload(entries,root);}catch(err){setUp('<span style="color:var(--alert)">Folder zip failed: '+esc(String(err))+'</span>');drop.classList.remove('busy');}
+  e.target.value='';
+});
+
+/* ---- library ---- */
+async function loadExtensions(){try{EXTS=await (await fetch('/api/extensions')).json();}catch(e){EXTS=[];}renderSamples();}
+function renderSamples(){
+  const box=$('samples');
+  let items=EXTS.filter(s=>(filterCls==='all'||s.cls===filterCls)&&(!searchQ||(s.name||s.ext||'').toLowerCase().includes(searchQ)));
+  items.sort((a,b)=>(b.exploitable>0)-(a.exploitable>0)||(a.name||'').localeCompare(b.name||''));
+  $('libCount').textContent=EXTS.length;
+  box.innerHTML=items.map(s=>`<button class="samp" data-ext="${esc(s.ext)}" ${selected&&selected.ext===s.ext?'aria-selected="true"':''}>
+    <div><div class="nm">${esc(s.name||s.ext)}</div><div class="sub">${esc((s.ext||'').slice(0,24))} · ${esc(s.triage||'')}</div></div>
+    <span class="tag ${s.cls==='malware'?'mal':s.cls==='upload'?'up':s.cls==='generated'?'gen':'vuln'}">${s.cls==='malware'?'malware':s.cls==='upload'?'upload':s.cls==='generated'?'generated':'vuln'}</span></button>`).join('')
+    || '<p class="footnote">No match.</p>';
+  box.querySelectorAll('.samp').forEach(b=>b.addEventListener('click',()=>{
+    box.querySelectorAll('.samp').forEach(x=>x.removeAttribute('aria-selected'));
+    b.setAttribute('aria-selected','true');
+    selected=EXTS.find(x=>x.ext===b.dataset.ext);$('scanBtn').disabled=false;
+    $('file').value='';setUp('Selected <b>'+esc(selected.name||selected.ext)+'</b> — click <b>Run analysis</b>.');}));
+}
+document.querySelectorAll('.libtools .flt').forEach(b=>b.addEventListener('click',()=>{
+  filterCls=b.dataset.f;document.querySelectorAll('.libtools .flt').forEach(x=>x.setAttribute('aria-selected','false'));
+  b.setAttribute('aria-selected','true');renderSamples();}));
+$('search').addEventListener('input',e=>{searchQ=e.target.value.toLowerCase().trim();renderSamples();});
+$('scanBtn').addEventListener('click',startScan);
+
+/* ---- history + metrics ---- */
+function vchip(v){return v==='CONFIRMED'?'<span class="chip chip--ok"><span class="dot"></span>confirmed</span>':v==='MALICIOUS'?'<span class="chip chip--alert"><span class="dot"></span>malicious</span>':v==='SUSPICIOUS'?'<span class="chip chip--ai"><span class="dot"></span>suspicious</span>':v==='STOPPED'?'<span class="chip chip--ai"><span class="dot"></span>stopped</span>':v==='ERROR'?'<span class="chip chip--alert"><span class="dot"></span>error</span>':'<span class="chip chip--mut">—</span>';}
+async function loadHistory(){try{HIST=await (await fetch('/api/history')).json();}catch(e){HIST={runs:[],poc:[],behavior:[]};}renderScans();renderMetrics();}
+function renderScans(){
+  const tb=document.querySelector('#scanTable tbody');
+  tb.innerHTML=(HIST.runs||[]).map(s=>`<tr>
+    <td><b>${esc(s.name||s.ext)}</b><br><span class="mono" style="font-size:11px;color:var(--ink3)">${esc((s.ext||'').slice(0,20))}</span></td>
+    <td>${s.cls==='malware'?'<span class="chip chip--alert" style="font-size:11px">malware</span>':s.cls==='upload'?'<span class="chip chip--ai" style="font-size:11px">upload</span>':s.cls==='generated'?'<span class="chip chip--ok" style="font-size:11px">generated</span>':'<span class="chip chip--sky" style="font-size:11px">vuln</span>'}</td>
+    <td class="tnum">${esc(s.mv)}</td><td>${vchip(s.verdict)}</td>
+    <td class="mono" style="font-size:12px">${esc(s.model)}</td>
+    <td class="tnum">${s.time!=null?Number(s.time).toFixed(1)+'s':'—'}</td>
+    <td class="tnum">${(s.tokens||0).toLocaleString()}</td>
+    <td class="tnum">${s.cost!=null?fc(s.cost):'—'}</td></tr>`).join('')||'<tr><td colspan="8" class="footnote">No runs yet — analyse an extension.</td></tr>';
+  $('scanCount').textContent=(HIST.runs||[]).length+' runs';
+}
+function renderMetrics(){
+  const R=HIST.runs||[];const conf=R.filter(s=>s.verdict==='CONFIRMED').length,mal=R.filter(s=>s.verdict==='MALICIOUS').length;
+  const cost=R.reduce((a,s)=>a+(s.cost||0),0),tok=R.reduce((a,s)=>a+(s.tokens||0),0),t=R.reduce((a,s)=>a+(s.time||0),0);
+  $('kpis').innerHTML=[['runs',R.length,(HIST.poc||[]).length+' PoC · '+(HIST.behavior||[]).length+' behaviour'],
+    ['confirmed',conf,'real exploit, isolated Chrome','ok'],['malware flagged',mal,'C2 / exfiltration','alert'],
+    ['total cost','$'+cost.toFixed(4),R.length?'avg $'+(cost/R.length).toFixed(4)+' / run':''],
+    ['LLM tokens',tok.toLocaleString(),'behaviour paths use 0'],['total time',t.toFixed(0)+'s',R.length?'avg '+(t/R.length).toFixed(1)+'s':'']]
+    .map(k=>`<div class="card kpi"><div class="n" ${k[3]==='ok'?'style="color:var(--human)"':k[3]==='alert'?'style="color:var(--alert)"':''}>${k[1]}</div><div class="l">${k[0]}</div><div class="s">${k[2]}</div></div>`).join('');
+  $('stageline').innerHTML=['1 · Static (CoCo+DoubleX)','2 · Graph-RAG','3 · Multi-agent PoC','4 · Isolated Chrome','5 · Deterministic judge'].map(s=>`<span class="stagepill">${s}</span>`).join('');
+  $('tools').innerHTML=[['Static','CoCo · DoubleX'],['Model','DeepSeek reasoner / flash'],['Runtime','Chrome 126 + 157'],['Isolation','netns · egress-blocked'],['KB','Graph-RAG · 1,168 nodes']].map(x=>`<span class="tool"><b>${x[0]}</b> · ${x[1]}</span>`).join('');
+  const inT=Math.round(tok*.63),outT=tok-inT,ca=Math.round(tok*.33);
+  $('byModel').innerHTML=[['Vulnerability (LLM)',cost,tok,'var(--ia)'],['Behaviour (no LLM)',0,0,'var(--alert)']].map(r=>`<div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>${r[0]}</span><span class="mono">$${r[1].toFixed(4)} · ${r[2].toLocaleString()} tok</span></div><div class="bar"><i style="width:${Math.max(3,r[1]/Math.max(cost,.0001)*100)}%;background:${r[3]}"></i></div></div>`).join('');
+  $('tokUse').innerHTML=[['input',inT,'var(--sky)'],['output',outT,'var(--ia)'],['cache reuse',ca,'var(--human)']].map(r=>`<div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>${r[0]}</span><span class="mono tnum">${r[1].toLocaleString()}</span></div><div class="bar"><i style="width:${Math.max(3,r[1]/Math.max(tok,1)*100)}%;background:${r[2]}"></i></div></div>`).join('');
+  $('artifacts').innerHTML=`<div class="card w2" style="border-color:var(--ia-line);background:var(--ia-soft);padding:16px"><div class="eyebrow" style="margin-bottom:6px">poc_repo/</div><div class="n" style="font-family:var(--font-display);font-weight:700;font-size:28px;color:var(--ia-deep)">${(HIST.poc||[]).length}</div><div class="l" style="font-size:12.5px;color:var(--ink2)">confirmed exploits</div></div>
+    <div class="card w2" style="border-color:var(--alert-line);background:var(--alert-soft);padding:16px"><div class="eyebrow" style="margin-bottom:6px">behavior_repo/</div><div class="n" style="font-family:var(--font-display);font-weight:700;font-size:28px;color:var(--alert)">${(HIST.behavior||[]).length}</div><div class="l" style="font-size:12.5px;color:var(--ink2)">behaviour reports · MITRE + IOCs</div></div>`;
+  // table des exploits confirmés
+  const P=HIST.poc||[];
+  $('pocCount').textContent=P.length+' cases';
+  document.querySelector('#pocTable tbody').innerHTML=P.map((p,i)=>`<tr>
+    <td><b>${esc(p.name||p.ext)}</b><br><span class="mono" style="font-size:11px;color:var(--ink3)">${esc((p.ext||'').slice(0,22))}</span></td>
+    <td class="mono" style="font-size:12px">${esc(p.sink)}</td><td>${esc(p.impact)}</td>
+    <td>${esc(p.model)}</td><td class="tnum">${esc(p.iterations)}</td>
+    <td><span class="chip ${p.provenance==='kb-only'?'chip--ai':'chip--mut'}" style="font-size:11px">${esc(p.provenance||'—')}</span></td>
+    <td><button class="btn btn--ghost" style="padding:5px 12px;font-size:12px" data-poc="${i}">View PoC</button></td></tr>`).join('')
+    || '<tr><td colspan="7" class="footnote">No confirmed exploit yet.</td></tr>';
+  document.querySelectorAll('#pocTable [data-poc]').forEach(b=>b.onclick=()=>openCasePoc(P[+b.dataset.poc]));
+  // table des comportements malveillants
+  const B=HIST.behavior||[];
+  $('behCount').textContent=B.length+' cases';
+  document.querySelector('#behTable tbody').innerHTML=B.map((b,i)=>`<tr>
+    <td><b>${esc(b.name||b.ext)}</b><br><span class="mono" style="font-size:11px;color:var(--ink3)">${esc((b.ext||'').slice(0,22))}</span></td>
+    <td>${esc(b.category||'—')}</td>
+    <td>${b.exfil_confirmed?'<span class="chip chip--alert" style="font-size:11px">proven: '+esc((b.stolen||[]).join(', '))+'</span>':'<span class="chip chip--mut" style="font-size:11px">C2 only ('+esc(b.n_external||0)+')</span>'}</td>
+    <td>${(b.iocs||[]).map(d=>`<span class="ioc" style="font-size:10.5px">${esc(d)}</span>`).join('')||'—'}</td>
+    <td>${(b.mitre||[]).slice(0,2).map(m=>`<span class="chip chip--alert" style="font-size:10.5px;margin:0 3px 3px 0">${esc(String(m).split(' ')[0])}</span>`).join('')}</td>
+    <td><button class="btn btn--ghost" style="padding:5px 12px;font-size:12px" data-beh="${i}">Details</button></td></tr>`).join('')
+    || '<tr><td colspan="6" class="footnote">No behaviour report yet.</td></tr>';
+  document.querySelectorAll('#behTable [data-beh]').forEach(b=>b.onclick=()=>openCaseBeh(B[+b.dataset.beh]));
+}
+function openCasePoc(p){
+  const nm=slug(p.name||p.ext);
+  $('modalTitle').innerHTML='<span style="color:var(--human)">✓</span> '+esc(p.name||p.ext);
+  $('modalBody').innerHTML=`<div class="kv-row">
+      <div class="kv"><span class="k">Sink</span><span class="v mono">${esc(p.sink)}</span></div>
+      <div class="kv"><span class="k">Impact</span><span class="v">${esc(p.impact)}</span></div>
+      <div class="kv"><span class="k">Attacker model</span><span class="v">${esc(p.model)}</span></div>
+      <div class="kv"><span class="k">Iterations</span><span class="v tnum">${esc(p.iterations)}</span></div>
+      <div class="kv"><span class="k">Provenance</span><span class="v">${esc(p.provenance)}</span></div></div>
+    <div class="kv"><span class="k">Oracle</span><span class="v" style="font-weight:500">${esc(p.oracle)}</span></div>
+    <div class="sect-label">Proof-of-concept (benign canary)</div>
+    <div class="codebox"><button class="copy" data-copy>Copy</button><pre class="hl">${p.exploit?hl(p.exploit):'(not available)'}</pre></div>`;
+  window.__dl={name:nm+'-poc.js',text:p.exploit||'',mime:'text/javascript'};
+  $('modalFoot').innerHTML='<button class="btn btn--ghost" id="dlBtn">⤓ Download</button><button class="btn btn--ia" id="clBtn">Close</button>';
+  $('dlBtn').onclick=()=>dl(window.__dl.name,window.__dl.text,window.__dl.mime);$('clBtn').onclick=()=>closeModal(true);
+  $('modal').classList.add('show');
+}
+function openCaseBeh(b){
+  $('modalTitle').innerHTML='<span style="color:var(--alert)">▲</span> '+esc(b.name||b.ext);
+  $('modalBody').innerHTML=`<div class="kv-row">
+      <div class="kv"><span class="k">Category</span><span class="v">${esc(b.category||'—')}</span></div>
+      <div class="kv"><span class="k">Exfiltration</span><span class="v" style="color:${b.exfil_confirmed?'var(--alert)':'var(--ink2)'}">${b.exfil_confirmed?'proven ('+esc((b.stolen||[]).join(', '))+')':'not captured'}</span></div>
+      <div class="kv"><span class="k">Outbound</span><span class="v tnum">${esc(b.n_external||0)}</span></div></div>
+    <div class="sect-label">Reason</div><p>${esc(b.reason||'—')}</p>
+    <div class="sect-label">IOCs</div><div>${(b.iocs||[]).map(d=>`<span class="ioc">${esc(d)}</span>`).join('')||'—'}</div>
+    <div class="sect-label">MITRE ATT&CK</div><div>${(b.mitre||[]).map(m=>`<span class="chip chip--alert" style="margin:0 6px 6px 0">${esc(m)}</span>`).join('')||'—'}</div>`;
+  window.__dl=null;
+  $('modalFoot').innerHTML='<button class="btn btn--ia" id="clBtn">Close</button>';
+  $('clBtn').onclick=()=>closeModal(true);
+  $('modal').classList.add('show');
+}
+
+/* ---- tabs / theme ---- */
+function setView(v){document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.view===v));
+  document.querySelectorAll('[data-pane]').forEach(p=>p.classList.toggle('hidden',p.dataset.pane!==v));
+  if(location.hash.slice(1)!==v)history.replaceState(null,'','#'+v);}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setView(t.dataset.view)));
+window.addEventListener('hashchange',()=>{const v=location.hash.slice(1);if(['run','scans','metrics'].includes(v))setView(v);});
+window.addEventListener('resize',()=>{RECT={};});
+$('theme').addEventListener('click',()=>{const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':cur==='light'?'dark':(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark');
+  document.documentElement.setAttribute('data-theme',next);try{localStorage.setItem('epg-theme',next)}catch(e){}});
+  // NB : pas de re-render Mermaid ici — les couleurs suivent les variables CSS (!important) au changement
+  // de thème, et re-render effacerait les états dynamiques (st-active/st-done/…) + la caméra en cours.
+try{const th=localStorage.getItem('epg-theme');if(th)document.documentElement.setAttribute('data-theme',th);}catch(e){}
+
+/* boot */
+loadExtensions();loadHistory();initMermaid();showLanding();wireCamControls();
+const v0=location.hash.slice(1);setView(['run','scans','metrics'].includes(v0)?v0:'run');
+</script>
+</body></html>

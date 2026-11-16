@@ -1,0 +1,84 @@
+[
+  {
+    "ext": "gen-BHT02",
+    "confirmed": 0,
+    "cost": 0.024063,
+    "dur": 233.6,
+    "hyps": [
+      [
+        "storage.local.set",
+        "FAILED",
+        false,
+        false,
+        false
+      ]
+    ]
+  },
+  {
+    "ext": "gen-CM02",
+    "confirmed": 0,
+    "cost": 0.0806,
+    "dur": 731.4,
+    "hyps": [
+      [
+        "downloads.download",
+        "FAILED",
+        false,
+        false,
+        false
+      ],
+      [
+        "downloads.download",
+        "FAILED",
+        false,
+        false,
+        false
+      ]
+    ]
+  },
+  {
+    "ext": "gen-COOK02",
+    "confirmed": 0,
+    "cost": 0.014895,
+    "dur": 146.0,
+    "hyps": [
+      [
+        "storage.local.set",
+        "FAILED",
+        false,
+        false,
+        false
+      ]
+    ]
+  },
+  {
+    "ext": "gen-DM13",
+    "confirmed": 1,
+    "cost": 0.008573,
+    "dur": 88.3,
+    "hyps": [
+      [
+        "chrome_downloads_download_sink",
+        "CONFIRMED",
+        false,
+        true,
+        true
+      ]
+    ]
+  },
+  {
+    "ext": "gen-WA02",
+    "confirmed": 0,
+    "cost": 0.062614,
+    "dur": 1387.7,
+    "hyps": [
+      [
+        "storage.local.set",
+        "FAILED",
+        false,
+        false,
+        false
+      ]
+    ]
+  }
+]

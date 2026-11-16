@@ -1,0 +1,46 @@
+sequenceDiagram
+    autonumber
+    participant EXT as Extension (CRX / source)
+    participant RD as Isolated Reader
+    participant SA as Static Analyzer (CoCo / DoubleX)
+    participant OR as Orchestrator
+    participant KB as Knowledge Base (Graph-RAG)
+    participant AG as PoC Agents
+    participant HN as Chrome MV3 Harness
+    participant JG as Evidence Judge
+
+    EXT->>RD: Source code and manifest
+    RD->>RD: Unpack, parse, extract security facts
+    RD->>SA: Components (cs / bg / manifest)
+
+    alt tools_on (taint available)
+        SA->>SA: CoCo + DoubleX taint path
+        SA->>OR: Fact Sheet (findings + witness)
+    else tools_off / incomplete analysis
+        SA->>OR: Fact Sheet (candidate sinks from permissions)
+    end
+
+    OR->>OR: Triage (3 states) + mode select + attacker_entry gate
+
+    loop Refinement (<= N iterations)
+        alt anchor on finding (tools_on)
+            OR->>KB: Query with structured finding
+        else anchor on manifest (tools_off)
+            OR->>KB: Query with manifest + attacker surface
+        end
+        KB-->>OR: API semantics, patterns, skeletons A/B, few-shot
+        OR->>AG: Security hypothesis + constraints + trigger/message
+        AG->>AG: Plan and generate candidate PoC (attacker model A/B)
+        AG->>AG: PoC safety and scope validation (sandbox-only)
+        AG->>OR: Candidate PoC + expected evidence (oracle)
+        OR->>HN: Validated test package
+        HN->>HN: Execute in isolated Chrome MV3 (attacker A/B)
+        HN->>JG: Instrumented execution trace
+        JG->>JG: Evaluate deterministic oracle + call-stack sanity
+        JG-->>OR: Verdict and evidence
+        OR->>OR: Revise (refiners) / stop / report
+    end
+
+    opt On confirmed PoC
+        OR->>KB: Store verified PoC (closed loop to few-shot / skeletons)
+    end

@@ -1,0 +1,57 @@
+{
+  "schema": "ext-malware-behavior/1.0",
+  "extension_id": "bblkpdkdloalbiifhhmekiaejmdkgohj__64775056",
+  "name": "划词小窗搜题",
+  "class": "vulnerable",
+  "manifest_version": "2",
+  "observed_at": "2026-11-08T09:20:49",
+  "verdict": {
+    "malicious_behavior": true,
+    "reason": "1 requête(s) sortante(s) externe(s) tentée(s)"
+  },
+  "category": "",
+  "mitre_tags": [
+    "T1071 Application Layer Protocol (C2 / phone-home)",
+    "T1041 Exfiltration Over C2 Channel (tentée)",
+    "T1539 Steal Web Session Cookie",
+    "T1185 Browser Session Hijacking (<all_urls>)"
+  ],
+  "iocs": {
+    "domains": [
+      "huacisouti.oss-cn-hangzhou.aliyuncs.com"
+    ],
+    "urls": [
+      "https://huacisouti.oss-cn-hangzhou.aliyuncs.com/conf"
+    ]
+  },
+  "observed_behavior": {
+    "n_external_requests": 1,
+    "outbound_c2": [
+      {
+        "url": "https://huacisouti.oss-cn-hangzhou.aliyuncs.com/conf",
+        "method": "GET"
+      }
+    ],
+    "sensitive_permissions": [
+      "<all_urls>",
+      "cookies"
+    ],
+    "console": [
+      "TypeError: Failed to fetch\n    at chrome-extension://kjlfkmkgdcofgnknhlidfmkpgggpbmdp/js/background.js:5:1"
+    ]
+  },
+  "evidence": {
+    "chromium": "126.0.6478.182",
+    "all_outbound": [
+      {
+        "url": "https://huacisouti.oss-cn-hangzhou.aliyuncs.com/conf",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:49819/favicon.ico",
+        "method": "GET"
+      }
+    ]
+  },
+  "provenance": "behavioral-observation (Chrome isolé, egress bloqué)"
+}

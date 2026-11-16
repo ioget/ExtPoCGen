@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GOD Agent — Architecte</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --border:#2b3440; --fg:#e6edf3;
+    --muted:#8b949e; --accent:#7ee787; --warn:#f0b72f; --bad:#ff7b72; --info:#79c0ff;
+    --chip:#21262d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  header{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--panel)}
+  header h1{font-size:16px;margin:0;font-weight:650;letter-spacing:.2px}
+  header .sub{color:var(--muted);font-size:12px}
+  header a{color:var(--info);text-decoration:none;font-size:13px;margin-left:auto}
+  .wrap{display:grid;grid-template-columns:320px 1fr;gap:0;height:calc(100vh - 53px)}
+  .left{border-right:1px solid var(--border);overflow:auto;background:var(--panel)}
+  .right{overflow:auto;padding:18px 22px}
+  .caps{padding:12px 14px;border-bottom:1px solid var(--border)}
+  .caps h3{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+  .cap-row{font-size:12px;margin:3px 0;color:var(--fg)}
+  .cap-row b{color:var(--info);font-weight:600}
+  .gap{color:var(--warn)}
+  .reports h3{margin:12px 14px 6px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+  .rep{padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer}
+  .rep:hover{background:var(--panel2)}
+  .rep.active{background:var(--panel2);border-left:3px solid var(--accent)}
+  .rep .nm{font-weight:600}
+  .rep .meta{font-size:11px;color:var(--muted);margin-top:2px}
+  .badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;font-weight:600;border:1px solid var(--border)}
+  .b-arch{color:var(--warn);border-color:#5a4a1a;background:#241d08}
+  .b-poc{color:var(--info);border-color:#1a3a5a;background:#0a1824}
+  .b-tn{color:var(--muted)}
+  .b-ok{color:var(--accent);border-color:#1f4028;background:#0c1f12}
+  .b-unk{color:var(--muted)}
+  .empty{color:var(--muted);padding:40px;text-align:center}
+  .reco{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;margin:0 0 16px}
+  .reco h2{font-size:15px;margin:0 0 4px}
+  .rc{font-size:12px;color:var(--warn);font-family:ui-monospace,Menlo,Consolas,monospace}
+  .sect{margin:12px 0 0}
+  .sect .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:3px}
+  .diag{background:var(--panel2);border-left:3px solid var(--warn);padding:9px 12px;border-radius:0 6px 6px 0}
+  pre{background:#0a0e14;border:1px solid var(--border);border-radius:6px;padding:10px;overflow:auto;font-size:12px;margin:4px 0 0}
+  .kv{font-size:12px}
+  .kv span{color:var(--muted)}
+  code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--info);background:var(--chip);padding:1px 5px;border-radius:4px;font-size:12px}
+  .files code{color:var(--accent)}
+  .guard{font-size:12px;color:var(--accent);background:#0c1f12;border:1px solid #1f4028;border-radius:6px;padding:8px 10px}
+  .status{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+  .s-proposed{color:var(--info)} .s-validated{color:var(--warn)} .s-rejected{color:var(--bad)}
+  .s-applied{color:var(--accent)} .s-measured{color:var(--accent)}
+  .actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  button{background:var(--chip);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer}
+  button:hover{border-color:var(--info)}
+  button.primary{background:#132a1a;border-color:#1f4028;color:var(--accent)}
+  button.danger{color:var(--bad)}
+  button:disabled{opacity:.5;cursor:default}
+  .impact{margin-top:12px;border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--panel2)}
+  .impact .verdict{font-weight:700;font-size:13px}
+  .v-ok{color:var(--accent)} .v-bad{color:var(--bad)} .v-neutral{color:var(--muted)}
+  .trun{font-size:12px;margin:3px 0}
+  .src{font-size:12px;color:var(--muted);margin-bottom:10px}
+  .pill{font-size:11px;padding:1px 6px;border-radius:8px;background:var(--chip);border:1px solid var(--border);margin-right:4px}
+  @media(max-width:820px){.wrap{grid-template-columns:1fr;height:auto}.left{border-right:none;border-bottom:1px solid var(--border)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>⚙️ GOD Agent <span class="sub">— méta-architecte (reco-gated)</span></h1>
+  <a href="/">← dashboard</a>
+</header>
+<div class="wrap">
+  <div class="left">
+    <div class="caps" id="caps"><h3>Couverture de l'oracle</h3><div class="muted">…</div></div>
+    <div class="reports"><h3>Rapports <button id="refresh" style="float:right;padding:2px 8px;font-size:11px">↻</button></h3><div id="list"></div></div>
+  </div>
+  <div class="right" id="detail"><div class="empty">Sélectionne un rapport à gauche.</div></div>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => (s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const TRIAGE_BADGE = {architecture_limitation:'b-arch',poc_llm_deficiency:'b-poc',
+  true_negative_or_threat_model:'b-tn',confirmed_no_action:'b-ok',unknown:'b-unk'};
+let CURRENT=null;
+
+async function loadCaps(){
+  try{
+    const c = await (await fetch('/api/god/capabilities')).json();
+    const obs = Object.entries(c.observers||{}).map(([k,v])=>
+      `<div class="cap-row"><b>${k}</b> · hooks: ${(v.hooks||[]).map(esc).join(', ')||'—'} · reads: ${(v.reads||[]).map(esc).join(', ')||'—'}</div>`).join('');
+    const env = Object.entries(c.environment||{}).filter(([,v])=>v).map(([k])=>`<span class="pill">${esc(k)}</span>`).join(' ');
+    const gaps = Object.entries(c.known_gaps||{}).map(([k,v])=>`<div class="cap-row gap">⚠ <b>${esc(k)}</b> — ${esc(v)}</div>`).join('');
+    $('#caps').innerHTML = `<h3>Couverture de l'oracle <span style="color:var(--muted)">(${esc(c.version)})</span></h3>${obs}
+      <div class="sect"><div class="lbl">environnement</div>${env}</div>
+      <div class="sect"><div class="lbl">angles morts connus</div>${gaps}</div>`;
+  }catch(e){ $('#caps').innerHTML='<h3>Couverture</h3><div class="gap">indisponible</div>'; }
+}
+
+async function loadList(){
+  const rows = await (await fetch('/api/god/reports')).json();
+  if(!rows.length){ $('#list').innerHTML='<div class="empty" style="padding:20px">Aucun rapport.<br>Lance un run, ou POST /api/god/analyze {all:true}.</div>'; return; }
+  $('#list').innerHTML = rows.map(r=>{
+    const b = TRIAGE_BADGE[r.triage]||'b-unk';
+    const st = (r.statuses||[]).filter(s=>s&&s!=='proposed');
+    return `<div class="rep" data-id="${esc(r.report_id)}">
+      <div class="nm">${esc(r.name||r.extension_id)}</div>
+      <div class="meta">${esc(r.verdict)} · <span class="badge ${b}">${esc(r.triage)}</span>
+        · ${r.n_recos} reco(s)${st.length?' · '+st.map(esc).join(','):''}</div>
+      <div class="meta">${esc(r.created_at)}</div></div>`;
+  }).join('');
+  document.querySelectorAll('.rep').forEach(el=>el.onclick=()=>openReport(el.dataset.id));
+}
+
+async function openReport(id){
+  CURRENT=id;
+  document.querySelectorAll('.rep').forEach(e=>e.classList.toggle('active',e.dataset.id===id));
+  const r = await (await fetch('/api/god/report?id='+encodeURIComponent(id))).json();
+  if(r.error){ $('#detail').innerHTML='<div class="empty">'+esc(r.error)+'</div>'; return; }
+  const sr=r.source_run||{}, tb=TRIAGE_BADGE[r.triage?.class]||'b-unk';
+  let h = `<div class="src">Run source : <b>${esc(sr.name)}</b> · <code>${esc(sr.extension_id)}</code>
+     · verdict ${esc(sr.verdict)} · mode ${esc(sr.mode)} · ${esc(sr.model)}
+     · log: <code>${esc(sr.log_file)}</code></div>
+     <div style="margin-bottom:14px"><span class="badge ${tb}">${esc(r.triage?.class)}</span>
+       <span style="color:var(--muted);font-size:12px"> conf ${esc(r.triage?.confidence)} — ${esc(r.triage?.rationale)}</span></div>`;
+  if(!(r.recommendations||[]).length) h += '<div class="empty">Aucune recommandation (couverture suffisante ou hors périmètre).</div>';
+  for(const rc of (r.recommendations||[])) h += recoHTML(r.report_id, rc);
+  $('#detail').innerHTML = h;
+  wire(r.report_id);
+}
+
+function recoHTML(reportId, rc){
+  const fs=rc.failure_signature||{}, pc=rc.proposed_change||{}, vp=rc.validation_plan||{};
+  const obs = Object.entries(fs.observed||{}).map(([k,v])=>`${k}=${v}`).join(' · ');
+  const canMeasure = vp.target_case && (pc.kind==='add_observer'||pc.kind==='add_environment_enabler');
+  let imp='';
+  if(rc.impact){
+    const iv=rc.impact.verdict||'', cl=/ADOPTABLE/.test(iv)?'v-ok':/REJET/.test(iv)?'v-bad':'v-neutral';
+    const reg=rc.impact.regression||{}, tg=rc.impact.target||{};
+    imp = `<div class="impact"><div class="verdict ${cl}">${esc(iv)}</div>
+      <div class="trun">cible <code>${esc(tg.extension_id)}</code> → confirmé: <b>${tg.confirmed_now?'oui':'non'}</b></div>
+      <div class="trun">régression: ${reg.still_confirmed}/${reg.total} restés CONFIRMED${(reg.regressed||[]).length?' · ⚠ régressions: '+reg.regressed.map(esc).join(', '):''}</div>
+      <div class="trun">faux positifs (set sain): ${(rc.impact.clean?.false_positives||[]).length}</div>
+      <div class="trun" style="color:var(--muted)">mesuré ${esc(rc.impact.measured_at)}</div></div>`;
+  }
+  return `<div class="reco" data-reco="${esc(rc.reco_id)}">
+    <h2>${esc(rc.title)} <span class="status s-${esc(rc.status)}">[${esc(rc.status)}]</span></h2>
+    <div class="rc">${esc(rc.root_cause_class)} · sink: ${esc(fs.sink)} (${esc(fs.sink_class)}) · canal: ${esc(fs.channel)} · stage: ${esc(fs.stage)}</div>
+    <div class="sect"><div class="lbl">Diagnostic (pourquoi)</div><div class="diag">${esc(rc.diagnosis)}</div></div>
+    <div class="sect"><div class="lbl">Signature d'échec</div><div class="kv">oracle=<code>${esc(fs.oracle_kind)}</code> · <span>${esc(obs)}</span> · symptômes: ${(fs.symptoms||[]).map(esc).join(' | ')||'—'}</div></div>
+    <div class="sect"><div class="lbl">Changement proposé — <code>${esc(pc.kind)}</code></div>
+      <div class="kv files">fichiers: ${(pc.target_files||[]).map(f=>'<code>'+esc(f)+'</code>').join(' ')||'—'}</div>
+      <div class="kv" style="margin-top:3px">${esc(pc.summary)}</div>
+      ${pc.declarative_spec?'<pre>'+esc(JSON.stringify(pc.declarative_spec,null,1))+'</pre>':''}</div>
+    <div class="sect"><div class="lbl">Plan de validation (test)</div>
+      <div class="kv">cible: <code>${esc(vp.target_case?.extension_id)}</code> — attendu ${esc(vp.target_case?.expected_before)} → <b>${esc(vp.target_case?.expected_after)}</b></div>
+      <div class="kv"><span>régression (doivent rester CONFIRMED):</span> ${(vp.regression_set||[]).length} ext · <span>delta attendu:</span> ${esc(vp.expected_trace_delta)}</div></div>
+    <div class="sect"><div class="lbl">Garde-fou soundness</div><div class="guard">🛡 ${esc(rc.soundness_guard)}</div></div>
+    ${imp}
+    <div class="actions">
+      <button class="validate" ${canMeasure?'':'disabled title="rien à mesurer (hors archi)"'}>✓ Valider & mesurer l'impact</button>
+      <button class="reject danger">✗ Rejeter</button>
+    </div></div>`;
+}
+
+function wire(reportId){
+  document.querySelectorAll('.reco').forEach(card=>{
+    const rc=card.dataset.reco;
+    card.querySelector('.validate').onclick=async(e)=>{
+      e.target.disabled=true; e.target.textContent='⏳ mesure en cours (rejeu PoCs)…';
+      await fetch('/api/god/measure',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({report_id:reportId,reco_id:rc})});
+      poll(reportId);
+    };
+    card.querySelector('.reject').onclick=async()=>{
+      await fetch('/api/god/status',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({report_id:reportId,reco_id:rc,status:'rejected'})});
+      openReport(reportId);
+    };
+  });
+}
+
+function poll(reportId){
+  let n=0; const iv=setInterval(async()=>{
+    n++; const r=await (await fetch('/api/god/report?id='+encodeURIComponent(reportId))).json();
+    const measured=(r.recommendations||[]).some(x=>x.status==='measured'&&x.impact);
+    if(measured||n>120){ clearInterval(iv); openReport(reportId); }
+  },3000);
+}
+
+$('#refresh').onclick=loadList;
+loadCaps(); loadList();
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+flowchart TB
+    IN(["Chrome Extension CRX / Source Code"])
+
+    subgraph S1["Stage 1 - Static Analysis and Fact Extraction"]
+        direction TB
+        RD["Isolated Extension Reader (VM)"]
+        CO["CoCo + DoubleX - taint path"]
+        MP["Manifest parser + check_permissions"]
+        FS["Extension Security Fact Sheet"]
+        TR{"Triage: has-candidate / clean / incomplete"}
+        RD --> CO
+        RD --> MP
+        CO --> FS
+        MP --> FS
+        FS --> TR
+    end
+
+    MODE{"Mode: tools_on / tools_off / hybrid"}
+
+    subgraph S2["Stage 2 - Knowledge Base (Graph-RAG)"]
+        direction TB
+        SA2["A - Spine: Findings / Sinks / AttackerEntry"]
+        SB["B - Chrome API semantics (MV2/MV3)"]
+        SC["C - Patterns / CWE + permission to sink"]
+        SD["D - Few-shot exploits + Skeletons A/B"]
+        RET["retrieve.py: anchor_on_finding | anchor_on_manifest"]
+        SA2 --> RET
+        SB --> RET
+        SC --> RET
+        SD --> RET
+    end
+
+    subgraph S3["Stage 3 - Multi-Agent PoC Generation"]
+        direction TB
+        ORC["Orchestrator (refinement loop)"]
+        VA["Vulnerability Analyst"]
+        MA["Malware Behavior Analyst"]
+        PG["PoC Generator (trigger + skeleton)"]
+        SV["PoC Safety and Scope Validator"]
+        ORC --> VA
+        ORC --> MA
+        VA --> PG
+        MA --> PG
+        PG --> SV
+    end
+
+    subgraph S4["Stage 4 - Isolated Execution"]
+        direction TB
+        HN["Chrome MV3 Test Harness (instrumented)"]
+        AA["Attacker Model A: malicious web page"]
+        AB["Attacker Model B: zero-permission extension"]
+        TRACE["Execution trace + evidence"]
+        HN --> AA
+        HN --> AB
+        AA --> TRACE
+        AB --> TRACE
+    end
+
+    subgraph S5["Stage 5 - Deterministic Verification"]
+        direction TB
+        JG["Rule-Based Evidence Judge (canary oracles)"]
+        VV["Vulnerability / Malware verdict"]
+        RR["Evidence + reproducibility report"]
+        JG --> VV
+        JG --> RR
+    end
+
+    REPO(["Verified PoC Repository"])
+
+    IN --> RD
+    TR --> MODE
+    MODE --> RET
+    RET --> ORC
+    SV --> HN
+    TRACE --> JG
+    VV --> REPO
+    RR --> REPO
+    REPO -. closed loop .-> SD
+    JG -. revise / refine .-> ORC

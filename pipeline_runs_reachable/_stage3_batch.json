@@ -1,0 +1,454 @@
+[
+  {
+    "log": "logs/agent_runs/gen-BHT02_20261115-141203.json",
+    "name": "鲲圭豆荚",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "has-candidate",
+    "paths": [
+      "vulnerability"
+    ],
+    "llm_calls": 7,
+    "cost_usd": 0.058228,
+    "duration_s": 524.33,
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "storage.local.set",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": null,
+    "malware_n_external": null,
+    "ext_id": "gen-BHT02",
+    "model": "deepseek-reasoner",
+    "budget": 12,
+    "rc": 0,
+    "wall_s": 524.6
+  },
+  {
+    "log": "logs/agent_runs/gen-CM02_20261115-142222.json",
+    "name": "__MSG_appName__",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "has-candidate",
+    "paths": [
+      "vulnerability"
+    ],
+    "llm_calls": 9,
+    "cost_usd": 0.068381,
+    "duration_s": 618.92,
+    "n_hyps": 2,
+    "hypotheses": [
+      {
+        "sink": "downloads.download",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "downloads.download",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": null,
+    "malware_n_external": null,
+    "ext_id": "gen-CM02",
+    "model": "deepseek-reasoner",
+    "budget": 12,
+    "rc": 0,
+    "wall_s": 619.2
+  },
+  {
+    "log": "logs/agent_runs/gen-COOK02_20261115-142719.json",
+    "name": "Captain Data",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "has-candidate",
+    "paths": [
+      "vulnerability"
+    ],
+    "llm_calls": 4,
+    "cost_usd": 0.030786,
+    "duration_s": 297.31,
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "storage.local.set",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": null,
+    "malware_n_external": null,
+    "ext_id": "gen-COOK02",
+    "model": "deepseek-reasoner",
+    "budget": 12,
+    "rc": 0,
+    "wall_s": 297.7
+  },
+  {
+    "log": "logs/agent_runs/gen-DM13_20261115-170756.json",
+    "name": "QuickDrag for Chrome",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "has-candidate",
+    "paths": [
+      "vulnerability"
+    ],
+    "llm_calls": 6,
+    "cost_usd": 0.047092,
+    "duration_s": 9636.52,
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "chrome_downloads_download_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": null,
+    "malware_n_external": null,
+    "ext_id": "gen-DM13",
+    "model": "deepseek-reasoner",
+    "budget": 12,
+    "rc": 0,
+    "wall_s": 9636.9
+  },
+  {
+    "log": "logs/agent_runs/gen-WA02_20261115-204357.json",
+    "name": "Stash Extension",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "has-candidate",
+    "paths": [
+      "vulnerability"
+    ],
+    "llm_calls": 7,
+    "cost_usd": 0.097029,
+    "duration_s": 12960.27,
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "storage.local.set",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": null,
+    "malware_n_external": null,
+    "ext_id": "gen-WA02",
+    "model": "deepseek-reasoner",
+    "budget": 12,
+    "rc": 0,
+    "wall_s": 12960.5
+  },
+  {
+    "log": "logs/agent_runs/gen-AUTH04_20261115-204748.json",
+    "name": "__MSG_extName__",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 17,
+    "cost_usd": 0.018377,
+    "duration_s": 230.2,
+    "n_hyps": 6,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "fetch",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "showShopOverlay -> addRow -> span.textContent (overlay DOM in page)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "saveShopInfo -> storageSet(STORAGE_KEYS.SHOP, shop) -> chrome.storage.local",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "fetch(SHOP_ENDPOINT + '?url=' + encodeURIComponent(url)) in background",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "chrome.runtime.onMessage switch in background (ORIONI_PAGE_READY, ORIONI_GET_IDENTITY, ORIONI_REPORT_SHOP) and content script (ORIONI_SHOW_SHOP, ORIONI_GET_IDENTITY)",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "attacker_controlled": null
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-AUTH04",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 230.9
+  },
+  {
+    "log": "logs/agent_runs/gen-DH03_20261115-205106.json",
+    "name": "记忆体",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "incomplete-analysis",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 14,
+    "cost_usd": 0.0151,
+    "duration_s": 197.41,
+    "n_hyps": 5,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "chrome.runtime.sendMessage({type:'MB_LOG_WORD', text}) -> background addWord() -> chrome.storage.local.set(WORDS)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "getSettings() merge -> chrome.storage.local.set(SETTINGS) -> scheduleAlarms(next)",
+        "status": "UNREACHABLE",
+        "iterations": 0,
+        "sink_fired": null,
+        "attacker_controlled": null
+      },
+      {
+        "sink": "saveWords([]) / deliverDailyPrompt() / getWords() responses",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "showNotification body built from words.map(w => '• ' + w.text).join('\\n')",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-DH03",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 198.3
+  },
+  {
+    "log": "logs/agent_runs/gen-DT02_20261115-205432.json",
+    "name": "__MSG_appName__",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 14,
+    "cost_usd": 0.014378,
+    "duration_s": 205.33,
+    "n_hyps": 4,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "document.documentElement.setAttribute('data-abtasty-variant', clean) via applyVariant",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "chrome.runtime.onMessage handler -> applyVariant / showHeatmap / openEditor / updateTabState (background) via sendToTab",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "updateTabState(tabId, ...) and sendToTab(tabId, ...) in background",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-DT02",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 206.0
+  },
+  {
+    "log": "logs/agent_runs/gen-EC02_20261115-205911.json",
+    "name": "TheHub Click To Dial",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "incomplete-analysis",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 21,
+    "cost_usd": 0.022001,
+    "duration_s": 278.22,
+    "n_hyps": 6,
+    "hypotheses": [
+      {
+        "sink": "chrome_tabs_executeScript_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "fetch",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "fetch(url) in dialNumber() where url = buildYealinkUrl(settings, number) — attacker-controlled number interpolated into a GET request to the configured Yealink phone",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "fetch(`http://${host}/`) in the test-connection handler, and buildYealinkUrl() used by dialNumber()",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "dialNumber(target) → fetch(buildYealinkUrl(settings, number))",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-EC02",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 278.7
+  },
+  {
+    "log": "logs/agent_runs/gen-ESI02_20261115-210223.json",
+    "name": "Fabasoft Folio",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "paths": [
+      "vulnerability",
+      "malware_behavior"
+    ],
+    "llm_calls": 13,
+    "cost_usd": 0.013558,
+    "duration_s": 191.81,
+    "n_hyps": 4,
+    "hypotheses": [
+      {
+        "sink": "postToNative(tabId, msg) -> chrome.runtime.connectNative(NATIVE_HOST_NAME).postMessage",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "postToPage({ns, kind:'native', payload: msg}) -> window.postMessage(data, '*')",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "postToPage({ns, kind:'response', payload: msg, requestId}) -> window.postMessage('*')",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      },
+      {
+        "sink": "postToPage({ns, kind:'native', payload: msg}) -> window.postMessage('*')",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false
+      }
+    ],
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "ext_id": "gen-ESI02",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "rc": 0,
+    "wall_s": 192.2
+  }
+]

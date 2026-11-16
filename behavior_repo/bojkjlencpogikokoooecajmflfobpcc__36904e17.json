@@ -1,0 +1,264 @@
+{
+  "schema": "ext-malware-behavior/1.1",
+  "extension_id": "bojkjlencpogikokoooecajmflfobpcc__36904e17",
+  "name": "Random Captcha",
+  "class": "vulnerable",
+  "manifest_version": "3",
+  "observed_at": "2026-11-12T01:37:56",
+  "verdict": {
+    "malicious_behavior": true,
+    "exfiltration_confirmed": false,
+    "reason": "contact externe vers hôte(s) non réputé(s) (azlabs.tech) SANS exfiltration prouvée — à corroborer"
+  },
+  "category": "",
+  "mitre_tags": [
+    "T1071.001 Application Layer Protocol: Web Protocols"
+  ],
+  "mitre": [
+    {
+      "id": "T1071.001",
+      "name": "Application Layer Protocol: Web Protocols",
+      "tactic": "Command and Control",
+      "evidence": "13 outbound request(s) to external host(s), no canary captured"
+    }
+  ],
+  "iocs": {
+    "domains": [
+      "azlabs.tech"
+    ],
+    "urls": [
+      "https://azlabs.tech/login?uuid=acee4801-76db-4c36-d2df-e6e4bd215b55",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPojs",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPo-y",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPp1z",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPpEK",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPrjm",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPrmq",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPrqw",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPr_L",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPsG4",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPslL",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPs-y",
+      "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPtzj"
+    ]
+  },
+  "exfiltration": {
+    "confirmed": false,
+    "canaries_seeded": {
+      "cookie": "CANARY-E956DA30-COOKIE",
+      "creds": "CANARY-E956DA30-CREDS",
+      "history": "CANARY-E956DA30-HISTORY",
+      "storage": "CANARY-E956DA30-LSTORAGE",
+      "dom": "CANARY-E956DA30-DOM",
+      "card": "4111CANARYE956DA301111",
+      "cvv": "CVVE956DA30",
+      "wallet": "0xCANARYE956DA30DEADBEEF",
+      "seed": "canary E956DA30 mnemonic seed phrase words"
+    },
+    "hits": [],
+    "stolen_kinds": []
+  },
+  "observed_behavior": {
+    "behaviors": [
+      "external_network_contact"
+    ],
+    "n_external_requests": 13,
+    "outbound_c2": [
+      {
+        "url": "https://azlabs.tech/login?uuid=acee4801-76db-4c36-d2df-e6e4bd215b55",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPojs",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPo-y",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPp1z",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPpEK",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPrjm",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPrmq",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPrqw",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPr_L",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPsG4",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPslL",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPs-y",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPtzj",
+        "method": "GET"
+      }
+    ],
+    "sink_hits": [
+      {
+        "method": "GET",
+        "dest": "clients2.google.com/time/1/current?cup2key=ML-DSA-44-10:H6pvtO0iuEgH_z231fv_b45At_a2s7iu4VE7ele9eOE&cup2hreq=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "has_body": false
+      }
+    ],
+    "stimulation": [
+      "bank.html",
+      "mail.html",
+      "social.html",
+      "search.html",
+      "checkout.html",
+      "wallet.html"
+    ],
+    "sensitive_permissions": [],
+    "console": [
+      "failed to parseSyntaxError: Unexpected token 'p', \"ping\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at chrome-extension://lgdkfciinlhiaceokhmbmpcklbgmeedd/content.js:11:22",
+      "the window recieved a messageObject",
+      "the window recieved a messageObject",
+      "the window recieved a messageObject",
+      "the window recieved a messageObject",
+      "the window recieved a messageObject",
+      "the window recieved a messageping",
+      "failed to parseSyntaxError: Unexpected token 'p', \"ping\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at chrome-extension://lgdkfciinlhiaceokhmbmpcklbgmeedd/content.js:11:22",
+      "the window recieved a messageObject",
+      "the window recieved a messageObject",
+      "the window recieved a messageObject",
+      "the window recieved a messageObject",
+      "the window recieved a messageObject",
+      "the window recieved a messageping",
+      "failed to parseSyntaxError: Unexpected token 'p', \"ping\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at chrome-extension://lgdkfciinlhiaceokhmbmpcklbgmeedd/content.js:11:22"
+    ]
+  },
+  "reproducibility": {
+    "n_runs": 1,
+    "rate": 1.0
+  },
+  "evidence": {
+    "chromium": "157.0.8103.38",
+    "all_outbound": [
+      {
+        "url": "chrome://theme/colors.css?sets=ui%2Cchrome&version=1794447449466",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/login?uuid=acee4801-76db-4c36-d2df-e6e4bd215b55",
+        "method": "GET"
+      },
+      {
+        "url": "chrome://resources/roboto/roboto-regular.woff2",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:50839/bank.html?v=CANARY-E956DA30-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPojs",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:50839/favicon.ico",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPo-y",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:50839/login",
+        "method": "POST"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPp1z",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPpEK",
+        "method": "GET"
+      },
+      {
+        "url": "http://secure-paypal.com/mail.html?v=CANARY-E956DA30-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://secure-paypal.com/mail.html?v=CANARY-E956DA30-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "http://login-chase.com/social.html?v=CANARY-E956DA30-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://login-chase.com/social.html?v=CANARY-E956DA30-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "http://accounts-google.com/search.html?v=CANARY-E956DA30-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://accounts-google.com/search.html?v=CANARY-E956DA30-HISTORY",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPrjm",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPrmq",
+        "method": "GET"
+      },
+      {
+        "url": "http://localhost:50839/pay",
+        "method": "POST"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPrqw",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPr_L",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPsG4",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPslL",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPs-y",
+        "method": "GET"
+      },
+      {
+        "url": "https://azlabs.tech/socket.io/?EIO=4&transport=polling&t=Q7DPtzj",
+        "method": "GET"
+      }
+    ]
+  },
+  "provenance": "behavioral-observation (Chrome isolé + sinkhole MAP *, canaries semés)"
+}

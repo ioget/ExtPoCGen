@@ -1,0 +1,10 @@
+{
+  "//": "Skeleton Attacker Model B : extension MV3 zero-permission (confused deputy).",
+  "//2": "Exploite une cible dont le background ecoute onMessageExternal sans externally_connectable restrictif.",
+  "manifest_version": 3,
+  "name": "poc-attacker-B",
+  "version": "0.0.1",
+  "permissions": [],
+  "host_permissions": [],
+  "background": { "service_worker": "attacker.js" }
+}
