@@ -55,11 +55,7 @@ guards), not by the oracle:
 | reachability-filtered, baseline contract resolver | 2 / 10 |
 | reachability-filtered, **improved contract resolver** | **7 / 10** |
 
-Improving how the triggering channel and guards are bound to each sink moves the generator from
-0 to 4 confirmations on comparable extensions, while the oracle keeps the false-positive rate at
-zero. Per-run evidence (prompts, generated PoCs, oracle traces, GOD diagnosis) lives in
-`pipeline_runs_*/`; results are also subject to LLM sampling variance, and every attribution in the
-reports is made per-run from the actual traces.
+
 
 ## Repository layout (what is included here)
 
