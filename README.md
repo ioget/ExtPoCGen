@@ -28,7 +28,7 @@ Architecture diagrams: [`MyThinking-Archi/`](MyThinking-Archi/).
 `python3 code/server.py` serves an interactive studio (http://localhost:8750) to upload an extension
 or run a pre-analysed sample through the full pipeline and watch it live.
 
-**Analyse** — drop a packed `.zip`/`.crx` or an unpacked folder (analysed with CoCo/DoubleX and
+**Analyse** drop a packed `.zip`/`.crx` or an unpacked folder (analysed with CoCo/DoubleX and
 observed in isolated Chrome), or pick one of the pre-analysed samples:
 
 ![ExtPoCGen Studio: analyse a browser extension](Image/dashboard-analyze.png)
