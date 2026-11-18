@@ -53,17 +53,27 @@ serves in the sandbox by impersonating that origin over TLS, i.e. exploitable if
 content on the trusted host). Of 140 specifications, **135 are testable** (62 A + 73 A'); 5 expose no
 web surface.
 
-Over **10 batches / 171 runs on 131 unique testable extensions**:
+Over **10 batches / 171 runs on 131 unique testable extensions**. Treating every generated
+specification as vulnerable (the ChromeSecBench ground-truth assumption), the confusion matrix is:
 
 | Metric | Result |
 |---|---|
-| **Detection rate** (oracle-confirmed) | **76 / 131 = 58.0 %** |
+| **TP** (oracle-confirmed exploits) | **76 / 131** |
+| **Recall = detection rate** | **58.0 %** |
 | &nbsp;&nbsp;↳ tier A (arbitrary page) | 20 / 32 = **62 %** |
 | &nbsp;&nbsp;↳ tier A' (first-party, sandboxed origin) | 40 / 69 = **58 %** |
-| **Precision / false positives** | **1.000 / 0** (by construction) |
-| **False-positive rate** | **0.000** |
+| **FN** (vulnerable, not confirmed) | **55** (miss rate **42 %**) |
+| **FP** (confirmed in error) | **0** (by construction) |
+| **Precision** | **1.000** |
 | **F1** | **0.734** |
 | Cost | **~$0.014 / run** |
+
+The soundness guarantee is **FP = 0 / precision = 1.0** (the differential oracle never confirms a
+non-exploit). *Accuracy* and *false-positive rate* are **undefined** here: the generated set has no
+benign/negative class (no true negatives), so FPR = FP/(FP+TN) is 0/0. The **55 FN are an upper
+bound**: some non-confirmed specs may carry no web-reachable vulnerability at all (true negatives
+under the attacker model rather than misses), which only per-extension ground-truth review could
+separate.
 
 Detection climbed with the architecture work (baseline 0 to 10 %, then 40 %, 50 %, and ~58 % once the
 multi-hop/stateful contract resolver and the A/A' reachability tiering were in place) and stayed
