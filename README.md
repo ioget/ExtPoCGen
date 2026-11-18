@@ -33,13 +33,13 @@ observed in isolated Chrome), or pick one of the pre-analysed samples:
 
 ![ExtPoCGen Studio: analyse a browser extension](Image/dashboard-analyze.png)
 
-**Live pipeline map and agent-action stream** — Stage 1 static detection, Stage 2 Graph-RAG knowledge
+**Live pipeline map and agent-action stream** Stage 1 static detection, Stage 2 Graph-RAG knowledge
 base, Stage 3 multi-agent PoC generation, Stage 4 isolated Chrome execution, Stage 5 deterministic
 verifier, with per-run elapsed / LLM calls / tokens / cost:
 
 ![ExtPoCGen live pipeline map and agent actions](Image/pipeline-live.png)
 
-**A confirmed exploit** — the dangerous sink, the differential-oracle verdict, and the generated
+**A confirmed exploit** the dangerous sink, the differential-oracle verdict, and the generated
 benign-canary PoC. The canary is observed flowing through the sink in isolated Chrome, which is the
 sole basis for a `confirmed` verdict (zero false positives by construction):
 
