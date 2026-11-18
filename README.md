@@ -53,38 +53,43 @@ serves in the sandbox by impersonating that origin over TLS, i.e. exploitable if
 content on the trusted host). Of 140 specifications, **135 are testable** (62 A + 73 A'); 5 expose no
 web surface.
 
-Over **10 batches / 171 runs on 131 unique testable extensions**. Treating every generated
-specification as vulnerable (the ChromeSecBench ground-truth assumption), the confusion matrix is:
+**Protocol.** The headline test is a **held-out set of 101 generated extensions, each run exactly
+once** (no re-runs, no best-of-N). A separate set of 30 generated extensions was used *during*
+resolver development (seen across several passes) and is **excluded from the held-out rate** to avoid
+best-of-N bias; it is reported only in the per-batch progression below. Treating every generated
+specification as vulnerable (the ChromeSecBench ground-truth assumption), the confusion matrix on the
+**101 held-out extensions** is:
 
 | Metric | Result |
 |---|---|
-| **TP** (oracle-confirmed exploits) | **76 / 131** |
-| **Recall = detection rate** | **58.0 %** |
+| **TP** (oracle-confirmed exploits) | **60 / 101** |
+| **Recall = detection rate** | **59.4 %** |
 | &nbsp;&nbsp;↳ tier A (arbitrary page) | 20 / 32 = **62 %** |
 | &nbsp;&nbsp;↳ tier A' (first-party, sandboxed origin) | 40 / 69 = **58 %** |
-| **FN** (vulnerable, not confirmed) | **55** (miss rate **42 %**) |
+| **FN** (vulnerable, not confirmed) | **41** (miss rate **40.6 %**) |
 | **FP** (confirmed in error) | **0** (by construction) |
 | **Precision** | **1.000** |
-| **F1** | **0.734** |
+| **F1** | **0.745** |
 | Cost | **~$0.014 / run** |
 
+The tiers partition the set exactly: 20 + 40 = 60 confirmations over 32 + 69 = 101 extensions.
 The soundness guarantee is **FP = 0 / precision = 1.0** (the differential oracle never confirms a
 non-exploit). *Accuracy* and *false-positive rate* are **undefined** here: the generated set has no
-benign/negative class (no true negatives), so FPR = FP/(FP+TN) is 0/0. The **55 FN are an upper
+benign/negative class (no true negatives), so FPR = FP/(FP+TN) is 0/0. The **41 FN are an upper
 bound**: some non-confirmed specs may carry no web-reachable vulnerability at all (true negatives
 under the attacker model rather than misses), which only per-extension ground-truth review could
 separate.
 
-Detection climbed with the architecture work (baseline 0 to 10 %, then 40 %, 50 %, and ~58 % once the
-multi-hop/stateful contract resolver and the A/A' reachability tiering were in place) and stayed
-**stable at ~58 % as the set grew from 90 to 131 extensions**, at **zero false positives across all
-171 runs**. First-party surfaces reached by sandbox origin-impersonation (A') confirm about as often
-as arbitrary-page surfaces (A). The remaining non-confirmations are dominated by generator shape/
-timing (the PoC not reaching the sink) and a minority of hard multi-hop/stateful contracts, never by
-the oracle. Per-run evidence (triage, sinks, GOD diagnosis) lives in `pipeline_runs_*/`, and the full
-ledger (one record per run, with metrics) in `pipeline_runs_tracking/generated_runs_tracking.json`;
-results are subject to LLM sampling variance, and every attribution is made per-run from the actual
-traces.
+Detection climbed with the architecture work (development batches: baseline 0 to 10 %, then 40 %,
+50 %, then ~58 % once the multi-hop/stateful contract resolver and the A/A' reachability tiering were
+in place) and held **stable at ~55 to 73 % across the five held-out batches** (12/20, 11/20, 12/20,
+17/30, 8/11), at **zero false positives across every run**. First-party surfaces reached by sandbox
+origin-impersonation (A') confirm about as often as arbitrary-page surfaces (A). The remaining
+non-confirmations are dominated by generator shape/timing (the PoC not reaching the sink) and a
+minority of hard multi-hop/stateful contracts, never by the oracle. Per-run evidence (triage, sinks,
+GOD diagnosis) lives in `pipeline_runs_*/`, and the full ledger (one record per run, with metrics) in
+`pipeline_runs_tracking/generated_runs_tracking.json`; results are subject to LLM sampling variance,
+and every attribution is made per-run from the actual traces.
 
 ## Repository layout (what is included here)
 
