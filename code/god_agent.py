@@ -75,7 +75,9 @@ CAPABILITY_REGISTRY = {
     "observers": {
         "code":    {"hooks": ["chrome.tabs.executeScript", "chrome.scripting.executeScript",
                               "Element.innerHTML(setter)", "Element.insertAdjacentHTML",
-                              "Document.write", "Function", "eval(indirect)"],
+                              "Document.write", "Function", "eval(indirect)",
+                              "chrome.tabs.create", "chrome.tabs.update",   # ① navigation
+                              "chrome.downloads.download"],                  # ① download
                     "reads": []},
         "storage": {"hooks": ["Storage.prototype.setItem"],
                     "reads": ["chrome.storage.local", "chrome.storage.sync",
@@ -148,6 +150,12 @@ def _resolve_observer(sink, impact, oracle_kind):
     # monde isolé du content-script). document.write DIRECT dans la page reste hooké aussi.
     if has("innerhtml", "insertadjacent", "document.write", "documentwrite", "outerhtml", "dom_xss"):
         return ("code", "DOM injection (innerHTML/document.write…)", True, "code")
+    # navigation / tabs — ADOPTÉ (① : hooks chrome.tabs.create/update à la frontière API, contexte extension)
+    if has("tabs.create", "tabs.update", "tabs_create", "tabs_update", "open-redirect", "openredirect", "forced navigation"):
+        return ("navigation", "chrome.tabs.create/update (URL)", True, "code")
+    # download — ADOPTÉ (① : hook chrome.downloads.download)
+    if has("downloads.download", "downloads_download", "chrome.downloads"):
+        return ("download", "chrome.downloads.download", True, "code")
     # network
     if has("fetch", "xmlhttp", "xhr", "sendbeacon", "ajax", "network", "exfil", "sendresponse"):
         return ("network", "requête sortante", True, "network")
@@ -165,14 +173,18 @@ def _last_trace(hyp):
     return {}
 
 
-def _harness_reachable_origin(ae):
-    """ Une page servie par le harness (localhost / origine attaquant arbitraire) peut-elle
-        atteindre un canal de l'extension sous MODÈLE A (page web malveillante arbitraire) ?
-        - externally_connectable.matches incluant localhost / un wildcard large -> onMessageExternal joignable
-        - content_scripts.matches incluant <all_urls> / *://*/* / motif large -> canal window.message joignable
-        Si la surface est verrouillée à l'origine first-party (reqbin.com, amazon.com…),
-        une page ARBITRAIRE ne peut PAS déclencher le handler -> hors modèle A.
-        Renvoie (reachable: bool, reason: str). """
+def _reachability_tier(ae):
+    """ Palier de joignabilité sous attaquant web + l'HÔTE que le harness doit servir :
+        - 'A'       : page web ARBITRAIRE (content_scripts large <all_urls>/*://*/* OU
+                      externally_connectable localhost/large) -> Modèle A strict.
+        - 'A_prime' : surface VERROUILLÉE first-party avec un HÔTE CONCRET (ex. *://www.amazon.com/*,
+                      https://*.scribble.be/*). Le harness SAIT servir cette origine DANS LA SANDBOX
+                      (host-resolver MAP <host> 127.0.0.1 + cert TLS auto-signé + --ignore-certificate-
+                      errors, cf. _host_from_matches / _servable_external_origin), backend simulé par le
+                      responder JSON déclaratif. Testable SOUS HYPOTHÈSE que l'attaquant contrôle du
+                      contenu sur cet hôte (XSS / compromission first-party) -> Modèle A'.
+        - 'none'    : aucune surface web concrète (popup/options/devtools/background only).
+        Renvoie (tier, host|None, reason). """
     ae = ae or {}
     ec = ae.get("externally_connectable") or {}
     ec_matches = ec.get("matches", []) if isinstance(ec, dict) else []
@@ -184,21 +196,32 @@ def _harness_reachable_origin(ae):
             return True
         if "localhost" in m or "127.0.0.1" in m:
             return True
-        # motif d'hôte joker (ex. *://*.foo/* reste first-party ; *://*/* est large)
         return m.startswith("*://*/") or m.startswith("http://*/") or m.startswith("https://*/")
 
-    ec_reach = any(broad(m) for m in ec_matches)
-    cs_reach = any(broad(m) for m in cs_matches)
-    if ec_reach or cs_reach:
-        via = "externally_connectable" if ec_reach else "content_scripts"
-        return True, f"origine attaquant servable via {via} (localhost/large)"
-    locked = []
-    if ec_matches:
-        locked.append(f"externally_connectable={list(ec_matches)[:3]}")
-    if cs_matches:
-        locked.append(f"content_scripts={list(cs_matches)[:2]}")
-    return False, ("surface verrouillée first-party (" + " ; ".join(locked) + ")"
-                   if locked else "aucune surface web déclarée")
+    def concrete_host(m):
+        if not m or "://" not in m:
+            return None
+        host = m.split("://", 1)[1].split("/", 1)[0].split(":")[0]
+        if host in ("*", "", "<all_urls>"):
+            return None
+        if host.startswith("*."):
+            host = "www." + host[2:]
+        return host
+
+    if any(broad(m) for m in cs_matches) or any(broad(m) for m in ec_matches):
+        return ("A", "localhost", "page web arbitraire (content_scripts/externally_connectable large)")
+    for m in list(cs_matches) + list(ec_matches):     # first-party : hôte concret servable en sandbox
+        h = concrete_host(m)
+        if h and h != "localhost":
+            return ("A_prime", h, f"first-party servable en sandbox (origine impersonée: {h})")
+    return ("none", None, "aucune surface web concrète (popup/devtools/background only)")
+
+
+def _harness_reachable_origin(ae):
+    """ Compat : (reachable_in_sandbox: bool, reason) — True pour A ET A' (le harness SERT l'origine
+        first-party dans la sandbox). Seul 'none' (aucune surface concrète) reste vrai négatif. """
+    tier, host, reason = _reachability_tier(ae)
+    return (tier != "none", f"[{tier}] {reason}")
 
 
 # ------------------------------------------------------------------ dataset labellisé (connu)
@@ -215,6 +238,66 @@ def _known_confirmed(exclude=None):
             conf[d["extension_id"]] = d.get("name")
     conf.pop(exclude, None)
     return conf
+
+
+def _classify_poc_gap(sink, channel, fs, tr=None):
+    """ P5 — raffine l'ancien fourre-tout `poc_shape` (→ `poc_llm_deficiency`) en distinguant la VRAIE
+        cause, car elle change la décision d'archi :
+          • contract_stateful_gap / contract_relay_gap → `contract_gap` (le résolveur handler↔canal doit
+            livrer le vrai déclencheur : séquence config→trigger, ou chaîne de relais multi-contextes) ;
+          • kb_skeleton_gap → `kb_gap` (classe de sink sans skeleton/pattern dans la KB) ;
+          • poc_shape → `poc_llm_deficiency` (authentique défaut de forme/timing, contrat correct).
+        Inféré du libellé sink/canal de l'hypothèse (seule info disponible à GOD). """
+    s = (sink or "").lower()
+    ch = (channel or "").lower()
+    stateful = bool((re.search(r"\b(config|configure|repoint|set-?settings|sethost)\b", s)
+                     and re.search(r"(fetch|network|host|url|endpoint|xmlhttp|request|print|send|exfil)", s))
+                    or re.search(r"(after|then)\b.*(set|config|fetch|send|print)", s))
+    relay = (any(t in s for t in ("relay", "relayed", "service worker", "forwarded", "sendmessage",
+                                   "port.postmessage")) or "(interne)" in ch
+             or (ch.startswith("onmessage") and "external" not in ch))
+    kb = any(t in s for t in ("shadowroot", "shadow dom", "response channel", "response_channel",
+                              "requestid", "handshake"))
+    if stateful:
+        return ("contract_stateful_gap", "contract_gap",
+                "Sink réseau conditionné par un ÉTAT préalable (hôte/config posé par un AUTRE message) : "
+                "une PoC mono-message ne peut pas le déclencher. Le contrat doit SÉQUENCER config→trigger.",
+                {"kind": "improve_contract", "target_files": ["code/orchestrator.py"],
+                 "summary": "Contrat À ÉTAT (prelude config→trigger) dans extract_handler_contract.",
+                 "declarative_spec": None})
+    if relay:
+        return ("contract_relay_gap", "contract_gap",
+                "Sink atteint via un RELAIS inter-contextes (content-script → runtime/tabs.sendMessage → "
+                "handler background → sink). Un contrat mono-saut façonne le message pour le PREMIER "
+                "listener, qui ne fait que relayer → sink jamais atteint. Besoin d'un contrat multi-hop.",
+                {"kind": "improve_contract", "target_files": ["code/orchestrator.py"],
+                 "summary": "Contrat RELAIS (canal d'entrée + champ de routage + gardes du handler "
+                            "background) dans extract_handler_contract.", "declarative_spec": None})
+    if kb:
+        return ("kb_skeleton_gap", "kb_gap",
+                "Classe de sink sans SKELETON/pattern dans la KB (shadowRoot via rendu d'état, canal de "
+                "réponse à corrélation…) : le générateur improvise sans échafaudage.",
+                {"kind": "add_kb_skeleton", "target_files": ["rag/attack_kb.json", "rag/graph/kb.sqlite"],
+                 "summary": "Ajouter un skeleton/pattern KB pour cette classe de sink.",
+                 "declarative_spec": None})
+    # P3 — signal d'ENTRÉE de listener. ATTENTION : la sonde actuelle (wrap de addListener/
+    # addEventListener) s'installe APRÈS que l'extension a enregistré ses handlers -> elle est
+    # aujourd'hui MUETTE (listeners_entered toujours vide). On N'interprète donc un vide ni comme
+    # "non reçu" ni comme "reçu" : seul un signal NON vide est exploité. (Correctif prévu : injection
+    # pré-chargement via Page.addScriptToEvaluateOnNewDocument dans les contextes extension.)
+    _le = (tr or {}).get("listeners_entered") or []
+    if _le:
+        note = (f" Signal harness : le(s) handler(s) {', '.join(_le)} ONT tourné mais le sink n'a pas été "
+                "atteint -> GARDE/FORME du message (actionnable par refiners).")
+        summary = "Refiners : forme/garde exacte du message."
+    else:
+        note = (" (Sonde d'entrée de listener indisponible — ne RIEN conclure sur la réception ;"
+                " cause probable : forme/timing du message.)")
+        summary = "Refiners : forme exacte + dispatch répété (sonde d'entrée à réparer, injection pré-chargement)."
+    return ("poc_shape", "poc_llm_deficiency",
+            "Sink observable mais jamais appelé." + note,
+            {"kind": "feedback_to_generator", "target_files": [], "summary": summary,
+             "declarative_spec": None})
 
 
 # ------------------------------------------------------------------ diagnostic d'une hypothèse ratée
@@ -240,8 +323,10 @@ def _diagnose_hypothesis(hyp, fs):
     #      -> l'échec vient du MODÈLE DE MENACE (surface verrouillée first-party : reqbin.com,
     #      amazon.com…), pas du générateur ni de l'oracle. Non-confirmation = vrai négatif.
     reachable, why = _harness_reachable_origin(fs.get("attacker_entry", {}))
-    if (stage in ("sink_not_reached", None) and not tr.get("sink_fired")
-            and not tr.get("sink_called") and not reachable):
+    _not_reached = stage in ("sink_not_reached", "listener_entered_sink_not_reached", None)
+    if (_not_reached and not tr.get("sink_fired")
+            and not tr.get("sink_called") and not reachable
+            and not tr.get("listeners_entered")):   # si un handler a tourné, la surface EST joignable
         return ("threat_model_boundary", "true_negative_or_threat_model",
                 f"Sink `{sink}` jamais atteint et {why} : sous le modèle A (page web arbitraire), "
                 "aucun canal de l'extension n'est joignable par l'attaquant. Non-confirmation CORRECTE "
@@ -273,7 +358,7 @@ def _diagnose_hypothesis(hyp, fs):
                  "declarative_spec": spec})
 
     # 3) sink observable mais jamais atteint : distinguer env / backend / poc
-    if stage in ("sink_not_reached", None) and not tr.get("sink_fired"):
+    if _not_reached and not tr.get("sink_fired"):
         served = tr.get("served_url") or ""
         caps = tr.get("captured_requests") or []
         unmatched = [c for c in caps if not c.get("matched")]
@@ -286,13 +371,10 @@ def _diagnose_hypothesis(hyp, fs):
                     {"kind": "feedback_to_generator", "target_files": [],
                      "summary": "Renvoyer au générateur : déclarer un POC-RESPONDER.",
                      "declarative_spec": None})
-        # 3b) rien d'observable côté réseau et sink pas appelé : probable souci de PoC/timing/forme
-        return ("poc_shape", "poc_llm_deficiency",
-                "Sink observable mais jamais appelé, et aucune piste d'environnement : vraisemblablement "
-                "la forme du message / le timing de la PoC. Boucle de raffinement (générateur), pas archi.",
-                {"kind": "feedback_to_generator", "target_files": [],
-                 "summary": "Laisser les refiners (forme du message exacte + dispatch répété).",
-                 "declarative_spec": None})
+        # 3b) rien d'observable côté réseau et sink pas appelé : raffiner la cause (P5)
+        #     contract_gap (relais/état) vs kb_gap (pas de skeleton) vs poc_shape (forme/timing),
+        #     avec le signal P3 (quels handlers ont tourné).
+        return _classify_poc_gap(sink, channel, fs, tr)
 
     # 4) sink appelé sans le canary : soit routage de canary (poc), soit canary transformé (archi)
     if tr.get("sink_called") and not tr.get("sink_fired"):
@@ -313,6 +395,10 @@ def _oracle_kind(impact, sink):
     if "cookie" in imp or "cookie" in snk: return "cookie"
     if any(t in imp or t in snk for t in ("network", "fetch", "ajax", "xmlhttp", "exfil", "sendresponse")):
         return "network"
+    # ① navigation / download : observés via marqueurs de sink (-> page_hit) comme la classe "code"
+    if any(t in imp or t in snk for t in ("tabs.create", "tabs.update", "tabs_create", "tabs_update",
+                                          "navigation", "downloads.download", "downloads_download", "download")):
+        return "code"
     if "code" in imp: return "code"
     return "any"
 
@@ -425,9 +511,18 @@ def _overall_triage(d, recos):
         return {"class": "architecture_limitation", "confidence": 0.8,
                 "rationale": f"{len(arch)} limite(s) d'architecture détectée(s) : "
                              + ", ".join(sorted({r['root_cause_class'] for r in arch}))}
+    if any(r["root_cause_class"] in ("contract_relay_gap", "contract_stateful_gap") for r in recos):
+        return {"class": "contract_gap", "confidence": 0.7,
+                "rationale": "Non-confirmation due à un CONTRAT handler↔canal incomplet (relais multi-hop / "
+                             "séquence à état), pas au LLM ni à l'oracle : le résolveur doit livrer le vrai "
+                             "déclencheur. (Oracle intact : toujours 0 FP.)"}
+    if any(r["root_cause_class"] == "kb_skeleton_gap" for r in recos):
+        return {"class": "kb_gap", "confidence": 0.6,
+                "rationale": "Non-confirmation due à l'absence de SKELETON/pattern KB pour cette classe de "
+                             "sink : le générateur improvise sans échafaudage."}
     if any(r["root_cause_class"] in ("poc_shape", "backend_response_gated") for r in recos):
         return {"class": "poc_llm_deficiency", "confidence": 0.6,
-                "rationale": "Échec probablement côté générateur (forme/timing/responder), pas archi."}
+                "rationale": "Échec probablement côté générateur (forme/timing/responder), contrat correct."}
     if any(r["root_cause_class"] == "threat_model_boundary" for r in recos):
         return {"class": "true_negative_or_threat_model", "confidence": 0.7,
                 "rationale": "Non-confirmation correcte : hors modèle d'attaquant."}
@@ -482,9 +577,10 @@ def set_reco_status(report_id, reco_id, status, note=None):
 
 # ------------------------------------------------------------------ validation de structure
 _ROOT_CAUSES = {"oracle_coverage_gap", "environment_missing", "timing", "canary_transformed",
-                "context_not_attached", "backend_response_gated", "threat_model_boundary", "poc_shape"}
+                "context_not_attached", "backend_response_gated", "threat_model_boundary", "poc_shape",
+                "contract_relay_gap", "contract_stateful_gap", "kb_skeleton_gap"}
 _KINDS = {"add_observer", "add_environment_enabler", "add_stage_rung", "flag_threat_model",
-          "feedback_to_generator", "none"}
+          "feedback_to_generator", "improve_contract", "add_kb_skeleton", "none"}
 
 
 def validate_report(report):

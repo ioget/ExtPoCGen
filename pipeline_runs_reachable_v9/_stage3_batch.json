@@ -1,0 +1,1283 @@
+[
+  {
+    "ext_id": "gen-WA09",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Coinneal自动交易社区共享版本",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 2,
+    "hypotheses": [
+      {
+        "sink": "chrome.runtime.sendMessage({type:'COINNEAL_LOG', line: `page request: ${detail.action}`})",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "start()/stop() trading engine driving dispatchTrade -> window.__coinneal.execute(action, params) using state.settings",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 5,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-WA09_20261118-104950.json",
+    "wall_s": 98.1
+  },
+  {
+    "ext_id": "gen-WA11",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Coinneal自动交易",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome.runtime.sendMessage({type:'COINEAL_TRADE_RESULT', result: data.result}) and {type:'COINEAL_NOTIFY', title, body}",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "window.postMessage({source:'COINEAL_CONTENT', type:'SETTINGS', settings: resp.settings}, '*')",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "window.postMessage({source:'COINEAL_CONTENT', type:'EXECUTE_TRADE', side, symbol, amount, price}, '*')",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 8,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-WA11_20261118-105200.json",
+    "wall_s": 130.3
+  },
+  {
+    "ext_id": "gen-BHT34",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "__MSG_name__",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 5,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "setSettings -> chrome.storage.local.set (settings persisted, later consumed by newtab UI)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "addBookmark -> chrome.bookmarks.create({title, url})",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "getHistory / searchHistory -> chrome.history.search + chrome.storage.local.set(HISTORY)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "fliptabOrigin used in subsequent network requests / origin checks",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 17,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-BHT34_20261118-105612.json",
+    "wall_s": 251.9
+  },
+  {
+    "ext_id": "gen-CM03",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Templates for Gmail",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.storage.local.set via setTemplates/saveTemplate (STORAGE_KEY 'gmail_templates_v1')",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "createEl('div', ..., nameEl) / menu.appendChild(nameEl) rendering template name into DOM",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 9,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM03_20261118-105858.json",
+    "wall_s": 165.9
+  },
+  {
+    "ext_id": "gen-CM05",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Spotsetter",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "innerHTML",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 2,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM05_20261118-105948.json",
+    "wall_s": 49.7
+  },
+  {
+    "ext_id": "gen-CM06",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "VK Profi",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "innerHTML",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 2,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM06_20261118-110038.json",
+    "wall_s": 50.5
+  },
+  {
+    "ext_id": "gen-CM07",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Player.me custom filter",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 4,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.storage.sync.set(incoming) in background.js PMCF_SET_SETTINGS handler, followed by broadcastSettingsChanged(incoming) to all player.me tabs",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "sendResponse({ok:true, settings}) returning full chrome.storage.sync settings to page context",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "applySettings(msg.settings) in content_scripts.js",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 12,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM07_20261118-110348.json",
+    "wall_s": 190.0
+  },
+  {
+    "ext_id": "gen-CM09",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "xChat",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "postToPage('xchat:settings-changed', patch) / settings persistence via saveSettings",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "mergeDefaults(filterSettings(...)) -> settings consumed by injectPageScript / postToPage",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 11,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM09_20261118-110644.json",
+    "wall_s": 176.1
+  },
+  {
+    "ext_id": "gen-CM10",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Netflix Subtitles Automatic (beta)",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.storage.local.set(patch)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "self._gaq.push(['_trackEvent', ...])",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 9,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM10_20261118-110909.json",
+    "wall_s": 144.8
+  },
+  {
+    "ext_id": "gen-CM11",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Clean Reddit",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 0,
+    "hypotheses": [],
+    "llm_calls": 1,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM11_20261118-110935.json",
+    "wall_s": 26.0
+  },
+  {
+    "ext_id": "gen-CM12",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "JamakFlix",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 5,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.storage.sync.set(data.options)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "window.postMessage({type:'JAMAK_OPTIONS', options: opts}) back to page",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.storage.sync.set(toSave) + chrome.tabs.sendMessage broadcast",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "sendResponse({options: opts}) from chrome.storage.sync.get",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 17,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM12_20261118-111311.json",
+    "wall_s": 215.7
+  },
+  {
+    "ext_id": "gen-CM13",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "renren-markdown",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 0,
+    "hypotheses": [],
+    "llm_calls": 0,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM13_20261118-111336.json",
+    "wall_s": 24.9
+  },
+  {
+    "ext_id": "gen-CM14",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "SE Chat Faces",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "chrome_tabs_executeScript_sink",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 2,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM14_20261118-111425.json",
+    "wall_s": 49.6
+  },
+  {
+    "ext_id": "gen-CM15",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "iPlug BETA",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 4,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "saveSettings -> chrome.storage.local.set (arbitrary settings object written to extension storage)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.notifications.create({title, message})",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "bumpStats -> chrome.storage.local.set (stats counters mutated)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 14,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-CM15_20261118-111743.json",
+    "wall_s": 197.7
+  },
+  {
+    "ext_id": "gen-COOK04",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "__MSG_appName__",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "innerHTML",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 2,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-COOK04_20261118-111837.json",
+    "wall_s": 53.8
+  },
+  {
+    "ext_id": "gen-COOK08",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "__MSG_appName__",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 6,
+    "hypotheses": [
+      {
+        "sink": "chrome_cookies_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.cookies.getAll / chrome.cookies.set / chrome.cookies.remove in background.js",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.cookies.getAll({domain: host}) and chrome.cookies.getAll({domain: '.'+host})",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "DOM CustomEvent detail containing full cookie values (including httpOnly cookies)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.cookies.set(payload) in background.js",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.cookies.remove({url, name}) in background.js",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 20,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-COOK08_20261118-112312.json",
+    "wall_s": 275.5
+  },
+  {
+    "ext_id": "gen-DH02",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Plugmixer",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.storage.local.set({playlists: playlists, ...})",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.notifications.create({title, message})",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 9,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DH02_20261118-112546.json",
+    "wall_s": 154.1
+  },
+  {
+    "ext_id": "gen-DH04",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "FireConverter",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "sendRuntime -> chrome.runtime.sendMessage to service worker (FC_CONVERT, FC_POLL_JOB, FC_OPEN_DASHBOARD)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "relayToPage -> window.postMessage back to page (convert-result, poll-job-result, pong)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "sendRuntime({type:'FC_DOWNLOAD', url: link.href})",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 8,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DH04_20261118-112755.json",
+    "wall_s": 129.0
+  },
+  {
+    "ext_id": "gen-DH06",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Công cụ đặt hàng DichVuTaoBao.com",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "innerHTML",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 2,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DH06_20261118-112848.json",
+    "wall_s": 52.9
+  },
+  {
+    "ext_id": "gen-DH07",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "__MSG_manifest_name__",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "chrome_downloads_download_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.runtime.sendMessage -> background chrome.downloads.download({url: data:text/csv..., filename, saveAs:true})",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "status.textContent = 'Export failed: ' + d.result.error (DOM text injection in panel)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 11,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DH07_20261118-113124.json",
+    "wall_s": 155.4
+  },
+  {
+    "ext_id": "gen-DH12",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Auragem - Chinese Order Tool",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "innerHTML",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 2,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DH12_20261118-113218.json",
+    "wall_s": 54.3
+  },
+  {
+    "ext_id": "gen-DH13",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "支付宝推广助手",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 5,
+    "hypotheses": [
+      {
+        "sink": "fetch",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "XMLHttpRequest_url_sink",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "forwardToBackground(data.url, data.body) -> chrome.runtime.sendMessage to service worker for parsing/persistence",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "forwardToBackground -> chrome.runtime.sendMessage -> background parsing/persistence",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "post(url, body) / forwardToBackground(url, body) -> chrome.runtime.sendMessage",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 16,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DH13_20261118-113543.json",
+    "wall_s": 204.7
+  },
+  {
+    "ext_id": "gen-DH18",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "ptYou - Star Citizen Contact Manager",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "chrome.storage.local/sync get/set/remove via content-script relay",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 4,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DH18_20261118-113644.json",
+    "wall_s": 61.3
+  },
+  {
+    "ext_id": "gen-DH19",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Extension for Appsleak.com service",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 3,
+    "hypotheses": [
+      {
+        "sink": "XMLHttpRequest_url_sink",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "XMLHttpRequest GET to buildPlayUrl(identifier) — attacker-influenced URL fetch",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "DOMParser.parseFromString(xhr.responseText, 'text/html') then parsePlayPage(doc)",
+        "status": "CONFIRMED",
+        "iterations": 3,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 10,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DH19_20261118-113922.json",
+    "wall_s": 157.6
+  },
+  {
+    "ext_id": "gen-DH21",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "小悦记",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 0,
+    "hypotheses": [],
+    "llm_calls": 0,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DH21_20261118-113946.json",
+    "wall_s": 24.1
+  },
+  {
+    "ext_id": "gen-DM02",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "moodleup",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 2,
+    "hypotheses": [
+      {
+        "sink": "chrome_downloads_download_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.downloads.download({url, filename}) in background.js",
+        "status": "CONFIRMED",
+        "iterations": 3,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 8,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DM02_20261118-114157.json",
+    "wall_s": 131.3
+  },
+  {
+    "ext_id": "gen-DM03",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "squares.io puzzle downloader",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 4,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "requestSquaresDownload(url) -> download of attacker-chosen URL",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "requestSquaresDownload(url, sender.tab.id) -> download",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "permission request / origin grant (truncated handler)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 14,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DM03_20261118-114514.json",
+    "wall_s": 196.6
+  },
+  {
+    "ext_id": "gen-DM05",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "subWatch 3",
+    "confirmed": 0,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 6,
+    "hypotheses": [
+      {
+        "sink": "chrome_storage_local_set_sink",
+        "status": "FAILED",
+        "iterations": 4,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "fetch",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.runtime.sendMessage(message) relayed to background handleMessage",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.tabs.create({ url: msg.url })",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "chrome.storage.local.set(STORAGE_KEYS.SETTINGS)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      },
+      {
+        "sink": "fetchText(`${TVMAZE_BASE}/search/shows?q=${encodeURIComponent(query)}`)",
+        "status": "FAILED",
+        "iterations": 3,
+        "sink_fired": false,
+        "attacker_controlled": false,
+        "stage": "sink_not_reached",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 20,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DM05_20261118-114934.json",
+    "wall_s": 260.1
+  },
+  {
+    "ext_id": "gen-DM07",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Tranwise Addon",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "chrome_downloads_download_sink",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 2,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DM07_20261118-115026.json",
+    "wall_s": 52.3
+  },
+  {
+    "ext_id": "gen-DM10",
+    "model": "deepseek-chat",
+    "budget": 4,
+    "triage_route": "clean",
+    "rc": 0,
+    "name": "Dext",
+    "confirmed": 1,
+    "status": "ok",
+    "triage": "clean",
+    "n_hyps": 1,
+    "hypotheses": [
+      {
+        "sink": "chrome_downloads_download_sink",
+        "status": "CONFIRMED",
+        "iterations": 1,
+        "sink_fired": true,
+        "attacker_controlled": true,
+        "stage": "confirmed",
+        "listeners_entered": []
+      }
+    ],
+    "llm_calls": 2,
+    "cost_usd": null,
+    "malware_level": "clean",
+    "malware_n_external": 0,
+    "log": "logs/agent_runs/gen-DM10_20261118-115118.json",
+    "wall_s": 51.9
+  }
+]

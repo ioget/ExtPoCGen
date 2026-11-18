@@ -27,9 +27,10 @@ Architecture diagrams: [`MyThinking-Archi/`](MyThinking-Archi/).
 
 The oracle confirms **only observed** exploits: **zero false positives by construction**.
 
-### Real vulnerable extensions (min-set)
+### Training / validation set: real vulnerable extensions (min-set)
 
-On the labelled min-set of **54 real vulnerable browser extensions**:
+The architecture (oracle, handler-contract resolver, GOD diagnostics) is built and validated on a
+labelled **min-set of 54 real vulnerable browser extensions**:
 
 | Stage | Result |
 |---|---|
@@ -38,24 +39,42 @@ On the labelled min-set of **54 real vulnerable browser extensions**:
 | &nbsp;&nbsp;↳ of the flagged candidates | 22 / 39 = **56 %** |
 | &nbsp;&nbsp;↳ of the full vulnerable set | 22 / 54 = **41 %** |
 
-Every one of the 22 confirmations is **oracle-grounded** (differential, canary-based): the exploit was *observed* firing under attacker control and *not* firing without it. No verdict rests on an LLM claim.
+Every confirmation is **oracle-grounded** (differential, canary-based): the exploit was *observed*
+firing under attacker control and *not* firing without it. No verdict rests on an LLM claim.
 
-### Generated extensions (ChromeSecBench)
+### Test set: generated extensions (ChromeSecBench)
 
-To stress-test the generator at scale, we synthesise full extensions from the
-**[ChromeSecBench](https://github.com/yueyueL/ChromeSecBench) benchmark** (arXiv:2510.16823):
-its manifest + description specifications are completed into runnable extensions with DeepSeek,
-then passed through the same pipeline. On these generated, web-reachable extensions the
-confirmation rate is governed by the static→generator **handler-contract binding** (channel and
-guards), not by the oracle:
+To evaluate the pipeline on a held-out set never used for tuning, we synthesise full extensions from
+the **[ChromeSecBench](https://github.com/yueyueL/ChromeSecBench) benchmark** (arXiv:2510.16823):
+each manifest + description specification is completed into a runnable extension with DeepSeek, then
+passed through the same pipeline. Reachability is tiered under the web-attacker model: **A** (an
+arbitrary web page can reach the surface) and **A'** (a first-party-locked surface, which the harness
+serves in the sandbox by impersonating that origin over TLS, i.e. exploitable if an attacker controls
+content on the trusted host). Of 140 specifications, **135 are testable** (62 A + 73 A'); 5 expose no
+web surface.
 
-| Batch (10 generated extensions each) | Confirmed PoCs |
+Over **10 batches / 171 runs on 131 unique testable extensions**:
+
+| Metric | Result |
 |---|---|
-| random selection | 5 / 10 |
-| reachability-filtered, baseline contract resolver | 2 / 10 |
-| reachability-filtered, **improved contract resolver** | **7 / 10** |
+| **Detection rate** (oracle-confirmed) | **76 / 131 = 58.0 %** |
+| &nbsp;&nbsp;↳ tier A (arbitrary page) | 20 / 32 = **62 %** |
+| &nbsp;&nbsp;↳ tier A' (first-party, sandboxed origin) | 40 / 69 = **58 %** |
+| **Precision / false positives** | **1.000 / 0** (by construction) |
+| **False-positive rate** | **0.000** |
+| **F1** | **0.734** |
+| Cost | **~$0.014 / run** |
 
-
+Detection climbed with the architecture work (baseline 0 to 10 %, then 40 %, 50 %, and ~58 % once the
+multi-hop/stateful contract resolver and the A/A' reachability tiering were in place) and stayed
+**stable at ~58 % as the set grew from 90 to 131 extensions**, at **zero false positives across all
+171 runs**. First-party surfaces reached by sandbox origin-impersonation (A') confirm about as often
+as arbitrary-page surfaces (A). The remaining non-confirmations are dominated by generator shape/
+timing (the PoC not reaching the sink) and a minority of hard multi-hop/stateful contracts, never by
+the oracle. Per-run evidence (triage, sinks, GOD diagnosis) lives in `pipeline_runs_*/`, and the full
+ledger (one record per run, with metrics) in `pipeline_runs_tracking/generated_runs_tracking.json`;
+results are subject to LLM sampling variance, and every attribution is made per-run from the actual
+traces.
 
 ## Repository layout (what is included here)
 
