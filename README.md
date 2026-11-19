@@ -1,6 +1,6 @@
-# ExtPoCGen: Sound Proof-of-Concept Generation for Browser-Extension Vulnerabilities and Malicious Behaviors
+# ExtPoCGen: Sound Proof-of-Concept Generation for Browser-Extension Vulnerabilities
 
-> *Neuro-symbolic agent that **generates** and, above all, **soundly validates** Proof-of-Concept (PoC) exploits for browser-extension vulnerabilities, plus a malicious-behaviour detection path. A verdict is only ever reached from **observed, deterministic proof**: zero false positives by construction.*
+> *Neuro-symbolic agent that **generates** and, above all, **soundly validates** Proof-of-Concept (PoC) exploits for browser-extension vulnerabilities. A verdict is only ever reached from **observed, deterministic proof**: zero false positives by construction.*
 
 ---
 
@@ -18,8 +18,7 @@ Static detectors flag *candidate* vulnerable flows but cannot tell you whether a
 2. **Fact sheet**: attacker entry model (A = malicious web page, B = another extension), candidate findings, 3-state triage (`has-candidate` / `clean` / `incomplete-analysis`).
 3. **PoC generation**: an LLM (DeepSeek) drafts an attacker page from a **handler contract** (exact channel, guards and tainted field) extracted from the code.
 4. **Differential oracle**: the extension is loaded in an **isolated, instrumented headless Chrome** (CDP, `--load-extension`), served a local attacker page with a **canary**; the sink is observed with and without the attacker. `attacker_controlled = fired_with AND not fired_without`.
-5. **Malicious-behaviour path**: for extensions with no vulnerability surface, behaviour is observed in isolated Chrome (canary + sinkhole) and scored.
-6. **GOD agent**: a symbolic, reco-gated meta-diagnostic that reads run traces and classifies *why* a run did not confirm (threat-model boundary vs generator deficiency vs oracle-coverage gap), without ever touching the oracle.
+5. **GOD agent**: a symbolic, reco-gated meta-diagnostic that reads run traces and classifies *why* a run did not confirm (threat-model boundary vs generator deficiency vs oracle-coverage gap), without ever touching the oracle.
 
 Architecture diagrams: [`MyThinking-Archi/`](MyThinking-Archi/).
 
@@ -113,6 +112,46 @@ GOD diagnosis) lives in `pipeline_runs_*/`, and the full ledger (one record per 
 `pipeline_runs_tracking/generated_runs_tracking.json`; results are subject to LLM sampling variance,
 and every attribution is made per-run from the actual traces.
 
+### Test set with a negative class: generated vulnerable + benign extensions
+
+The generated set above has no benign/negative class, so *precision*, *FPR* and *accuracy* stay
+undefined there. To close that gap we built a second held-out set where **vulnerable and benign
+extensions share the exact same manifest** and differ only in the generation prompt (a clean control):
+DeepSeek is asked once to introduce the vulnerable flow and once to implement the same feature safely.
+This yields **102 vulnerable + 30 benign** loadable extensions, each run once through the same oracle.
+
+While running them, the oracle produced a finding: **8 extensions the LLM had labelled benign fire the
+dangerous sink under attacker control and not without it**, i.e. they are **differentially proven
+exploits**. The "secure" generation prompt failed and the benign label is simply wrong, so the oracle
+*corrected* the ground truth rather than being scored against it. Against this corrected ground truth
+(vuln = positive, benign = negative), the confusion matrix is:
+
+| | predicted vuln (confirmed) | predicted non-vuln |
+|---|---|---|
+| **vuln (actual, 110)** | TP = 67 | FN = 43 |
+| **benign (actual, 22)** | FP = 0 | TN = 22 |
+
+| Metric | Result |
+|---|---|
+| **Recall** (vuln detection rate) | 67 / 110 = **60.9 %** |
+| **False-negative rate** (miss rate) | 43 / 110 = **39.1 %** |
+| **Precision** | 67 / 67 = **1.000** |
+| **False-positive rate** | 0 / 22 = **0.000** |
+| **Accuracy** | 89 / 132 = **67.4 %** |
+| **F1** | **0.757** |
+
+Precision stays **1.000** and FPR **0** exactly as on every other set: the differential oracle never
+confirms a non-exploit. The new result this set adds is a *defined* FPR and accuracy (it has a real
+negative class), plus the finding that **ExtPoCGen uncovered 8 vulnerabilities an LLM labeler missed**.
+
+**Robustness note.** Taken against the *raw* LLM labels, before correcting those 8, the same run reads
+precision 0.881, FPR 0.267, accuracy 0.614, F1 0.698; the entire gap is the 8 proven exploits
+miscounted as benign. The correction rests on the oracle's soundness (each of the 8 carries
+`attacker_controlled = True` in its trace); a human spot-check of the 8 removes any residual doubt and
+is listed as future work. More broadly, LLM "benign" controls are noisy (about 27 % were in fact
+exploitable). Per-run evidence is in `pipeline_runs_v2_labeled/`, the eval summary in
+`publication/metrics/v2_eval.json`, and the matrix in `publication/tables/confusion_matrix.md`.
+
 ## Repository layout (what is included here)
 
 | Path | Contents |
@@ -120,7 +159,6 @@ and every attribution is made per-run from the actual traces.
 | [`code/`](code/) | Implementation: `orchestrator.py`, `harness.py` (CDP oracle), `god_agent.py`, `build_fact_sheets.py`, `server.py` + `dashboard.html`, `eval_*.py` |
 | [`rag/`](rag/) | Knowledge base: attack KB + PoC skeletons |
 | `pipeline_runs_*/` | Experimental **results** (per-extension reports + funnel) for the generated batches |
-| `behavior_repo/` | Malicious-behaviour analysis reports (IOCs, outbound attempts) |
 | [`min-set/`](min-set/) | Dataset **index + builder only** (`index.csv`, `build_minset.py`); **no payloads** |
 | [`MyThinking-Archi/`](MyThinking-Archi/) | Architecture docs and diagrams |
 
