@@ -8,6 +8,10 @@
 
 ![ExtPoCGen pipeline](MyThinking-Archi/pipeline_5stage.png)
 
+*Lightweight view — the five stages and what flows between them:*
+
+![ExtPoCGen lightweight architecture](MyThinking-Archi/pipeline_5stage_v2.png)
+
 ## Why
 
 Static detectors flag *candidate* vulnerable flows but cannot tell you whether an attacker can *actually* trigger them. LLMs can draft exploit PoCs but hallucinate confirmations. ExtPoCGen couples the two and puts a **differential oracle** in charge of the verdict: an exploit is **CONFIRMED only if the dangerous sink fires with an attacker-controlled value AND does not fire without the attacker**. Nothing else concludes.

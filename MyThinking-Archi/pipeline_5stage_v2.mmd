@@ -1,0 +1,34 @@
+%%{init: {'theme':'base', 'themeVariables': {'fontSize':'16px','fontFamily':'Helvetica, Arial, sans-serif'}, 'flowchart': {'htmlLabels':true, 'curve':'basis', 'nodeSpacing':45, 'rankSpacing':55}}}%%
+flowchart LR
+    %% Entrée / sortie
+    Start(["GitHub Repository URL /<br/>Source Code"])
+    End(["Verified PoC<br/>Repository"])
+
+    %% Stages = une box chacun (titre seul)
+    S1["<b>Stage 1</b><br/>Static Analysis &amp;<br/>Info Extraction"]
+    S2["<b>Stage 2</b><br/>Knowledge-Base<br/>Enrichment"]
+    S3["<b>Stage 3</b><br/>Multi-Agent<br/>PoC Generation"]
+    S4["<b>Stage 4</b><br/>Testbed<br/>Execution"]
+    S5["<b>Stage 5</b><br/>Deterministic<br/>Validation"]
+
+    %% Flux principal avec étiquettes courtes
+    Start --> S1
+    S1 -- "Fact sheet" --> S2
+    S2 -- "Context" --> S3
+    S3 -- "Candidate PoC" --> S4
+    S4 -- "Exec trace" --> S5
+    S5 -- "Verified PoC" --> End
+
+    %% Boucles de rétroaction
+    End -. "Closed loop" .-> S3
+    End -. "Closed loop" .-> S2
+    S3 -. "Re-query" .-> S2
+
+    %% Styles
+    style S1 fill:#f9e6e6,stroke:#c48b8b,stroke-width:1.5px,color:#000
+    style S2 fill:#e3f3f1,stroke:#88b8b2,stroke-width:1.5px,color:#000
+    style S3 fill:#fae8d8,stroke:#cfa17c,stroke-width:1.5px,color:#000
+    style S4 fill:#e3effa,stroke:#88a8c7,stroke-width:1.5px,color:#000
+    style S5 fill:#e6f4e1,stroke:#8eb882,stroke-width:1.5px,color:#000
+    style Start fill:#ffffff,stroke:#333333,stroke-width:1.5px,color:#000
+    style End fill:#ffffff,stroke:#333333,stroke-width:1.5px,color:#000
