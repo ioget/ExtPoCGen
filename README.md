@@ -138,9 +138,10 @@ This yields **102 vulnerable + 30 benign** loadable extensions, each run once th
 
 While running them, the oracle produced a finding: **8 extensions the LLM had labelled benign fire the
 dangerous sink under attacker control and not without it**, i.e. they are **differentially proven
-exploits**. The "secure" generation prompt failed and the benign label is simply wrong, so the oracle
-*corrected* the ground truth rather than being scored against it. Against this corrected ground truth
-(vuln = positive, benign = negative), the confusion matrix is:
+exploits**. The "secure" generation prompt failed and the benign label is simply wrong, so we
+**reclassify those 8 as `vuln` in the dataset** (`publication/datasets/labels.csv`), bringing the
+ground truth to **113 vuln / 22 benign / 15 malware** (110 vuln + 22 benign loadable and tested).
+Against this corrected ground truth (vuln = positive, benign = negative), the DeepSeek confusion matrix is:
 
 | | predicted vuln (confirmed) | predicted non-vuln |
 |---|---|---|
@@ -160,13 +161,25 @@ Precision stays **1.000** and FPR **0** exactly as on every other set: the diffe
 confirms a non-exploit. The new result this set adds is a *defined* FPR and accuracy (it has a real
 negative class), plus the finding that **ExtPoCGen uncovered 8 vulnerabilities an LLM labeler missed**.
 
+**Same validator, a weaker generator.** Re-running the identical set and oracle with **Claude Haiku 5.5**
+as the generator confirms 36 / 110 (recall **32.7 %**) with, again, **precision 1.000 and FPR 0.000**;
+its 2 benign-labelled hits are a strict subset of DeepSeek's 8. Swapping the generator roughly halves
+recall but leaves soundness untouched — which is the point: **the oracle's precision is a property of
+the validator, not of the model that writes the exploits; only recall depends on the generator.**
+
+| Generator | Recall (vuln) | Precision | FPR | F1 | Cost (full v2) |
+|---|---|---|---|---|---|
+| DeepSeek | 67 / 110 = **60.9 %** | 1.000 | 0.000 | 0.757 | ~$2 |
+| Claude Haiku 5.5 | 36 / 110 = **32.7 %** | 1.000 | 0.000 | 0.493 | ~$1.24 |
+
 **Robustness note.** Taken against the *raw* LLM labels, before correcting those 8, the same run reads
 precision 0.881, FPR 0.267, accuracy 0.614, F1 0.698; the entire gap is the 8 proven exploits
 miscounted as benign. The correction rests on the oracle's soundness (each of the 8 carries
 `attacker_controlled = True` in its trace); a human spot-check of the 8 removes any residual doubt and
 is listed as future work. More broadly, LLM "benign" controls are noisy (about 27 % were in fact
-exploitable). Per-run evidence is in `pipeline_runs_v2_labeled/`, the eval summary in
-`publication/metrics/v2_eval.json`, and the matrix in `publication/tables/confusion_matrix.md`.
+exploitable). Per-run evidence is in `pipeline_runs_v2_labeled/` (DeepSeek) and `pipeline_runs_v2_claude/`
+(Haiku), the eval summary in `publication/metrics/v2_eval.json`, and the matrix in
+`publication/tables/confusion_matrix.md`.
 
 Structurally, the 150 labelled extensions (vuln + benign, malware shown) are diverse and the confirmed
 exploits spread across the whole space, not one easy cluster. Each point is one extension (2D MDS on
