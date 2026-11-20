@@ -22,6 +22,15 @@ Static detectors flag *candidate* vulnerable flows but cannot tell you whether a
 
 Architecture diagrams: [`MyThinking-Archi/`](MyThinking-Archi/).
 
+### Knowledge graph (Graph-RAG store)
+
+Stage 2 retrieves from a typed knowledge graph (`rag/graph/kb.sqlite`, 1393 nodes / 1368 edges):
+attack patterns, the exact Chrome APIs, sinks and sources, PoC skeletons, CWE classes and per-extension
+evidence, linked by typed edges (`targets_sink`, `CLASSIFIED_AS`, `DECLARES`, ...). From a candidate
+sink the agent walks to the matching attack pattern, its canary-based oracle and a few-shot example.
+
+![ExtPoCGen knowledge graph](publication/figures/knowledge_graph.png)
+
 ## The tool (dashboard)
 
 `python3 code/server.py` serves an interactive studio (http://localhost:8750) to upload an extension
