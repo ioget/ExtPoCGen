@@ -112,6 +112,14 @@ GOD diagnosis) lives in `pipeline_runs_*/`, and the full ledger (one record per 
 `pipeline_runs_tracking/generated_runs_tracking.json`; results are subject to LLM sampling variance,
 and every attribution is made per-run from the actual traces.
 
+The 139 generated extensions are structurally diverse (no near-duplicates), and the 76 oracle-confirmed
+exploits are scattered across the structural space, not confined to one easy cluster (each point is one
+extension by 2D MDS on AST-token distance; green = oracle-confirmed).
+
+| Clustered by vulnerability category | Colored by detection result (green = confirmed) |
+|---|---|
+| ![Generated v1 clustered by vulnerability category](publication/figures/cluster_map_v1.png) | ![Generated v1 colored by detection result](publication/figures/cluster_map_v1_detected.png) |
+
 ### Test set with a negative class: generated vulnerable + benign extensions
 
 The generated set above has no benign/negative class, so *precision*, *FPR* and *accuracy* stay
@@ -151,6 +159,16 @@ miscounted as benign. The correction rests on the oracle's soundness (each of th
 is listed as future work. More broadly, LLM "benign" controls are noisy (about 27 % were in fact
 exploitable). Per-run evidence is in `pipeline_runs_v2_labeled/`, the eval summary in
 `publication/metrics/v2_eval.json`, and the matrix in `publication/tables/confusion_matrix.md`.
+
+Structurally, the 150 labelled extensions (vuln + benign, malware shown) are diverse and the confirmed
+exploits spread across the whole space, not one easy cluster. Each point is one extension (2D MDS on
+AST-token distance); shape = class (circle vuln, square benign, triangle malware), green = confirmed.
+The confirmed benign squares are the 8 proven mislabels; malware triangles are shown for completeness
+(behaviour path confirms only 1 of 15).
+
+| Clustered by class | Colored by detection result (green = confirmed) |
+|---|---|
+| ![Labelled v2 clustered by class](publication/figures/cluster_map.png) | ![Labelled v2 colored by detection result](publication/figures/cluster_map_detected.png) |
 
 ## Repository layout (what is included here)
 
