@@ -87,10 +87,12 @@ flowchart LR
     Stage4 --> Stage5
     Stage5 --> End
 
-    %% Boucles de rétroaction (pointillés) — vers les conteneurs
-    Stage4 -. "Review / Refine" .-> Stage3
-    End -. "Closed Loop" .-> Stage1
+    %% Boucles de rétroaction (pointillés) — toutes deux depuis le PoC vérifié (End)
+    End -. "Closed Loop" .-> Stage3
     End -. "Closed Loop" .-> Stage2
+
+    %% L'agent peut ré-interroger le retrieval à la demande pendant la génération
+    Stage3 -. "Re-query (on demand)" .-> Stage2
 
     %% Styles des conteneurs (Stages)
     style Stage1 fill:#f9e6e6,stroke:#c48b8b,stroke-width:1.5px,color:#000
