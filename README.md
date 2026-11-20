@@ -10,7 +10,7 @@
 
 *Lightweight view the five stages and what flows between them:*
 
-![ExtPoCGen lightweight architecture](MyThinking-Archi/pipeline_5stage_v2.png)
+![ExtPoCGen lightweight architecture](MyThinking-Archi/simplify-archi.png)
 
 ## Why
 
