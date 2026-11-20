@@ -1,0 +1,104 @@
+%%{init: {'themeVariables': {'fontSize':'17px'}}}%%
+flowchart LR
+    %% Entrée initiale
+    Start(["GitHub Repository URL /<br/>Source Code"])
+
+    %% Stage 1
+    subgraph Stage1["Stage 1: Static Analysis & Info Extraction"]
+        direction TB
+        S1_feat["Feature Extraction<br/>(Anomalies)"]
+        S1_meta["Metadata<br/>(Manifest, config,<br/>dependencies)"]
+        S1_patt["Pattern Matching<br/>(Code / malware<br/>patterns)"]
+        S1_sheet["Collaborative<br/>Security Fact Sheet"]
+        S1_repo{"Is repo too<br/>large?"}
+
+        S1_feat --> S1_meta
+        S1_feat --> S1_patt
+        S1_meta --> S1_sheet
+        S1_patt --> S1_sheet
+        S1_sheet --> S1_repo
+    end
+
+    %% Stage 2
+    subgraph Stage2["Stage 2: Knowledge-Base Enrichment"]
+        direction TB
+        S2_few["Few-shot<br/>exploits"]
+        S2_cve["CVEs /<br/>Pentest<br/>Plans"]
+        S2_api["API<br/>Semantics"]
+        S2_build["Build<br/>Settings"]
+        S2_ret["Retrieve features,<br/>find high-anchor,<br/>in_manifest"]
+
+        S2_few --> S2_ret
+        S2_cve --> S2_ret
+        S2_api --> S2_ret
+        S2_build --> S2_ret
+    end
+
+    %% Stage 3
+    subgraph Stage3["Stage 3: Multi-Agent PoC Generation"]
+        direction TB
+        S3_orch["Orchestrator<br/>(Inference Loop)"]
+        S3_vuln["Vulnerability<br/>Analyst"]
+        S3_mal["Malware<br/>Analyst"]
+        S3_gen["PoC Generator<br/>(Skeleton)"]
+        S3_val["PoC Safety &<br/>Script Validation"]
+
+        S3_orch --> S3_vuln
+        S3_orch --> S3_mal
+        S3_vuln --> S3_gen
+        S3_mal --> S3_gen
+        S3_gen --> S3_val
+    end
+
+    %% Stage 4
+    subgraph Stage4["Stage 4: Testbed Execution"]
+        direction TB
+        S4_run["Runtime / HIL<br/>Test Harness"]
+        S4_virt["Virtual<br/>behavior<br/>generation"]
+        S4_feed["Feedback &<br/>notifications"]
+        S4_logs["Execution Logs<br/>/ Status"]
+
+        S4_run --> S4_virt
+        S4_run --> S4_feed
+        S4_virt --> S4_logs
+        S4_feed --> S4_logs
+    end
+
+    %% Stage 5
+    subgraph Stage5["Stage 5: Deterministic Validation"]
+        direction TB
+        S5_rule["Rule &<br/>Evidence-based<br/>Summary"]
+        S5_verd["Vulnerability/<br/>Malware<br/>Verdict"]
+        S5_rep["Evidence &<br/>Reproducibility<br/>Report"]
+
+        S5_rule --> S5_verd
+        S5_rule --> S5_rep
+    end
+
+    %% Sortie finale
+    End(["Verified PoC<br/>Repository"])
+
+    %% Flux principal entre les étapes (toutes les flèches ciblent des CONTENEURS
+    %% -> Mermaid respecte alors le `direction TB` interne de chaque stage)
+    Start --> Stage1
+    Stage1 --> Stage2
+    Stage2 --> Stage3
+    Stage3 --> Stage4
+    Stage4 --> Stage5
+    Stage5 --> End
+
+    %% Boucles de rétroaction (pointillés) — vers les conteneurs
+    Stage4 -. "Review / Refine" .-> Stage3
+    End -. "Closed Loop" .-> Stage1
+    End -. "Closed Loop" .-> Stage2
+
+    %% Styles des conteneurs (Stages)
+    style Stage1 fill:#f9e6e6,stroke:#c48b8b,stroke-width:1.5px,color:#000
+    style Stage2 fill:#e3f3f1,stroke:#88b8b2,stroke-width:1.5px,color:#000
+    style Stage3 fill:#fae8d8,stroke:#cfa17c,stroke-width:1.5px,color:#000
+    style Stage4 fill:#e3effa,stroke:#88a8c7,stroke-width:1.5px,color:#000
+    style Stage5 fill:#e6f4e1,stroke:#8eb882,stroke-width:1.5px,color:#000
+
+    %% Styles des boîtes internes
+    classDef whiteBox fill:#ffffff,stroke:#333333,stroke-width:1.5px,color:#000
+    class Start,End,S1_feat,S1_meta,S1_patt,S1_sheet,S1_repo,S2_few,S2_cve,S2_api,S2_build,S2_ret,S3_orch,S3_vuln,S3_mal,S3_gen,S3_val,S4_run,S4_virt,S4_feed,S4_logs,S5_rule,S5_verd,S5_rep whiteBox

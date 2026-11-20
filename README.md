@@ -6,7 +6,7 @@
 
 **Status: study in progress.** Two core modules (`code/orchestrator.py`, the agent, routing and handler-contract resolver; and `code/harness.py`, the differential oracle) are **withheld** from this public snapshot and are **available on request**: `gnintezemo.m.rosly@aims-senegal.org`.
 
-![ExtPoCGen pipeline](MyThinking-Archi/extpocgen-flow.png)
+![ExtPoCGen pipeline](MyThinking-Archi/pipeline_5stage.png)
 
 ## Why
 
