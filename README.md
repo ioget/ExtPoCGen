@@ -63,6 +63,14 @@ labelled **min-set of 54 real vulnerable browser extensions**:
 Every confirmation is **oracle-grounded** (differential, canary-based): the exploit was *observed*
 firing under attacker control and *not* firing without it. No verdict rests on an LLM claim.
 
+The statically-flagged vulnerable extensions, clustered on their own code (manifest content_scripts and
+background, vendor libraries excluded so shared libs do not dominate), are structurally diverse, and the
+oracle-confirmed exploits (green, right) spread across the space rather than sitting in one cluster.
+
+| Clustered by vulnerability impact category | Colored by detection result (green = confirmed) |
+|---|---|
+| ![min-set clustered by vulnerability impact category](publication/figures/cluster_map_minset_bycategory.png) | ![min-set colored by detection result](publication/figures/cluster_map_minset_detected.png) |
+
 ### Test set: generated extensions (ChromeSecBench)
 
 To evaluate the pipeline on a held-out set never used for tuning, we synthesise full extensions from
