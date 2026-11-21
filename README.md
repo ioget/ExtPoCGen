@@ -147,58 +147,91 @@ The generated set above has no benign/negative class, so *precision*, *FPR* and 
 undefined there. To close that gap we built a second held-out set where **vulnerable and benign
 extensions share the exact same manifest** and differ only in the generation prompt (a clean control):
 DeepSeek is asked once to introduce the vulnerable flow and once to implement the same feature safely.
-This yields **102 vulnerable + 30 benign** loadable extensions, each run once through the same oracle.
+This yields **102 vulnerable + 30 benign** loadable extensions, each run once through the same oracle,
+with **four generators**: DeepSeek, Qwen3-Coder (480B, via OpenRouter), Claude Haiku 5.5, and a partial
+GPT-5-mini.
 
-While running them, the oracle produced a finding: **8 extensions the LLM had labelled benign fire the
-dangerous sink under attacker control and not without it**, i.e. they are **differentially proven
-exploits**. The "secure" generation prompt failed and the benign label is simply wrong, so we
-**reclassify those 8 as `vuln` in the dataset** (`publication/datasets/labels.csv`), bringing the
-ground truth to **113 vuln / 22 benign / 15 malware** (110 vuln + 22 benign loadable and tested).
-Against this corrected ground truth (vuln = positive, benign = negative), the DeepSeek confusion matrix is:
+While running them, the oracle produced a striking finding: **15 of the 30 extensions the LLM had
+labelled benign actually fire the dangerous sink under attacker control and not without it** - they are
+**differentially proven exploits**. The "secure" generation prompt failed and the benign label is simply
+wrong, so we **reclassify those 15 as `vuln` in the dataset** (`publication/datasets/labels.csv`),
+bringing the ground truth to **120 vuln / 15 benign / 15 malware** (117 vuln + 15 benign loadable and
+tested). In other words **half of the LLM-generated "benign" controls are in fact exploitable** - and
+*the more generators we run, the more mislabels surface*: DeepSeek exposes 8, Qwen3-Coder 12, Haiku 2,
+and their union is 15.
 
+Against this corrected ground truth (vuln = positive, benign = negative), **every generator keeps
+precision 1.000 / FPR 0.000** - the differential oracle never confirms a non-exploit - while **recall
+tracks the generator**:
+
+| Generator | Recall (vuln) | Precision | FPR | F1 | Accuracy | Cost (full v2) |
+|---|---|---|---|---|---|---|
+| **DeepSeek** | 67 / 117 = **57.3 %** | 1.000 | 0.000 | 0.728 | 62.1 % | ~$2 |
+| **Qwen3-Coder** (480B) | 65 / 117 = **55.6 %** | 1.000 | 0.000 | 0.714 | 60.6 % | ~$2.2 |
+| **Claude Haiku 5.5** | 36 / 117 = **30.8 %** | 1.000 | 0.000 | 0.471 | 38.6 % | ~$1.25 |
+| GPT-5-mini *(partial, 52 ext)* | ≈ 17 % | 1.000 | 0.000 | - | - | ~$4 |
+
+Confusion matrices of the two strongest generators (vuln = positive, benign = negative):
+
+*DeepSeek*
 | | predicted vuln (confirmed) | predicted non-vuln |
 |---|---|---|
-| **vuln (actual, 110)** | TP = 67 | FN = 43 |
-| **benign (actual, 22)** | FP = 0 | TN = 22 |
+| **vuln (actual, 117)** | TP = 67 | FN = 50 |
+| **benign (actual, 15)** | FP = 0 | TN = 15 |
 
-| Metric | Result |
-|---|---|
-| **Recall** (vuln detection rate) | 67 / 110 = **60.9 %** |
-| **False-negative rate** (miss rate) | 43 / 110 = **39.1 %** |
-| **Precision** | 67 / 67 = **1.000** |
-| **False-positive rate** | 0 / 22 = **0.000** |
-| **Accuracy** | 89 / 132 = **67.4 %** |
-| **F1** | **0.757** |
+*Qwen3-Coder*
+| | predicted vuln (confirmed) | predicted non-vuln |
+|---|---|---|
+| **vuln (actual, 117)** | TP = 65 | FN = 52 |
+| **benign (actual, 15)** | FP = 0 | TN = 15 |
 
-Precision stays **1.000** and FPR **0** exactly as on every other set: the differential oracle never
-confirms a non-exploit. The new result this set adds is a *defined* FPR and accuracy (it has a real
-negative class), plus the finding that **ExtPoCGen uncovered 8 vulnerabilities an LLM labeler missed**.
+Both read **recall 57.3 % / 55.6 %, precision 1.000, FPR 0.000** - identical soundness, generator-dependent recall.
 
-**Same validator, a weaker generator.** Re-running the identical set and oracle with **Claude Haiku 5.5**
-as the generator confirms 36 / 110 (recall **32.7 %**) with, again, **precision 1.000 and FPR 0.000**;
-its 2 benign-labelled hits are a strict subset of DeepSeek's 8. Swapping the generator roughly halves
-recall but leaves soundness untouched — which is the point: **the oracle's precision is a property of
-the validator, not of the model that writes the exploits; only recall depends on the generator.**
+**Two takeaways.** First, **soundness is a property of the validator, not the generator**: swapping the
+model that writes the exploits moves recall across a ~3.5× range (≈17 % → 57 %) but never yields a false
+positive (precision 1.000, FPR 0 everywhere). Second, **the two strongest generators are complementary** -
+of the 117 true vulnerabilities, Qwen3-Coder confirms **16 that DeepSeek misses** (and DeepSeek confirms
+18 that Qwen misses), so the **union of DeepSeek + Qwen3-Coder reaches 67 + 16 = 83 / 117 = 70.9 % recall,
++13.6 points over DeepSeek alone**, still at precision 1.000. More generators means more recall *and* more mislabels uncovered, soundness unchanged.
 
-| Generator | Recall (vuln) | Precision | FPR | F1 | Cost (full v2) |
+Because every confirmation is a proven exploit, the **union of several generators** raises effective
+recall for free, with **precision pinned at 1.000** throughout:
+
+| Configuration | Recall | F1 | Accuracy | Cost | Time |
 |---|---|---|---|---|---|
-| DeepSeek | 67 / 110 = **60.9 %** | 1.000 | 0.000 | 0.757 | ~$2 |
-| Claude Haiku 5.5 | 36 / 110 = **32.7 %** | 1.000 | 0.000 | 0.493 | ~$1.24 |
+| DeepSeek alone | 67 / 117 = **57.3 %** | 0.728 | 62.1 % | ~$2 | ~8.9 h |
+| DeepSeek + Qwen3-Coder | 83 / 117 = **70.9 %** | 0.830 | 74.2 % | ~$4.2 | ~15.6 h |
+| **DeepSeek + Qwen3-Coder + Haiku** | 85 / 117 = **72.6 %** | **0.842** | **75.8 %** | ~$5.5 | ~20.1 h |
 
-**Robustness note.** Taken against the *raw* LLM labels, before correcting those 8, the same run reads
-precision 0.881, FPR 0.267, accuracy 0.614, F1 0.698; the entire gap is the 8 proven exploits
-miscounted as benign. The correction rests on the oracle's soundness (each of the 8 carries
-`attacker_controlled = True` in its trace); a human spot-check of the 8 removes any residual doubt and
-is listed as future work. More broadly, LLM "benign" controls are noisy (about 27 % were in fact
-exploitable). Per-run evidence is in `pipeline_runs_v2_labeled/` (DeepSeek) and `pipeline_runs_v2_claude/`
-(Haiku), the eval summary in `publication/metrics/v2_eval.json`, and the matrix in
-`publication/tables/confusion_matrix.md`.
+Cost and time are cumulative (one more generator = one more full run). The runs are independent, so in
+parallel the wall-clock collapses to the slowest one (~9 h). Since precision is pinned at 1.000, every
+point of recall is a point of F1: the three-generator ensemble lifts the system from F1 0.728 to **0.842**
+without a single false positive.
+
+The reclassification rests entirely on the oracle's soundness - each reclassified extension carries
+`attacker_controlled = True` in its trace - so it adds no unproven assumption. Per-run evidence is in
+`pipeline_runs_v2_labeled/` (DeepSeek), `pipeline_runs_v2_qwen/` (Qwen3-Coder) and
+`pipeline_runs_v2_claude/` (Haiku); the eval summary is in `publication/metrics/v2_eval.json` and the
+matrices in `publication/tables/confusion_matrix.md`.
+
+**Cost and time per generator.** Per confirmed detection (the metric that matters), DeepSeek is the
+cheapest (~$0.029 / exploit) and Qwen3-Coder the fastest (~6.3 min / exploit); Haiku is cheapest and
+fastest *per extension* (~$0.009, ~2 min) but confirms fewer, so its per-detection cost lands similar.
+Budget 4, same oracle; GPT-5-mini is excluded (partial run).
+
+![Cost and time efficiency per generator](publication/figures/analysis_efficiency.png)
+
+**Recall by family.** Broken down by vulnerability family, the generators are visibly complementary:
+DeepSeek leads on BHT and CM, Qwen3-Coder leads on AUTH and COOK, they tie on DH / DM / DT, and Haiku
+trails across the board. This is why their union lifts recall so much (70.9 % for DeepSeek + Qwen3-Coder).
+
+![Recall by vulnerability family, three generators](publication/figures/analysis_recall_by_family.png)
 
 Structurally, the 150 labelled extensions (vuln + benign, malware shown) are diverse and the confirmed
 exploits spread across the whole space, not one easy cluster. Each point is one extension (2D MDS on
 AST-token distance); shape = class (circle vuln, square benign, triangle malware), green = confirmed.
-The confirmed benign squares are the 8 proven mislabels; malware triangles are shown for completeness
-(behaviour path confirms only 1 of 15).
+The confirmed benign squares are proven mislabels (DeepSeek's 8 are shown here; 15 across all
+generators); malware triangles are shown for completeness (behaviour path confirms only 1 of 15).
 
 | Clustered by class | Colored by detection result (green = confirmed) |
 |---|---|

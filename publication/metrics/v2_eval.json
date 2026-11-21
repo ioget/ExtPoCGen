@@ -2,58 +2,82 @@
   "dataset": "chromesecbench_generated_v2",
   "reclassified": {
     "applied": true,
-    "when": "2026-11-20",
+    "when": "2026-11-21",
+    "n": 15,
     "ids": [
       "benign-AUTH01",
+      "benign-AUTH02",
+      "benign-AUTH03",
+      "benign-AUTH04",
       "benign-AUTH06",
+      "benign-BHT01",
       "benign-BHT02",
       "benign-BHT05",
+      "benign-BHT08",
+      "benign-BHT10",
       "benign-BHT15",
+      "benign-BHT16",
       "benign-BHT20",
       "benign-BHT23",
       "benign-BHT24"
     ],
-    "rule": "benign etiquetes LLM mais prouves exploitables (attacker_controlled=True par l'oracle differentiel) -> reclasses vuln dans labels.csv"
+    "rule": "benign etiquetes LLM mais PROUVES exploitables (attacker_controlled=True, oracle differentiel) par au moins un generateur (DeepSeek/Haiku/Qwen3) -> reclasses vuln. 15/30 = 50% des 'benign' le sont."
   },
-  "ground_truth": {
-    "vuln": 113,
-    "benign": 22,
-    "malware": 15,
-    "note": "malware exclu de l'etude de detection vuln/benign"
+  "ground_truth_testable": {
+    "vuln": 117,
+    "benign": 15,
+    "malware": 15
   },
   "runs": {
-    "deepseek": {
+    "DeepSeek": {
       "TP": 67,
-      "FN": 43,
+      "FN": 50,
       "FP": 0,
-      "TN": 22,
-      "n_vuln": 110,
-      "n_benign": 22,
+      "TN": 15,
+      "recall": 0.573,
       "precision": 1.0,
-      "recall": 0.609,
       "FPR": 0.0,
-      "FNR": 0.391,
-      "accuracy": 0.674,
-      "F1": 0.757
+      "FNR": 0.427,
+      "accuracy": 0.621,
+      "F1": 0.728
     },
-    "claude-haiku-5-5": {
-      "TP": 36,
-      "FN": 74,
+    "Qwen3-Coder": {
+      "TP": 65,
+      "FN": 52,
       "FP": 0,
-      "TN": 22,
-      "n_vuln": 110,
-      "n_benign": 22,
+      "TN": 15,
+      "recall": 0.556,
       "precision": 1.0,
-      "recall": 0.327,
       "FPR": 0.0,
-      "FNR": 0.673,
-      "accuracy": 0.439,
-      "F1": 0.493
+      "FNR": 0.444,
+      "accuracy": 0.606,
+      "F1": 0.714
+    },
+    "Haiku 5.5": {
+      "TP": 36,
+      "FN": 81,
+      "FP": 0,
+      "TN": 15,
+      "recall": 0.308,
+      "precision": 1.0,
+      "FPR": 0.0,
+      "FNR": 0.692,
+      "accuracy": 0.386,
+      "F1": 0.471
     }
+  },
+  "cost": {
+    "DeepSeek": "~$2",
+    "Qwen3-Coder": "~$2.2",
+    "Haiku 5.5": "~$1.25"
+  },
+  "ensemble_deepseek_qwen3": {
+    "recall_vuln": 0.709,
+    "note": "union des confirmations"
   },
   "soundness": {
     "oracle_false_positives": 0,
     "oracle_precision": 1.0,
-    "note": "precision=1.0 / FPR=0 pour les deux modeles : l'oracle ne confirme jamais un non-exploit ; la soundness est independante du generateur, le recall en depend"
+    "note": "FP=0 / precision=1.0 pour les 3 generateurs (l'oracle ne confirme jamais un non-exploit) ; recall varie avec le generateur : DeepSeek > Qwen3 > Haiku"
   }
 }

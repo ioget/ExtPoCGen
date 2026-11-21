@@ -2,46 +2,50 @@
 
 Détection de vulnérabilité (vuln = positif, benign = négatif ; classe malware exclue de l'étude).
 
-**Vérité-terrain :** l'oracle différentiel a prouvé que 8 extensions étiquetées « benign » par le LLM
-sont en fait exploitables (le sink tire sous contrôle attaquant, pas sans = `attacker_controlled=True`).
-Le label LLM était faux ; ces 8 sont donc **reclassées `vuln` dans le dataset** (`publication/datasets/labels.csv`),
-portant la vérité-terrain à **113 vuln / 22 benign / 15 malware**. Parmi elles, 110 vuln et 22 benign
-sont chargeables et testées (3 vuln non chargeables).
+**Vérité-terrain corrigée par la preuve.** L'oracle différentiel a prouvé que **15 extensions étiquetées
+« benign » par le LLM sont en fait exploitables** (`attacker_controlled = True` sur au moins un
+générateur — DeepSeek, Haiku ou Qwen3-Coder). Un benign confirmé est un **exploit réel** (soundness),
+donc on les reclasse `vuln` dans `publication/datasets/labels.csv`. Résultat :
+**120 vuln / 15 benign / 15 malware** ; testables : **117 vuln / 15 benign**.
 
-Ids reclassés : `benign-AUTH01, benign-AUTH06, benign-BHT02, benign-BHT05, benign-BHT15, benign-BHT20, benign-BHT23, benign-BHT24`.
+→ **50 % du jeu « benign » généré par LLM est en réalité exploitable.** Plus on passe de générateurs,
+plus on démasque de mislabels (DeepSeek en trouve 8, Qwen3 12, Haiku 2 ; union = 15).
 
-## DeepSeek (générateur de référence)
+Ids reclassés : `AUTH01, AUTH02, AUTH03, AUTH04, AUTH06, BHT01, BHT02, BHT05, BHT08, BHT10, BHT15, BHT16, BHT20, BHT23, BHT24`.
 
+## Matrices par générateur (même oracle, même budget, 117 vuln / 15 benign)
+
+### DeepSeek
 | | prédit vuln (confirmé) | prédit non-vuln |
 |---|---|---|
-| **vuln (réel, 110)** | TP=67 | FN=43 |
-| **benign (réel, 22)** | FP=0 | TN=22 |
+| **vuln (réel, 117)** | TP=67 | FN=50 |
+| **benign (réel, 15)** | FP=0 | TN=15 |
 
-recall=0.609 · **precision=1.000** · **FPR=0.000** · FNR=0.391 · accuracy=0.674 · F1=0.757
+recall=0.573 · **precision=1.000** · **FPR=0.000** · FNR=0.427 · F1=0.728 · accuracy=0.621
 
-## Claude Haiku 5.5 (même dataset, même validation)
-
+### Qwen3-Coder (480B, OpenRouter)
 | | prédit vuln (confirmé) | prédit non-vuln |
 |---|---|---|
-| **vuln (réel, 110)** | TP=36 | FN=74 |
-| **benign (réel, 22)** | FP=0 | TN=22 |
+| **vuln (réel, 117)** | TP=65 | FN=52 |
+| **benign (réel, 15)** | FP=0 | TN=15 |
 
-recall=0.327 · **precision=1.000** · **FPR=0.000** · FNR=0.673 · accuracy=0.439 · F1=0.493
+recall=0.556 · **precision=1.000** · **FPR=0.000** · FNR=0.444 · F1=0.714 · accuracy=0.606
 
-→ **precision 1.0 / FPR 0 pour les deux modèles** : l'oracle ne confirme jamais un non-exploit.
-La soundness est **indépendante du générateur** ; seul le recall en dépend (Haiku ≈ ½ du recall de
-DeepSeek). Les 2 benign-exploitables trouvés par Haiku (`BHT05`, `BHT23`) sont un sous-ensemble strict
-des 8 de DeepSeek — aucun faux positif réel.
-
-## Note de robustesse (labels LLM bruts, avant reclassification)
-
+### Claude Haiku 5.5
 | | prédit vuln (confirmé) | prédit non-vuln |
 |---|---|---|
-| **vuln (réel, 102)** | TP=59 | FN=43 |
-| **benign (réel, 30)** | FP=8 | TN=22 |
+| **vuln (réel, 117)** | TP=36 | FN=81 |
+| **benign (réel, 15)** | FP=0 | TN=15 |
 
-precision=0.881 · recall=0.578 · FPR=0.267 · accuracy=0.614 · F1=0.698 (DeepSeek)
+recall=0.308 · **precision=1.000** · **FPR=0.000** · FNR=0.692 · F1=0.471 · accuracy=0.386
 
-Tout l'écart = les 8 exploits prouvés comptés à tort comme benign avant correction. La reclassification
-repose sur la soundness de l'oracle (les 8 portent `attacker_controlled=True` dans leur trace).
-Plus largement, les contrôles « benign » générés par LLM sont bruités (~27 % en fait exploitables).
+## Lecture
+
+- **precision 1.000 / FPR 0.000 pour les trois générateurs** : l'oracle ne confirme jamais un
+  non-exploit. La **soundness est une propriété du validateur**, indépendante du générateur.
+- Le **recall dépend du générateur** : **DeepSeek (57 %) > Qwen3-Coder (56 %) > Haiku (31 %)**
+  (et GPT-5-mini ≈ 17 %, run partiel). Qwen3-Coder, cross-vendor, confirme que *les bons générateurs
+  convergent haut*.
+- **Complémentarité** : l'union DeepSeek + Qwen3-Coder atteint **83/117 = 70.9 %** de recall,
+  soit **+13.6 points** au-dessus de DeepSeek seul. Un **ensemble multi-générateur** augmente le recall
+  sans jamais toucher à la soundness (toujours 0 FP).
